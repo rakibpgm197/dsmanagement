@@ -609,13 +609,13 @@ body{font-family:'Inter','Hind Siliguri',sans-serif;background:var(--bg);color:v
 </div>
 
 <!-- Invoice Create -->
-<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>দুরন্ত ডিজিটাল সাইন - ইনভয়েস</title>
+    <title>দুরন্ত ডিজিটাল সাইন - ইনভয়েস সিস্টেম</title>
     <style>
+        /* ===== GLOBAL ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -625,429 +625,647 @@ body{font-family:'Inter','Hind Siliguri',sans-serif;background:var(--bg);color:v
             padding: 20px;
         }
 
-        /* ===== CONTROL PANEL ===== */
-        .control-panel {
-            max-width: 900px;
-            margin: 0 auto 25px auto;
+        /* ===== FORM PANEL ===== */
+        .form-panel {
+            max-width: 860px;
+            margin: 0 auto 28px auto;
             background: white;
-            border-radius: 16px;
-            padding: 20px 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 18px;
+            padding: 24px 28px;
+            box-shadow: 0 12px 45px rgba(0,0,0,0.22);
         }
 
         .panel-title {
             text-align: center;
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 900;
             color: #6c63ff;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
             border-bottom: 2px dashed #e0d7ff;
         }
 
-        .panel-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 14px;
+        .sec-label {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #6c63ff;
+            margin: 18px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid #e8e4ff;
+            text-transform: uppercase;
+            letter-spacing: .4px;
         }
 
-        .panel-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-bottom: 6px; }
+        .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 13px; margin-bottom: 6px; }
+        .full  { grid-column: 1 / -1; }
 
-        .panel-group label {
-            font-size: 12.5px;
-            font-weight: 700;
-            color: #555;
-        }
-
-        .panel-group input, .panel-group select {
+        .fg { display: flex; flex-direction: column; gap: 5px; }
+        .fg label { font-size: 12px; font-weight: 700; color: #666; }
+        .fg input, .fg select, .fg textarea {
             padding: 8px 12px;
             border: 1.5px solid #d4cdff;
-            border-radius: 8px;
+            border-radius: 9px;
             font-size: 13px;
             font-family: inherit;
             color: #333;
             outline: none;
-            transition: border 0.2s;
+            transition: border .2s;
+            background: #fdfcff;
         }
+        .fg input:focus, .fg select:focus, .fg textarea:focus { border-color: #6c63ff; background: #fff; }
+        .fg textarea { resize: vertical; min-height: 60px; }
 
-        .panel-group input:focus, .panel-group select:focus {
-            border-color: #6c63ff;
-        }
-
-        .section-label {
-            font-size: 14px;
-            font-weight: 800;
-            color: #6c63ff;
-            margin: 16px 0 10px 0;
-            padding-bottom: 6px;
-            border-bottom: 1.5px solid #e0d7ff;
-        }
-
-        /* Items table in control panel */
-        .items-table-ctrl {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-
-        .items-table-ctrl th {
+        /* Items ctrl table */
+        .ctrl-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+        .ctrl-table th {
             background: linear-gradient(135deg, #6c63ff, #9b59b6);
-            color: white;
-            padding: 8px 6px;
-            font-size: 12px;
-            text-align: center;
+            color: white; padding: 9px 7px;
+            font-size: 12px; text-align: center;
         }
-
-        .items-table-ctrl td {
-            padding: 5px 4px;
+        .ctrl-table th:nth-child(2) { text-align: left; }
+        .ctrl-table td { padding: 4px 4px; }
+        .ctrl-table input {
+            width: 100%; padding: 6px 8px;
+            border: 1.5px solid #e0d7ff; border-radius: 7px;
+            font-size: 12.5px; font-family: inherit;
+            text-align: center; outline: none; background: #fdfcff;
         }
+        .ctrl-table input.left { text-align: left; }
+        .ctrl-table input:focus { border-color: #6c63ff; }
 
-        .items-table-ctrl input {
-            width: 100%;
-            padding: 6px 8px;
-            border: 1.5px solid #e0d7ff;
-            border-radius: 6px;
-            font-size: 12px;
-            font-family: inherit;
-            text-align: center;
-            outline: none;
-        }
+        /* Payment rows */
+        .pay-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; margin-bottom: 8px; }
+        .pay-row .fg { margin: 0; }
 
-        .items-table-ctrl input:focus {
-            border-color: #6c63ff;
-        }
+        /* Buttons */
+        .btn { border: none; border-radius: 25px; cursor: pointer; font-family: inherit; font-weight: 700; transition: all .25s; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-add  { background: linear-gradient(135deg,#43e97b,#38f9d7); color:#fff; padding:8px 18px; font-size:13px; }
+        .btn-del  { background: #ff6584; color:#fff; width:30px; height:30px; border-radius:8px; font-size:15px; flex-shrink:0; }
+        .btn-upd  { background: linear-gradient(135deg,#6c63ff,#9b59b6); color:#fff; padding:13px 32px; font-size:15px; box-shadow:0 6px 20px rgba(108,99,255,.35); }
+        .btn-prt  { background: linear-gradient(135deg,#11998e,#38ef7d); color:#fff; padding:13px 32px; font-size:15px; box-shadow:0 6px 20px rgba(17,153,142,.35); }
+        .btn-rst  { background: linear-gradient(135deg,#ff6584,#ff8e53); color:#fff; padding:13px 32px; font-size:15px; box-shadow:0 6px 20px rgba(255,101,132,.35); }
 
-        .items-table-ctrl input.desc-input {
-            text-align: left;
-        }
-
-        .del-btn {
-            background: #ff6584;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            width: 28px;
-            height: 28px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .add-row-btn {
-            background: linear-gradient(135deg, #43e97b, #38f9d7);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 6px;
-        }
-
-        /* Payment inputs */
-        .payment-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .pay-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .pay-item label {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: #888;
-        }
-
-        .pay-item input {
-            padding: 7px 10px;
-            border: 1.5px solid #ffd0e0;
-            border-radius: 8px;
-            font-size: 13px;
-            font-family: inherit;
-            outline: none;
-        }
-
-        .pay-item input:focus {
-            border-color: #ff6584;
-        }
-
-        /* Action buttons */
-        .action-btns {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 18px;
-            flex-wrap: wrap;
-        }
-
-        .btn-update {
-            background: linear-gradient(135deg, #6c63ff, #9b59b6);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(108,99,255,0.4);
-            transition: all 0.3s;
-        }
-
-        .btn-update:hover { transform: translateY(-2px); }
-
-        .btn-print {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(17,153,142,0.4);
-            transition: all 0.3s;
-        }
-
-        .btn-print:hover { transform: translateY(-2px); }
-
-        .btn-reset {
-            background: linear-gradient(135deg, #ff6584, #ff8e53);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(255,101,132,0.4);
-            transition: all 0.3s;
-        }
-
-        .btn-reset:hover { transform: translateY(-2px); }
+        .action-row { display:flex; gap:12px; justify-content:center; margin-top:22px; flex-wrap:wrap; }
 
         /* ===== A4 PREVIEW ===== */
-        .a4-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-        }
+        .a4-wrap { max-width: 860px; margin: 0 auto; display: flex; justify-content: center; }
 
-        .a4-page {
+        .a4 {
             width: 210mm;
             min-height: 297mm;
             background: white;
-            padding: 12mm 14mm;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            border-radius: 4px;
+            padding: 13mm 15mm;
+            box-shadow: 0 22px 65px rgba(0,0,0,0.28);
+            border-radius: 5px;
             position: relative;
             overflow: hidden;
         }
 
+        /* --- decorative bg circles --- */
+        .a4::before {
+            content:'';
+            position:absolute; top:-60px; right:-60px;
+            width:200px; height:200px;
+            background: radial-gradient(circle, rgba(108,99,255,.07), transparent 70%);
+            border-radius:50%; pointer-events:none;
+        }
+        .a4::after {
+            content:'';
+            position:absolute; bottom:-60px; left:-60px;
+            width:200px; height:200px;
+            background: radial-gradient(circle, rgba(255,101,132,.06), transparent 70%);
+            border-radius:50%; pointer-events:none;
+        }
+
+        .wm {
+            position:absolute; top:50%; left:50%;
+            transform:translate(-50%,-50%) rotate(-28deg);
+            font-size:88px; color:rgba(108,99,255,.04);
+            font-weight:900; pointer-events:none; white-space:nowrap; z-index:0;
+        }
+
+        /* top rainbow bar */
         .top-bar {
-            height: 8px;
-            background: linear-gradient(90deg, #6c63ff, #ff6584, #43e97b, #6c63ff);
+            height: 7px;
+            background: linear-gradient(90deg,#6c63ff,#ff6584,#f9ca24,#43e97b,#6c63ff);
             border-radius: 4px;
-            margin-bottom: 14px;
+            margin-bottom: 15px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 14px;
-            padding-bottom: 12px;
-            border-bottom: 2px dashed #e0d7ff;
+        /* shop header */
+        .inv-header { text-align:center; margin-bottom:15px; padding-bottom:13px; border-bottom:2px dashed #e8e4ff; }
+        .inv-shop-name { font-size:27px; font-weight:900; color:#6c63ff; line-height:1.2; letter-spacing:.8px; }
+        .inv-shop-name .pink { color:#ff6584; }
+        .inv-addr { font-size:12.5px; color:#777; margin-top:5px; line-height:1.65; }
+        .inv-badge {
+            display:inline-block;
+            background:linear-gradient(135deg,#6c63ff,#9b59b6);
+            color:white; padding:4px 22px; border-radius:20px;
+            font-size:14px; font-weight:700; margin-top:9px; letter-spacing:2px;
         }
 
-        .shop-name {
-            font-size: 28px;
-            font-weight: 900;
-            color: #6c63ff;
-            letter-spacing: 1px;
-            line-height: 1.2;
+        /* meta strip */
+        .inv-meta {
+            display:flex; justify-content:space-between;
+            margin-bottom:15px;
+            background:linear-gradient(135deg,#f8f7ff,#fff5f7);
+            border-radius:11px; padding:13px 17px; border:1px solid #ece8ff;
         }
+        .inv-meta-col { font-size:13px; line-height:2.1; }
+        .ml { color:#999; font-weight:600; }
+        .mv { color:#333; font-weight:700; margin-left:5px; }
+        .mv.cname { font-size:14.5px; color:#6c63ff; font-weight:800; }
+        .mv.status-due   { color:#ff6584; }
+        .mv.status-paid  { color:#43e97b; }
+        .mv.status-part  { color:#f9ca24; }
 
-        .shop-name span { color: #ff6584; }
-
-        .shop-address {
-            font-size: 13px;
-            color: #666;
-            margin-top: 5px;
-            line-height: 1.6;
+        /* items table */
+        .tbl-wrap { margin-bottom:15px; border-radius:11px; overflow:hidden; box-shadow:0 4px 18px rgba(108,99,255,.1); }
+        .inv-table { width:100%; border-collapse:collapse; font-size:13px; }
+        .inv-table thead tr { background:linear-gradient(135deg,#6c63ff,#9b59b6); color:white; }
+        .inv-table thead th { padding:11px 10px; text-align:center; font-size:13px; font-weight:700; }
+        .inv-table thead th:nth-child(2) { text-align:left; }
+        .inv-table tbody tr:nth-child(even) { background:#faf9ff; }
+        .inv-table tbody tr:nth-child(odd)  { background:#fff; }
+        .inv-table tbody tr { border-bottom:1px solid #f0edff; }
+        .inv-table tbody td { padding:10px; text-align:center; color:#333; font-size:13px; }
+        .inv-table tbody td:nth-child(2) { text-align:left; font-weight:600; color:#444; }
+        .sn {
+            width:30px; height:30px;
+            background:linear-gradient(135deg,#6c63ff,#ff6584);
+            color:white; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:700; font-size:11.5px; margin:0 auto;
         }
+        .amt { font-weight:700; color:#6c63ff; }
+        .inv-table .tot-row { background:linear-gradient(135deg,#6c63ff,#9b59b6) !important; }
+        .inv-table .tot-row td { color:white !important; font-weight:800 !important; font-size:14.5px !important; padding:12px 10px !important; }
 
-        .invoice-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #6c63ff, #9b59b6);
-            color: white;
-            padding: 4px 20px;
-            border-radius: 20px;
-            font-size: 15px;
-            font-weight: bold;
-            margin-top: 8px;
-            letter-spacing: 2px;
+        /* payment + due */
+        .pay-sec { display:flex; gap:14px; margin-bottom:15px; }
+
+        .pay-box {
+            flex:1;
+            background:linear-gradient(135deg,#fff5f7,#fff0fd);
+            border:1.5px solid #ffcce0; border-radius:11px; padding:13px 14px;
         }
+        .pay-box h3 { font-size:13.5px; color:#ff6584; font-weight:800; margin-bottom:9px; }
 
-        .invoice-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            background: linear-gradient(135deg, #f8f7ff, #fff5f7);
-            border-radius: 10px;
-            padding: 12px 16px;
-            border: 1px solid #e8e4ff;
-        }
+        .pi { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed #ffd0e0; font-size:12.5px; }
+        .pi:last-child { border-bottom:none; }
+        .pi .pl { color:#999; }
+        .pi .pv { font-weight:700; color:#444; }
 
-        .meta-left, .meta-right { font-size: 13.5px; line-height: 2; }
-        .meta-label { color: #888; font-weight: 600; }
-        .meta-value { color: #333; font-weight: 700; margin-left: 6px; }
-        .customer-name { font-size: 15px; color: #6c63ff; font-weight: 800; }
-
-        .table-wrapper {
-            margin-bottom: 14px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(108,99,255,0.1);
-        }
-
-        table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-
-        thead tr { background: linear-gradient(135deg, #6c63ff, #9b59b6); color: white; }
-
-        thead th {
-            padding: 11px 10px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 13.5px;
-        }
-
-        thead th:nth-child(2) { text-align: left; }
-
-        tbody tr { border-bottom: 1px solid #f0edff; }
-        tbody tr:nth-child(even) { background: #faf9ff; }
-        tbody tr:nth-child(odd) { background: #ffffff; }
-
-        tbody td { padding: 10px; text-align: center; color: #333; font-size: 13.5px; }
-        tbody td:nth-child(2) { text-align: left; font-weight: 600; color: #444; }
-
-        .serial-num {
-            width: 32px; height: 32px;
-            background: linear-gradient(135deg, #6c63ff, #ff6584);
-            color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 12px; margin: 0 auto;
-        }
-
-        .amount { font-weight: 700; color: #6c63ff; }
-
-        .total-row { background: linear-gradient(135deg, #6c63ff, #9b59b6) !important; }
-        .total-row td {
-            color: white !important; font-weight: 800 !important;
-            font-size: 15px !important; padding: 13px 10px !important;
-        }
-
-        .payment-section { display: flex; gap: 14px; margin-bottom: 14px; }
-
-        .payment-box {
-            flex: 1;
-            background: linear-gradient(135deg, #fff5f7, #fff0fd);
-            border: 1.5px solid #ffcce0;
-            border-radius: 10px;
-            padding: 12px 14px;
-        }
-
-        .payment-box h3 {
-            font-size: 14px; color: #ff6584; font-weight: 800;
-            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-        }
-
-        .payment-item {
-            display: flex; justify-content: space-between;
-            padding: 5px 0; border-bottom: 1px dashed #ffd0e0; font-size: 13px;
-        }
-
-        .payment-item:last-child { border-bottom: none; }
-        .payment-item .label { color: #888; }
-        .payment-item .value { font-weight: 700; color: #444; }
-
-        .payment-total {
-            background: linear-gradient(135deg, #ff6584, #ff8e53);
-            border-radius: 8px; padding: 8px 12px; margin-top: 8px;
-            display: flex; justify-content: space-between;
-            color: white; font-weight: 800; font-size: 13.5px;
+        .pay-tot {
+            background:linear-gradient(135deg,#ff6584,#ff8e53);
+            border-radius:8px; padding:8px 12px; margin-top:9px;
+            display:flex; justify-content:space-between;
+            color:white; font-weight:800; font-size:13px;
         }
 
         .due-box {
-            flex: 1.2;
-            background: linear-gradient(135deg, #f0edff, #e8f4fd);
-            border: 1.5px solid #c9bfff;
-            border-radius: 10px;
-            padding: 12px 14px;
+            flex:1.25;
+            background:linear-gradient(135deg,#f0edff,#e8f4fd);
+            border:1.5px solid #c9bfff; border-radius:11px; padding:13px 14px;
         }
+        .due-box h3 { font-size:13.5px; color:#6c63ff; font-weight:800; margin-bottom:9px; }
 
-        .due-box h3 {
-            font-size: 14px; color: #6c63ff; font-weight: 800;
-            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        .dr { display:flex; justify-content:space-between; padding:6px 0; font-size:12.5px; border-bottom:1px dashed #d4cdff; }
+        .dr .dl { color:#666; font-weight:600; }
+        .dr .dv { font-weight:700; color:#444; }
+
+        .due-hl {
+            background:linear-gradient(135deg,#6c63ff,#9b59b6);
+            border-radius:9px; padding:11px 14px; margin-top:11px; text-align:center;
         }
+        .due-hl .dhl { color:rgba(255,255,255,.82); font-size:11.5px; font-weight:600; letter-spacing:.4px; }
+        .due-hl .dha { color:#fff; font-size:21px; font-weight:900; display:block; margin-top:3px; }
 
-        .due-row {
-            display: flex; justify-content: space-between;
-            padding: 6px 0; font-size: 13px; border-bottom: 1px dashed #d4cdff;
+        /* note box */
+        .note-box {
+            background:#fffdf0; border:1.5px dashed #f9ca24;
+            border-radius:10px; padding:10px 14px; margin-bottom:14px;
+            font-size:12.5px; color:#666; line-height:1.7;
         }
+        .note-box strong { color:#e8a000; }
 
-        .due-row .label { color: #666; font-weight: 600; }
-        .due-row .value { font-weight: 700; color: #444; }
+        /* signature */
+        .sig-sec { display:flex; justify-content:space-between; margin-top:12px; margin-bottom:13px; }
+        .sig-bx { text-align:center; width:43%; }
+        .sig-ln { border-bottom:1.5px solid #ccc; height:38px; margin-bottom:7px; }
+        .sig-lbl { font-size:12.5px; color:#666; font-weight:700; }
 
-        .due-highlight {
-            background: linear-gradient(135deg, #6c63ff, #9b59b6);
-            border-radius: 8px; padding: 10px 14px; margin-top: 10px; text-align: center;
+        /* footer */
+        .inv-footer { text-align:center; padding-top:11px; border-top:2px dashed #e0d7ff; }
+        .inv-footer span { font-size:14.5px; color:#6c63ff; font-weight:700; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            body { background:white !important; padding:0 !important; }
+            .form-panel { display:none !important; }
+            .a4-wrap { max-width:100%; margin:0; }
+            .a4 {
+                box-shadow:none; border-radius:0;
+                width:210mm; min-height:297mm;
+                padding:13mm 15mm;
+                page-break-after: always;
+            }
+            @page { size:A4 portrait; margin:0; }
         }
+    </style>
+</head>
+<body>
 
-        .due-highlight .due-label {
-            color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600;
+<!-- ========== FORM PANEL ========== -->
+<div class="form-panel">
+    <div class="panel-title">⚙️ ইনভয়েস তৈরি করুন</div>
+
+    <!-- দোকান -->
+    <div class="sec-label">🏪 দোকানের তথ্য</div>
+    <div class="grid3">
+        <div class="fg"><label>নাম — প্রথম অংশ</label><input id="sn1" value="দুরন্ত"></div>
+        <div class="fg"><label>নাম — মাঝের অংশ (রঙিন)</label><input id="sn2" value="ডিজিটাল"></div>
+        <div class="fg"><label>নাম — শেষ অংশ</label><input id="sn3" value="সাইন"></div>
+        <div class="fg full"><label>ঠিকানা — লাইন ১</label><input id="ad1" value="পাটগ্রাম বড় মসজিদের সামনে, হোটেল সাদিকের নিচতলা"></div>
+        <div class="fg full"><label>ঠিকানা — লাইন ২</label><input id="ad2" value="পাটগ্রাম, লালমনিরহাট"></div>
+    </div>
+
+    <!-- ইনভয়েস তথ্য -->
+    <div class="sec-label">📋 ইনভয়েস তথ্য</div>
+    <div class="grid2">
+        <div class="fg"><label>গ্রাহকের নাম *</label><input id="cust" placeholder="নাম লিখুন" value="ললিতারহাট উচ্চ বিদ্যালয়"></div>
+        <div class="fg"><label>মোবাইল নম্বর</label><input id="phone" placeholder="01XXXXXXXXX"></div>
+        <div class="fg"><label>ঠিকানা</label><input id="caddr" placeholder="গ্রাহকের ঠিকানা (ঐচ্ছিক)"></div>
+        <div class="fg"><label>ইনভয়েস নং</label><input id="invno" value="DS-2026-07-16-001"></div>
+        <div class="fg"><label>তারিখ</label><input id="invdt" value="১৬ / ০৭ / ২০২৬ ইং"></div>
+        <div class="fg"><label>স্ট্যাটাস</label>
+            <select id="invst">
+                <option value="due">⏳ বকেয়া আছে</option>
+                <option value="paid">✅ সম্পূর্ণ পরিশোধিত</option>
+                <option value="part">🔄 আংশিক পরিশোধিত</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- পণ্য -->
+    <div class="sec-label">🛒 পণ্য / সেবার তালিকা</div>
+    <table class="ctrl-table">
+        <thead>
+            <tr>
+                <th style="width:32px">#</th>
+                <th style="width:38%">বিবরণ</th>
+                <th>পরিমাণ</th>
+                <th>একক মূল্য</th>
+                <th>মোট (৳)</th>
+                <th style="width:36px"></th>
+            </tr>
+        </thead>
+        <tbody id="itemsBody">
+            <tr>
+                <td style="text-align:center;color:#6c63ff;font-weight:800">১</td>
+                <td><input class="left" type="text" placeholder="পণ্যের নাম" value="স্টুডেন্ট আইডি কার্ড"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="২৭৭ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="৬৫"></td>
+                <td><input type="number" class="tot-in" placeholder="মোট" value="18005"></td>
+                <td><button class="btn btn-del" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center;color:#6c63ff;font-weight:800">২</td>
+                <td><input class="left" type="text" placeholder="পণ্যের নাম" value="ব্যানার (৩' × ৬')"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="১টি"></td>
+                <td><input type="text" placeholder="মূল্য" value="—"></td>
+                <td><input type="number" class="tot-in" placeholder="মোট" value="350"></td>
+                <td><button class="btn btn-del" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center;color:#6c63ff;font-weight:800">৩</td>
+                <td><input class="left" type="text" placeholder="পণ্যের নাম" value="প্রবেশপত্র (১০০ GSM)"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="৩০০ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="২"></td>
+                <td><input type="number" class="tot-in" placeholder="মোট" value="600"></td>
+                <td><button class="btn btn-del" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center;color:#6c63ff;font-weight:800">৪</td>
+                <td><input class="left" type="text" placeholder="পণ্যের নাম" value="কভার পেইজ (৬৫ GSM, ১৮&quot; × ১০&quot;)"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="৩,০০০ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="২"></td>
+                <td><input type="number" class="tot-in" placeholder="মোট" value="6000"></td>
+                <td><button class="btn btn-del" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center;color:#6c63ff;font-weight:800">৫</td>
+                <td><input class="left" type="text" placeholder="পণ্যের নাম" value="ডায়েরি"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="৩০০ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="৯০"></td>
+                <td><input type="number" class="tot-in" placeholder="মোট" value="27000"></td>
+                <td><button class="btn btn-del" onclick="delRow(this)">✕</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-add" onclick="addRow()">➕ নতুন পণ্য যোগ করুন</button>
+
+    <!-- জমা -->
+    <div class="sec-label">💰 জমাকৃত টাকা</div>
+    <div id="payRows">
+        <div class="pay-row">
+            <div class="fg"><label>জমাদানের নাম</label><input type="text" class="pay-lbl" value="প্রথম জমাদান"></div>
+            <div class="fg"><label>পরিমাণ (৳)</label><input type="number" class="pay-amt" value="5000" min="0"></div>
+            <button class="btn btn-del" onclick="delPay(this)" style="margin-bottom:1px">✕</button>
+        </div>
+        <div class="pay-row">
+            <div class="fg"><label>জমাদানের নাম</label><input type="text" class="pay-lbl" value="দ্বিতীয় জমাদান"></div>
+            <div class="fg"><label>পরিমাণ (৳)</label><input type="number" class="pay-amt" value="2000" min="0"></div>
+            <button class="btn btn-del" onclick="delPay(this)" style="margin-bottom:1px">✕</button>
+        </div>
+        <div class="pay-row">
+            <div class="fg"><label>জমাদানের নাম</label><input type="text" class="pay-lbl" value="তৃতীয় জমাদান"></div>
+            <div class="fg"><label>পরিমাণ (৳)</label><input type="number" class="pay-amt" value="10000" min="0"></div>
+            <button class="btn btn-del" onclick="delPay(this)" style="margin-bottom:1px">✕</button>
+        </div>
+    </div>
+    <button class="btn btn-add" onclick="addPay()" style="margin-top:4px">➕ জমা যোগ করুন</button>
+
+    <!-- নোট -->
+    <div class="sec-label">📝 নোট / শর্তাবলী</div>
+    <div class="fg"><textarea id="invNote" placeholder="ইনভয়েস নোট বা শর্তাবলী লিখুন (ঐচ্ছিক)..."></textarea></div>
+
+    <!-- Action -->
+    <div class="action-row">
+        <button class="btn btn-upd" onclick="buildInvoice()">🔄 প্রিভিউ আপডেট</button>
+        <button class="btn btn-prt" onclick="printNow()">🖨️ প্রিন্ট করুন</button>
+        <button class="btn btn-rst" onclick="resetAll()">🗑️ রিসেট</button>
+    </div>
+</div>
+
+<!-- ========== A4 INVOICE ========== -->
+<div class="a4-wrap">
+    <div class="a4" id="invoicePage">
+        <div class="wm">INVOICE</div>
+        <div class="top-bar"></div>
+
+        <!-- Header -->
+        <div class="inv-header">
+            <div class="inv-shop-name">
+                <span id="o-sn1">দুরন্ত</span>
+                <span class="pink"> <span id="o-sn2">ডিজিটাল</span> </span>
+                <span id="o-sn3">সাইন</span>
+            </div>
+            <div class="inv-addr">
+                <span id="o-ad1">পাটগ্রাম বড় মসজিদের সামনে, হোটেল সাদিকের নিচতলা</span><br>
+                <span id="o-ad2">পাটগ্রাম, লালমনিরহাট</span>
+            </div>
+            <div class="inv-badge">⚡ INVOICE</div>
+        </div>
+
+        <!-- Meta -->
+        <div class="inv-meta">
+            <div class="inv-meta-col">
+                <div><span class="ml">গ্রাহকের নাম:</span><span class="mv cname" id="o-cust">ললিতারহাট উচ্চ বিদ্যালয়</span></div>
+                <div id="o-phone-row"><span class="ml">মোবাইল:</span><span class="mv" id="o-phone"></span></div>
+                <div id="o-addr-row"><span class="ml">ঠিকানা:</span><span class="mv" id="o-caddr"></span></div>
+            </div>
+            <div class="inv-meta-col" style="text-align:right">
+                <div><span class="ml">ইনভয়েস নং:</span><span class="mv" id="o-invno">DS-2026-07-16-001</span></div>
+                <div><span class="ml">তারিখ:</span><span class="mv" id="o-invdt">১৬ / ০৭ / ২০২৬ ইং</span></div>
+                <div><span class="ml">স্ট্যাটাস:</span><span class="mv status-due" id="o-invst">⏳ বকেয়া আছে</span></div>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="tbl-wrap">
+            <table class="inv-table">
+                <thead>
+                    <tr>
+                        <th style="width:42px">ক্রমিক</th>
+                        <th>বিবরণ</th>
+                        <th>পরিমাণ</th>
+                        <th>একক মূল্য</th>
+                        <th>মোট</th>
+                    </tr>
+                </thead>
+                <tbody id="o-items"></tbody>
+            </table>
+        </div>
+
+        <!-- Payment + Due -->
+        <div class="pay-sec">
+            <div class="pay-box">
+                <h3>💰 জমাকৃত টাকার বিবরণ</h3>
+                <div id="o-payItems"></div>
+                <div class="pay-tot">
+                    <span>মোট জমা</span>
+                    <span id="o-totalPaid">৳০</span>
+                </div>
+            </div>
+            <div class="due-box">
+                <h3>📋 পরিশোধের সারসংক্ষেপ</h3>
+                <div class="dr"><span class="dl">সর্বমোট বিল</span><span class="dv" id="o-grand2">৳০</span></div>
+                <div class="dr"><span class="dl">(-) মোট জমা</span><span class="dv" style="color:#ff6584" id="o-paid2">৳০</span></div>
+                <div class="due-hl">
+                    <div class="dhl">⚠️ বকেয়া পরিশোধযোগ্য</div>
+                    <span class="dha" id="o-due">৳০/-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note -->
+        <div class="note-box" id="o-noteBox" style="display:none">
+            <strong>📝 নোট:</strong> <span id="o-note"></span>
+        </div>
+
+        <!-- Signature -->
+        <div class="sig-sec">
+            <div class="sig-bx">
+                <div class="sig-ln"></div>
+                <div class="sig-lbl">✍️ গ্রাহকের স্বাক্ষর</div>
+            </div>
+            <div class="sig-bx">
+                <div class="sig-ln"></div>
+                <div class="sig-lbl">✍️ দোকান কর্তৃপক্ষের স্বাক্ষর</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="inv-footer">
+            <span>🌸 ধন্যবাদ। আবারও আসবেন। 🌸</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ── বাংলা সংখ্যা ── */
+    const BN = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    const bn  = n => String(n).replace(/\d/g, d => BN[d]);
+    const BN_ORD = ['','প্রথম','দ্বিতীয়','তৃতীয়','চতুর্থ','পঞ্চম','ষষ্ঠ','সপ্তম','অষ্টম','নবম','দশম'];
+
+    function fmt(n) {
+        if (!n || isNaN(n)) return '—';
+        return '৳' + bn(Number(n).toLocaleString('en-IN'));
+    }
+
+    /* ── সিরিয়াল আপডেট ── */
+    function updateSerials() {
+        document.querySelectorAll('#itemsBody tr').forEach((tr, i) => {
+            tr.cells[0].textContent = bn(i + 1);
+        });
+    }
+
+    /* ── পণ্য সারি মুছুন ── */
+    function delRow(btn) { btn.closest('tr').remove(); updateSerials(); }
+
+    /* ── নতুন পণ্য যোগ ── */
+    function addRow() {
+        const tbody = document.getElementById('itemsBody');
+        const idx   = tbody.rows.length + 1;
+        const tr    = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="text-align:center;color:#6c63ff;font-weight:800">${bn(idx)}</td>
+            <td><input class="left" type="text" placeholder="পণ্যের নাম"></td>
+            <td><input type="text" placeholder="পরিমাণ"></td>
+            <td><input type="text" placeholder="মূল্য"></td>
+            <td><input type="number" class="tot-in" placeholder="মোট"></td>
+            <td><button class="btn btn-del" onclick="delRow(this)">✕</button></td>`;
+        tbody.appendChild(tr);
+        updateSerials();
+    }
+
+    /* ── জমা মুছুন ── */
+    function delPay(btn) { btn.closest('.pay-row').remove(); }
+
+    /* ── নতুন জমা যোগ ── */
+    let payCount = 3;
+    function addPay() {
+        payCount++;
+        const lbl = BN_ORD[payCount] ? BN_ORD[payCount] + ' জমাদান' : bn(payCount) + 'তম জমাদান';
+        const div = document.createElement('div');
+        div.className = 'pay-row';
+        div.innerHTML = `
+            <div class="fg"><label>জমাদানের নাম</label><input type="text" class="pay-lbl" value="${lbl}"></div>
+            <div class="fg"><label>পরিমাণ (৳)</label><input type="number" class="pay-amt" value="0" min="0"></div>
+            <button class="btn btn-del" onclick="delPay(this)" style="margin-bottom:1px">✕</button>`;
+        document.getElementById('payRows').appendChild(div);
+    }
+
+    /* ── স্ট্যাটাস ক্লাস ── */
+    function statusInfo(val) {
+        if (val === 'paid') return { cls:'status-paid', txt:'✅ সম্পূর্ণ পরিশোধিত' };
+        if (val === 'part') return { cls:'status-part', txt:'🔄 আংশিক পরিশোধিত' };
+        return { cls:'status-due',  txt:'⏳ বকেয়া আছে' };
+    }
+
+    /* ── মূল বিল্ড ── */
+    function buildInvoice() {
+
+        /* দোকান */
+        document.getElementById('o-sn1').textContent = document.getElementById('sn1').value;
+        document.getElementById('o-sn2').textContent = document.getElementById('sn2').value;
+        document.getElementById('o-sn3').textContent = document.getElementById('sn3').value;
+        document.getElementById('o-ad1').textContent = document.getElementById('ad1').value;
+        document.getElementById('o-ad2').textContent = document.getElementById('ad2').value;
+
+        /* ইনভয়েস মেটা */
+        document.getElementById('o-cust').textContent  = document.getElementById('cust').value;
+        document.getElementById('o-invno').textContent = document.getElementById('invno').value;
+        document.getElementById('o-invdt').textContent = document.getElementById('invdt').value;
+
+        const ph = document.getElementById('phone').value.trim();
+        document.getElementById('o-phone-row').style.display = ph ? '' : 'none';
+        document.getElementById('o-phone').textContent = ph;
+
+        const ca = document.getElementById('caddr').value.trim();
+        document.getElementById('o-addr-row').style.display = ca ? '' : 'none';
+        document.getElementById('o-caddr').textContent = ca;
+
+        const si = statusInfo(document.getElementById('invst').value);
+        const stEl = document.getElementById('o-invst');
+        stEl.textContent = si.txt;
+        stEl.className   = 'mv ' + si.cls;
+
+        /* পণ্য তালিকা */
+        const rows   = document.querySelectorAll('#itemsBody tr');
+        const oItems = document.getElementById('o-items');
+        oItems.innerHTML = '';
+        let grand = 0;
+
+        const bnOrd = ['১','২','৩','৪','৫','৬','৭','৮','৯','১০','১১','১২','১৩','১৪','১৫'];
+
+        rows.forEach((row, i) => {
+            const inp   = row.querySelectorAll('input');
+            const desc  = inp[0].value.trim();
+            const qty   = inp[1].value.trim() || '—';
+            const price = inp[2].value.trim() || '—';
+            const tot   = parseFloat(inp[3].value) || 0;
+            grand += tot;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><div class="sn">${bnOrd[i] || bn(i+1)}</div></td>
+                <td>${desc}</td>
+                <td>${qty}</td>
+                <td>${price !== '—' ? '৳' + price : '—'}</td>
+                <td class="amt">${fmt(tot)}</td>`;
+            oItems.appendChild(tr);
+        });
+
+        /* গ্র্যান্ড টোটাল রো */
+        const totTr = document.createElement('tr');
+        totTr.className = 'tot-row';
+        totTr.innerHTML = `
+            <td colspan="4" style="text-align:right;padding-right:16px">🧾 সর্বমোট বিল</td>
+            <td>${fmt(grand)}</td>`;
+        oItems.appendChild(totTr);
+
+        /* জমা */
+        const payItemsEl = document.getElementById('o-payItems');
+        payItemsEl.innerHTML = '';
+        let totalPaid = 0;
+
+        document.querySelectorAll('.pay-row').forEach(row => {
+            const lbl = row.querySelector('.pay-lbl').value.trim();
+            const amt = parseFloat(row.querySelector('.pay-amt').value) || 0;
+            totalPaid += amt;
+            payItemsEl.innerHTML += `
+                <div class="pi">
+                    <span class="pl">${lbl}</span>
+                    <span class="pv">${fmt(amt)}</span>
+                </div>`;
+        });
+
+        const due = grand - totalPaid;
+        document.getElementById('o-totalPaid').textContent = fmt(totalPaid);
+        document.getElementById('o-grand2').textContent    = fmt(grand);
+        document.getElementById('o-paid2').textContent     = fmt(totalPaid);
+        document.getElementById('o-due').textContent       = fmt(due) + '/-';
+
+        /* নোট */
+        const note = document.getElementById('invNote').value.trim();
+        const noteBox = document.getElementById('o-noteBox');
+        if (note) {
+            noteBox.style.display = '';
+            document.getElementById('o-note').textContent = note;
+        } else {
+            noteBox.style.display = 'none';
         }
+    }
 
-        .due-highlight .due-amount {
-            color: #fff; font-size: 22px; font-weight: 900;
-            display: block; margin-top: 2px;
-        }
+    /* ── প্রিন্ট ── */
+    function printNow() {
+        buildInvoice();
+        setTimeout(() => window.print(), 300);
+    }
 
-        .signature-section {
-            display: flex; justify-content: space-between;
-            margin-top: 10px; margin-bottom: 12px;
-        }
+    /* ── রিসেট ── */
+    function resetAll() {
+        if (confirm('সব তথ্য মুছে নতুন করে শুরু করবেন?')) location.reload();
+    }
 
-        .sig-box { text-align: center; width: 44%; }
-        .sig-line { border-bottom: 1.5px solid #bbb; margin-bottom: 6px; height: 35px; }
-        .sig-label { font-size: 13px; color: #555; font-weight: 700; }
-
-        .footer {
-            text-align: center; padding-top: 10px;
-            border-top: 2px dashed #e0d7ff;
-        }
-
-        .footer-text { font-size: 15px; color: #6c63ff; font-weight: 700; }
-        .footer-emoji { font-size: 18px; }
-
-        .watermark {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 90px; color: rgba(108,99,255,0.04);
-            font-weight: 900; pointer-events: none;
-            white-space: nowrap; z-index: 0;
-        }
-
+    /* পেজ লোডেই একবার বানাও */
+    buildInvoice();
+</script>
+</body>
         /* ===== PRINT ===== */
         @media print {
             body { background: white; padding: 0; }
