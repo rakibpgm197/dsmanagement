@@ -609,50 +609,892 @@ body{font-family:'Inter','Hind Siliguri',sans-serif;background:var(--bg);color:v
 </div>
 
 <!-- Invoice Create -->
-<div class="mBg" id="mInv">
-  <div class="mBox wide">
-    <div class="mHd"><div class="mTitle">🧾 নতুন ইনভয়েস</div><button class="mClose" onclick="closeM('mInv')">✕</button></div>
-    <div class="mBody">
-      <div class="fRow"><div class="fg"><label>কাস্টমার নাম *</label><input type="text" class="fi" id="iCust" placeholder="নাম লিখুন"></div><div class="fg"><label>মোবাইল</label><input type="text" class="fi" id="iPhone" placeholder="01XXXXXXXXX"></div></div>
-      <div class="fRow"><div class="fg"><label>ঠিকানা</label><input type="text" class="fi" id="iAddr" placeholder="ঠিকানা (ঐচ্ছিক)"></div><div class="fg"><label>রেফারেন্স</label><input type="text" class="fi" id="iRef" placeholder="WO-001 (ঐচ্ছিক)"></div></div>
-      <div class="fRow"><div class="fg"><label>ইনভয়েস তারিখ</label><input type="date" class="fi" id="iDate"></div><div class="fg"><label>পেমেন্ট ডেডলাইন</label><input type="date" class="fi" id="iDue"></div></div>
-      <!-- NEW: Link to existing customer -->
-      <div class="fg"><label>বিদ্যমান কাস্টমারের সাথে যুক্ত করুন (ঐচ্ছিক)</label>
-        <select class="fi" id="iLinkCust"><option value="">— নতুন কাস্টমার / কোনোটি নয় —</option></select>
-      </div>
-      <div style="margin:4px 0 12px;border-top:1px solid var(--br);padding-top:14px">
-        <div style="font-size:11.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:11px">পণ্য / সেবার তালিকা</div>
-        <div id="invItemsW"></div>
-        <button class="btn btnOl btnSm" onclick="addInvItem()" style="margin-bottom:4px">➕ আইটেম যোগ</button>
-      </div>
-      <div class="fRow">
-        <div class="fg"><label>ছাড় (৳)</label><input type="number" class="fi" id="iDisc" value="0" min="0" oninput="calcInvTot()"></div>
-        <div style="display:flex;align-items:flex-end;padding-bottom:15px"><div style="background:var(--pl);padding:13px 18px;border-radius:10px;width:100%;text-align:center"><div style="font-size:10.5px;color:var(--p);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">মোট</div><div style="font-size:21px;font-weight:900;color:var(--p)" id="iTot">৳ ০</div></div></div>
-      </div>
-      <!-- NEW: Advance payment option -->
-      <div class="fRow">
-        <div class="fg"><label>অগ্রিম / নগদ জমা (৳)</label><input type="number" class="fi" id="iAdvance" placeholder="0.00" min="0" value="0"></div>
-        <div class="fg"><label>জমার তারিখ</label><input type="date" class="fi" id="iAdvDate"></div>
-      </div>
-      <div class="fg"><label>নোট / শর্তাবলী</label><textarea class="fi fiTa" id="iNote" placeholder="ইনভয়েস নোট..."></textarea></div>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>দুরন্ত ডিজিটাল সাইন - ইনভয়েস</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'SolaimanLipi', 'Kalpurush', 'Noto Sans Bengali', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ===== CONTROL PANEL ===== */
+        .control-panel {
+            max-width: 900px;
+            margin: 0 auto 25px auto;
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .panel-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: #6c63ff;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed #e0d7ff;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .panel-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .panel-group label {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        .panel-group input, .panel-group select {
+            padding: 8px 12px;
+            border: 1.5px solid #d4cdff;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            color: #333;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .panel-group input:focus, .panel-group select:focus {
+            border-color: #6c63ff;
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #6c63ff;
+            margin: 16px 0 10px 0;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid #e0d7ff;
+        }
+
+        /* Items table in control panel */
+        .items-table-ctrl {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .items-table-ctrl th {
+            background: linear-gradient(135deg, #6c63ff, #9b59b6);
+            color: white;
+            padding: 8px 6px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .items-table-ctrl td {
+            padding: 5px 4px;
+        }
+
+        .items-table-ctrl input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1.5px solid #e0d7ff;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: inherit;
+            text-align: center;
+            outline: none;
+        }
+
+        .items-table-ctrl input:focus {
+            border-color: #6c63ff;
+        }
+
+        .items-table-ctrl input.desc-input {
+            text-align: left;
+        }
+
+        .del-btn {
+            background: #ff6584;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .add-row-btn {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+        /* Payment inputs */
+        .payment-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .pay-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .pay-item label {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #888;
+        }
+
+        .pay-item input {
+            padding: 7px 10px;
+            border: 1.5px solid #ffd0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .pay-item input:focus {
+            border-color: #ff6584;
+        }
+
+        /* Action buttons */
+        .action-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .btn-update {
+            background: linear-gradient(135deg, #6c63ff, #9b59b6);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(108,99,255,0.4);
+            transition: all 0.3s;
+        }
+
+        .btn-update:hover { transform: translateY(-2px); }
+
+        .btn-print {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(17,153,142,0.4);
+            transition: all 0.3s;
+        }
+
+        .btn-print:hover { transform: translateY(-2px); }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #ff6584, #ff8e53);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255,101,132,0.4);
+            transition: all 0.3s;
+        }
+
+        .btn-reset:hover { transform: translateY(-2px); }
+
+        /* ===== A4 PREVIEW ===== */
+        .a4-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 12mm 14mm;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #6c63ff, #ff6584, #43e97b, #6c63ff);
+            border-radius: 4px;
+            margin-bottom: 14px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed #e0d7ff;
+        }
+
+        .shop-name {
+            font-size: 28px;
+            font-weight: 900;
+            color: #6c63ff;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .shop-name span { color: #ff6584; }
+
+        .shop-address {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.6;
+        }
+
+        .invoice-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6c63ff, #9b59b6);
+            color: white;
+            padding: 4px 20px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 8px;
+            letter-spacing: 2px;
+        }
+
+        .invoice-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #f8f7ff, #fff5f7);
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid #e8e4ff;
+        }
+
+        .meta-left, .meta-right { font-size: 13.5px; line-height: 2; }
+        .meta-label { color: #888; font-weight: 600; }
+        .meta-value { color: #333; font-weight: 700; margin-left: 6px; }
+        .customer-name { font-size: 15px; color: #6c63ff; font-weight: 800; }
+
+        .table-wrapper {
+            margin-bottom: 14px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(108,99,255,0.1);
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+
+        thead tr { background: linear-gradient(135deg, #6c63ff, #9b59b6); color: white; }
+
+        thead th {
+            padding: 11px 10px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13.5px;
+        }
+
+        thead th:nth-child(2) { text-align: left; }
+
+        tbody tr { border-bottom: 1px solid #f0edff; }
+        tbody tr:nth-child(even) { background: #faf9ff; }
+        tbody tr:nth-child(odd) { background: #ffffff; }
+
+        tbody td { padding: 10px; text-align: center; color: #333; font-size: 13.5px; }
+        tbody td:nth-child(2) { text-align: left; font-weight: 600; color: #444; }
+
+        .serial-num {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, #6c63ff, #ff6584);
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 12px; margin: 0 auto;
+        }
+
+        .amount { font-weight: 700; color: #6c63ff; }
+
+        .total-row { background: linear-gradient(135deg, #6c63ff, #9b59b6) !important; }
+        .total-row td {
+            color: white !important; font-weight: 800 !important;
+            font-size: 15px !important; padding: 13px 10px !important;
+        }
+
+        .payment-section { display: flex; gap: 14px; margin-bottom: 14px; }
+
+        .payment-box {
+            flex: 1;
+            background: linear-gradient(135deg, #fff5f7, #fff0fd);
+            border: 1.5px solid #ffcce0;
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .payment-box h3 {
+            font-size: 14px; color: #ff6584; font-weight: 800;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        }
+
+        .payment-item {
+            display: flex; justify-content: space-between;
+            padding: 5px 0; border-bottom: 1px dashed #ffd0e0; font-size: 13px;
+        }
+
+        .payment-item:last-child { border-bottom: none; }
+        .payment-item .label { color: #888; }
+        .payment-item .value { font-weight: 700; color: #444; }
+
+        .payment-total {
+            background: linear-gradient(135deg, #ff6584, #ff8e53);
+            border-radius: 8px; padding: 8px 12px; margin-top: 8px;
+            display: flex; justify-content: space-between;
+            color: white; font-weight: 800; font-size: 13.5px;
+        }
+
+        .due-box {
+            flex: 1.2;
+            background: linear-gradient(135deg, #f0edff, #e8f4fd);
+            border: 1.5px solid #c9bfff;
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .due-box h3 {
+            font-size: 14px; color: #6c63ff; font-weight: 800;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        }
+
+        .due-row {
+            display: flex; justify-content: space-between;
+            padding: 6px 0; font-size: 13px; border-bottom: 1px dashed #d4cdff;
+        }
+
+        .due-row .label { color: #666; font-weight: 600; }
+        .due-row .value { font-weight: 700; color: #444; }
+
+        .due-highlight {
+            background: linear-gradient(135deg, #6c63ff, #9b59b6);
+            border-radius: 8px; padding: 10px 14px; margin-top: 10px; text-align: center;
+        }
+
+        .due-highlight .due-label {
+            color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600;
+        }
+
+        .due-highlight .due-amount {
+            color: #fff; font-size: 22px; font-weight: 900;
+            display: block; margin-top: 2px;
+        }
+
+        .signature-section {
+            display: flex; justify-content: space-between;
+            margin-top: 10px; margin-bottom: 12px;
+        }
+
+        .sig-box { text-align: center; width: 44%; }
+        .sig-line { border-bottom: 1.5px solid #bbb; margin-bottom: 6px; height: 35px; }
+        .sig-label { font-size: 13px; color: #555; font-weight: 700; }
+
+        .footer {
+            text-align: center; padding-top: 10px;
+            border-top: 2px dashed #e0d7ff;
+        }
+
+        .footer-text { font-size: 15px; color: #6c63ff; font-weight: 700; }
+        .footer-emoji { font-size: 18px; }
+
+        .watermark {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 90px; color: rgba(108,99,255,0.04);
+            font-weight: 900; pointer-events: none;
+            white-space: nowrap; z-index: 0;
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            body { background: white; padding: 0; }
+            .control-panel { display: none; }
+            .a4-wrapper { max-width: 100%; }
+            .a4-page {
+                box-shadow: none; border-radius: 0;
+                width: 100%; min-height: 100vh; padding: 10mm 12mm;
+            }
+            @page { size: A4; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== CONTROL PANEL ===== -->
+<div class="control-panel">
+    <div class="panel-title">⚙️ ইনভয়েস কাস্টমাইজ করুন</div>
+
+    <!-- Shop Info -->
+    <div class="section-label">🏪 দোকানের তথ্য</div>
+    <div class="panel-grid">
+        <div class="panel-group">
+            <label>দোকানের নাম (প্রথম অংশ)</label>
+            <input type="text" id="shopName1" value="দুরন্ত" placeholder="যেমন: দুরন্ত">
+        </div>
+        <div class="panel-group">
+            <label>দোকানের নাম (মাঝের অংশ - রঙিন)</label>
+            <input type="text" id="shopName2" value="ডিজিটাল" placeholder="যেমন: ডিজিটাল">
+        </div>
+        <div class="panel-group">
+            <label>দোকানের নাম (শেষ অংশ)</label>
+            <input type="text" id="shopName3" value="সাইন" placeholder="যেমন: সাইন">
+        </div>
+        <div class="panel-group">
+            <label>ঠিকানা (লাইন ১)</label>
+            <input type="text" id="addr1" value="পাটগ্রাম বড় মসজিদের সামনে, হোটেল সাদিকের নিচতলা">
+        </div>
+        <div class="panel-group" style="grid-column: 1/-1;">
+            <label>ঠিকানা (লাইন ২)</label>
+            <input type="text" id="addr2" value="পাটগ্রাম, লালমনিরহাট">
+        </div>
     </div>
-    <div class="mFoot"><button class="btn btnGh" onclick="closeM('mInv')">বাতিল</button><button class="btn btnP" onclick="saveInv()">🧾 ইনভয়েস তৈরি</button></div>
-  </div>
+
+    <!-- Invoice Info -->
+    <div class="section-label">📋 ইনভয়েস তথ্য</div>
+    <div class="panel-grid">
+        <div class="panel-group">
+            <label>ইনভয়েস নং</label>
+            <input type="text" id="invoiceNum" value="DS-2026-06-16-003">
+        </div>
+        <div class="panel-group">
+            <label>তারিখ</label>
+            <input type="text" id="invoiceDate" value="১৬ / ০৭ / ২০২৬ ইং">
+        </div>
+        <div class="panel-group">
+            <label>গ্রাহকের নাম</label>
+            <input type="text" id="customerName" value="ললিতারহাট উচ্চ বিদ্যালয়">
+        </div>
+        <div class="panel-group">
+            <label>স্ট্যাটাস</label>
+            <select id="statusText">
+                <option value="⏳ বকেয়া আছে">⏳ বকেয়া আছে</option>
+                <option value="✅ পরিশোধিত">✅ পরিশোধিত</option>
+                <option value="🔄 আংশিক পরিশোধিত">🔄 আংশিক পরিশোধিত</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Items -->
+    <div class="section-label">🛒 পণ্যের তালিকা</div>
+    <table class="items-table-ctrl">
+        <thead>
+            <tr>
+                <th style="width:30px;">#</th>
+                <th style="width:38%;">বিবরণ</th>
+                <th>পরিমাণ</th>
+                <th>একক মূল্য</th>
+                <th>মোট (৳)</th>
+                <th style="width:36px;"></th>
+            </tr>
+        </thead>
+        <tbody id="itemsBody">
+            <tr>
+                <td style="text-align:center; color:#6c63ff; font-weight:700;">১</td>
+                <td><input class="desc-input" type="text" placeholder="পণ্যের নাম" value="স্টুডেন্ট আইডি কার্ড"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="২৭৭ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="৬৫"></td>
+                <td><input type="number" class="total-input" placeholder="মোট" value="18005"></td>
+                <td><button class="del-btn" onclick="deleteRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center; color:#6c63ff; font-weight:700;">২</td>
+                <td><input class="desc-input" type="text" placeholder="পণ্যের নাম" value="ব্যানার (৩' × ৬')"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="১টি"></td>
+                <td><input type="text" placeholder="মূল্য" value="—"></td>
+                <td><input type="number" class="total-input" placeholder="মোট" value="350"></td>
+                <td><button class="del-btn" onclick="deleteRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center; color:#6c63ff; font-weight:700;">৩</td>
+                <td><input class="desc-input" type="text" placeholder="পণ্যের নাম" value="প্রবেশপত্র (১০০ GSM)"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="৩০০ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="২"></td>
+                <td><input type="number" class="total-input" placeholder="মোট" value="600"></td>
+                <td><button class="del-btn" onclick="deleteRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center; color:#6c63ff; font-weight:700;">৪</td>
+                <td><input class="desc-input" type="text" placeholder="পণ্যের নাম" value="কভার পেইজ (৬৫ GSM, ১৮&quot; × ১০&quot;)"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="৩,০০০ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="২"></td>
+                <td><input type="number" class="total-input" placeholder="মোট" value="6000"></td>
+                <td><button class="del-btn" onclick="deleteRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td style="text-align:center; color:#6c63ff; font-weight:700;">৫</td>
+                <td><input class="desc-input" type="text" placeholder="পণ্যের নাম" value="ডায়েরি"></td>
+                <td><input type="text" placeholder="পরিমাণ" value="৩০০ পিস"></td>
+                <td><input type="text" placeholder="মূল্য" value="৯০"></td>
+                <td><input type="number" class="total-input" placeholder="মোট" value="27000"></td>
+                <td><button class="del-btn" onclick="deleteRow(this)">✕</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="add-row-btn" onclick="addRow()">➕ নতুন পণ্য যোগ করুন</button>
+
+    <!-- Payments -->
+    <div class="section-label">💰 জমাকৃত টাকা</div>
+    <div id="paymentInputs">
+        <div class="payment-inputs">
+            <div class="pay-item">
+                <label>প্রথম জমাদানের নাম</label>
+                <input type="text" id="pay1label" value="প্রথম জমাদান">
+            </div>
+            <div class="pay-item">
+                <label>পরিমাণ (৳)</label>
+                <input type="number" id="pay1amount" value="5000">
+            </div>
+            <div class="pay-item" style="justify-content: flex-end; align-items: flex-end;">
+                <button class="add-row-btn" onclick="addPayment()" style="margin:0;">➕ জমা যোগ করুন</button>
+            </div>
+        </div>
+        <div class="payment-inputs">
+            <div class="pay-item">
+                <label>দ্বিতীয় জমাদানের নাম</label>
+                <input type="text" id="pay2label" value="দ্বিতীয় জমাদান">
+            </div>
+            <div class="pay-item">
+                <label>পরিমাণ (৳)</label>
+                <input type="number" id="pay2amount" value="2000">
+            </div>
+        </div>
+        <div class="payment-inputs">
+            <div class="pay-item">
+                <label>তৃতীয় জমাদানের নাম</label>
+                <input type="text" id="pay3label" value="তৃতীয় জমাদান">
+            </div>
+            <div class="pay-item">
+                <label>পরিমাণ (৳)</label>
+                <input type="number" id="pay3amount" value="10000">
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-btns">
+        <button class="btn-update" onclick="updateInvoice()">🔄 ইনভয়েস আপডেট করুন</button>
+        <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+        <button class="btn-reset" onclick="resetAll()">🗑️ রিসেট করুন</button>
+    </div>
 </div>
 
-<!-- Installment -->
-<div class="mBg" id="mInst">
-  <div class="mBox">
-    <div class="mHd"><div class="mTitle">💳 কিস্তি যোগ করুন</div><button class="mClose" onclick="closeM('mInst')">✕</button></div>
-    <div class="mBody">
-      <input type="hidden" id="mInstId">
-      <div style="background:var(--bg);border-radius:11px;padding:13px;margin-bottom:16px;line-height:1.9;font-size:13.5px" id="mInstSum"></div>
-      <div class="fRow"><div class="fg"><label>জমার পরিমাণ (৳) *</label><input type="number" class="fi" id="mInstAmt" placeholder="0.00" min="0"></div><div class="fg"><label>তারিখ *</label><input type="date" class="fi" id="mInstDt"></div></div>
-      <div class="fg"><label>নোট</label><input type="text" class="fi" id="mInstNt" placeholder="পেমেন্টের বিবরণ..."></div>
+<!-- ===== A4 INVOICE PREVIEW ===== -->
+<div class="a4-wrapper">
+    <div class="a4-page">
+        <div class="watermark">INVOICE</div>
+        <div class="top-bar"></div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="shop-name">
+                <span id="out-shopName1">দুরন্ত</span>
+                <span> <span id="out-shopName2">ডিজিটাল</span> </span>
+                <span id="out-shopName3">সাইন</span>
+            </div>
+            <div class="shop-address">
+                <span id="out-addr1">পাটগ্রাম বড় মসজিদের সামনে, হোটেল সাদিকের নিচতলা</span><br>
+                <span id="out-addr2">পাটগ্রাম, লালমনিরহাট</span>
+            </div>
+            <div class="invoice-badge">⚡ INVOICE</div>
+        </div>
+
+        <!-- Meta -->
+        <div class="invoice-meta">
+            <div class="meta-left">
+                <div>
+                    <span class="meta-label">গ্রাহকের নাম:</span>
+                    <span class="meta-value customer-name" id="out-customer">ললিতারহাট উচ্চ বিদ্যালয়</span>
+                </div>
+                <div>
+                    <span class="meta-label">ইনভয়েস নং:</span>
+                    <span class="meta-value" id="out-invoiceNum">DS-2026-06-16-003</span>
+                </div>
+            </div>
+            <div class="meta-right">
+                <div>
+                    <span class="meta-label">তারিখ:</span>
+                    <span class="meta-value" id="out-date">১৬ / ০৭ / ২০২৬ ইং</span>
+                </div>
+                <div>
+                    <span class="meta-label">স্ট্যাটাস:</span>
+                    <span class="meta-value" id="out-status" style="color:#ff6584;">⏳ বকেয়া আছে</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">ক্রমিক</th>
+                        <th>বিবরণ</th>
+                        <th>পরিমাণ</th>
+                        <th>একক মূল্য</th>
+                        <th>মোট</th>
+                    </tr>
+                </thead>
+                <tbody id="out-itemsBody">
+                    <!-- JS দিয়ে তৈরি হবে -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Payment & Due -->
+        <div class="payment-section">
+            <div class="payment-box">
+                <h3>💰 জমাকৃত টাকার বিবরণ</h3>
+                <div id="out-paymentItems"></div>
+                <div class="payment-total">
+                    <span>মোট জমা</span>
+                    <span id="out-totalPaid">৳০</span>
+                </div>
+            </div>
+            <div class="due-box">
+                <h3>📋 পরিশোধের সারসংক্ষেপ</h3>
+                <div class="due-row">
+                    <span class="label">সর্বমোট বিল</span>
+                    <span class="value" id="out-grandTotal2">৳০</span>
+                </div>
+                <div class="due-row">
+                    <span class="label">(-) মোট জমা</span>
+                    <span class="value" style="color:#ff6584;" id="out-totalPaid2">৳০</span>
+                </div>
+                <div class="due-highlight">
+                    <div class="due-label">⚠️ বকেয়া পরিশোধযোগ্য</div>
+                    <span class="due-amount" id="out-due">৳০/-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signature -->
+        <div class="signature-section">
+            <div class="sig-box">
+                <div class="sig-line"></div>
+                <div class="sig-label">✍️ গ্রাহকের স্বাক্ষর</div>
+            </div>
+            <div class="sig-box">
+                <div class="sig-line"></div>
+                <div class="sig-label">✍️ দোকান কর্তৃপক্ষের স্বাক্ষর</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <span class="footer-emoji">🌸</span>
+            <span class="footer-text"> ধন্যবাদ। আবারও আসবেন। </span>
+            <span class="footer-emoji">🌸</span>
+        </div>
     </div>
-    <div class="mFoot"><button class="btn btnGh" onclick="closeM('mInst')">বাতিল</button><button class="btn btnG" onclick="saveInst()">✅ কিস্তি সংরক্ষণ</button></div>
-  </div>
 </div>
+
+<script>
+    // ===== বাংলা সংখ্যা =====
+    const bnNums = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    function toBangla(num) {
+        return num.toString().replace(/\d/g, d => bnNums[d]);
+    }
+
+    function formatBDT(num) {
+        if (!num || isNaN(num)) return '—';
+        return '৳' + toBangla(Number(num).toLocaleString('en-IN'));
+    }
+
+    // ===== সারি ক্রমিক আপডেট =====
+    function updateSerials() {
+        const rows = document.querySelectorAll('#itemsBody tr');
+        const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯','১০'];
+        rows.forEach((row, i) => {
+            row.cells[0].textContent = toBangla(i + 1);
+        });
+    }
+
+    // ===== সারি মুছুন =====
+    function deleteRow(btn) {
+        btn.closest('tr').remove();
+        updateSerials();
+    }
+
+    // ===== নতুন পণ্য যোগ =====
+    let rowCount = 5;
+    function addRow() {
+        rowCount++;
+        const tbody = document.getElementById('itemsBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="text-align:center; color:#6c63ff; font-weight:700;">${toBangla(tbody.rows.length + 1)}</td>
+            <td><input class="desc-input" type="text" placeholder="পণ্যের নাম"></td>
+            <td><input type="text" placeholder="পরিমাণ"></td>
+            <td><input type="text" placeholder="মূল্য"></td>
+            <td><input type="number" class="total-input" placeholder="মোট"></td>
+            <td><button class="del-btn" onclick="deleteRow(this)">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+        updateSerials();
+    }
+
+    // ===== নতুন জমা যোগ =====
+    let payCount = 3;
+    function addPayment() {
+        payCount++;
+        const labels = ['চতুর্থ','পঞ্চম','ষষ্ঠ','সপ্তম','অষ্টম','নবম','দশম'];
+        const labelText = labels[payCount - 4] || (toBangla(payCount) + 'তম');
+        const container = document.getElementById('paymentInputs');
+        const div = document.createElement('div');
+        div.className = 'payment-inputs';
+        div.innerHTML = `
+            <div class="pay-item">
+                <label>${labelText} জমাদানের নাম</label>
+                <input type="text" id="pay${payCount}label" value="${labelText} জমাদান">
+            </div>
+            <div class="pay-item">
+                <label>পরিমাণ (৳)</label>
+                <input type="number" id="pay${payCount}amount" value="0">
+            </div>
+            <div class="pay-item" style="justify-content:flex-end; align-items:flex-end;">
+                <button class="del-btn" onclick="this.closest('.payment-inputs').remove()" style="width:auto; padding:0 12px;">✕ মুছুন</button>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    // ===== মূল আপডেট ফাংশন =====
+    function updateInvoice() {
+        // Shop info
+        document.getElementById('out-shopName1').textContent = document.getElementById('shopName1').value;
+        document.getElementById('out-shopName2').textContent = document.getElementById('shopName2').value;
+        document.getElementById('out-shopName3').textContent = document.getElementById('shopName3').value;
+        document.getElementById('out-addr1').textContent = document.getElementById('addr1').value;
+        document.getElementById('out-addr2').textContent = document.getElementById('addr2').value;
+
+        // Invoice info
+        document.getElementById('out-customer').textContent = document.getElementById('customerName').value;
+        document.getElementById('out-invoiceNum').textContent = document.getElementById('invoiceNum').value;
+        document.getElementById('out-date').textContent = document.getElementById('invoiceDate').value;
+        const statusEl = document.getElementById('out-status');
+        statusEl.textContent = document.getElementById('statusText').value;
+        statusEl.style.color = document.getElementById('statusText').value.includes('✅') ? '#43e97b' : '#ff6584';
+
+        // Items
+        const rows = document.querySelectorAll('#itemsBody tr');
+        const outBody = document.getElementById('out-itemsBody');
+        outBody.innerHTML = '';
+        let grandTotal = 0;
+
+        const bnSerial = ['১','২','৩','৪','৫','৬','৭','৮','৯','১০','১১','১২','১৩','১৪','১৫'];
+
+        rows.forEach((row, i) => {
+            const inputs = row.querySelectorAll('input');
+            const desc = inputs[0].value || '';
+            const qty = inputs[1].value || '—';
+            const price = inputs[2].value || '—';
+            const total = parseFloat(inputs[3].value) || 0;
+            grandTotal += total;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><div class="serial-num">${bnSerial[i] || toBangla(i+1)}</div></td>
+                <td>${desc}</td>
+                <td>${qty}</td>
+                <td>${price ? '৳' + price : '—'}</td>
+                <td class="amount">${formatBDT(total)}</td>
+            `;
+            outBody.appendChild(tr);
+        });
+
+        // Grand total row
+        const totalTr = document.createElement('tr');
+        totalTr.className = 'total-row';
+        totalTr.innerHTML = `
+            <td colspan="4" style="text-align:right; padding-right:16px;">🧾 সর্বমোট বিল</td>
+            <td>${formatBDT(grandTotal)}</td>
+        `;
+        outBody.appendChild(totalTr);
+
+        // Payments
+        let totalPaid = 0;
+        const payItemsEl = document.getElementById('out-paymentItems');
+        payItemsEl.innerHTML = '';
+
+        for (let p = 1; p <= payCount; p++) {
+            const labelEl = document.getElementById(`pay${p}label`);
+            const amountEl = document.getElementById(`pay${p}amount`);
+            if (!labelEl || !amountEl) continue;
+            const lbl = labelEl.value;
+            const amt = parseFloat(amountEl.value) || 0;
+            if (amt === 0 && lbl === '') continue;
+            totalPaid += amt;
+            payItemsEl.innerHTML += `
+                <div class="payment-item">
+                    <span class="label">${lbl}</span>
+                    <span class="value">${formatBDT(amt)}</span>
+                </div>
+            `;
+        }
+
+        const due = grandTotal - totalPaid;
+
+        document.getElementById('out-totalPaid').textContent = formatBDT(totalPaid);
+        document.getElementById('out-grandTotal2').textContent = formatBDT(grandTotal);
+        document.getElementById('out-totalPaid2').textContent = formatBDT(totalPaid);
+        document.getElementById('out-due').textContent = formatBDT(due) + '/-';
+    }
+
+    // ===== রিসেট =====
+    function resetAll() {
+        if (confirm('সব তথ্য মুছে ফেলবেন?')) {
+            location.reload();
+        }
+    }
+
+    // প্রথমেই আপডেট করুন
+    updateInvoice();
+</script>
+
+</body>
 
 <!-- Daily -->
 <div class="mBg" id="mDly">
