@@ -3,564 +3,1047 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>দুরন্ত ডিজিটাল সাইন — Shop Management</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<title>দুরন্ত ডিজিটাল সাইন</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
 <style>
+/* ════════════════════════════════════════════════
+   ROOT VARIABLES
+════════════════════════════════════════════════ */
 :root {
-  --p1:#1a73e8;--p2:#0d47a1;--p3:#e8f0fe;
-  --g1:#34a853;--g2:#1b5e20;--g3:#e6f4ea;
-  --r1:#ea4335;--r2:#b71c1c;--r3:#fce8e6;
-  --o1:#f9ab00;--o2:#e65100;--o3:#fff8e1;
-  --dark:#0f1729;--dark2:#1e2d4a;--dark3:#2d3f5e;
-  --text:#1a202c;--text2:#4a5568;--text3:#718096;
-  --bg:#f0f4ff;--bg2:#e8eef8;--card:#fff;
-  --border:#dde3f0;--border2:#c4cfe0;
-  --grad:linear-gradient(135deg,#1a73e8,#0d47a1);
-  --grad2:linear-gradient(135deg,#34a853,#1b5e20);
-  --grad3:linear-gradient(135deg,#ea4335,#b71c1c);
-  --grad4:linear-gradient(135deg,#f9ab00,#e65100);
-  --grad-dark:linear-gradient(160deg,#0f1729 0%,#1a73e8 60%,#34a853 100%);
-  --shadow-sm:0 2px 8px rgba(26,114,232,.08);
-  --shadow:0 4px 20px rgba(26,114,232,.12);
-  --shadow-lg:0 12px 40px rgba(26,114,232,.18);
-  --shadow-xl:0 24px 60px rgba(26,114,232,.22);
-  --r4:24px;--r3:16px;--r2:12px;--r1:8px;
+  --blue:#1a73e8; --blue-d:#1557b0; --blue-l:#e8f0fe;
+  --green:#34a853; --green-d:#1e7e34; --green-l:#e6f4ea;
+  --red:#ea4335; --red-d:#b71c1c; --red-l:#fce8e6;
+  --gold:#f9ab00; --gold-d:#e65100; --gold-l:#fff8e1;
+  --dark:#0f1729; --dark2:#1e2d4a; --dark3:#2a3f60;
+  --text:#1a202c; --text2:#4a5568; --text3:#718096;
+  --bg:#f0f4ff; --bg2:#e8eef8; --white:#ffffff;
+  --border:#dde3f0; --border2:#c4d0e8;
+  --grad-main:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%);
+  --grad-dark:linear-gradient(160deg,#0f1729 0%,#1e2d4a 50%,#1a73e8 100%);
+  --grad-green:linear-gradient(135deg,#34a853 0%,#1e7e34 100%);
+  --grad-red:linear-gradient(135deg,#ea4335 0%,#b71c1c 100%);
+  --grad-gold:linear-gradient(135deg,#f9ab00 0%,#e65100 100%);
+  --sh-sm:0 2px 10px rgba(26,114,232,.08);
+  --sh-md:0 6px 24px rgba(26,114,232,.14);
+  --sh-lg:0 16px 48px rgba(26,114,232,.20);
+  --sh-xl:0 28px 80px rgba(0,0,0,.18);
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-xl:28px;
+  --sb-w:265px;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Inter','Hind Siliguri',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-/* ═══════════════════════════════════════
-   LOGIN
-═══════════════════════════════════════ */
+/* ════════════════════════════════════════════════
+   RESET & BASE
+════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Inter','Hind Siliguri',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--blue)}
+
+/* ════════════════════════════════════════════════
+   LOGIN PAGE
+════════════════════════════════════════════════ */
 #loginPage{
-  min-height:100vh;
+  position:fixed;inset:0;z-index:9000;
   background:var(--grad-dark);
   display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
+  padding:20px;overflow:hidden;
 }
-.login-blob{
+.lg-bg-circle{
   position:absolute;border-radius:50%;
-  background:rgba(255,255,255,.04);
-  animation:blobFloat 8s ease-in-out infinite;
+  background:rgba(255,255,255,.04);pointer-events:none;
 }
-.login-blob:nth-child(1){width:500px;height:500px;top:-150px;right:-100px;animation-delay:0s}
-.login-blob:nth-child(2){width:350px;height:350px;bottom:-80px;left:-80px;animation-delay:3s}
-.login-blob:nth-child(3){width:200px;height:200px;top:40%;left:10%;animation-delay:6s}
-@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+.lg-bg-circle:nth-child(1){width:600px;height:600px;top:-200px;right:-150px;animation:lgFloat 10s ease-in-out infinite}
+.lg-bg-circle:nth-child(2){width:400px;height:400px;bottom:-120px;left:-100px;animation:lgFloat 8s ease-in-out infinite 2s reverse}
+.lg-bg-circle:nth-child(3){width:250px;height:250px;top:35%;left:8%;animation:lgFloat 12s ease-in-out infinite 4s}
+.lg-bg-circle:nth-child(4){width:150px;height:150px;top:15%;right:15%;animation:lgFloat 7s ease-in-out infinite 1s reverse}
+@keyframes lgFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-35px) rotate(5deg)}}
 
-.login-wrap{
-  display:grid;grid-template-columns:1fr 1fr;
-  width:100%;max-width:920px;
-  background:rgba(255,255,255,.97);
-  border-radius:32px;
-  box-shadow:0 40px 100px rgba(0,0,0,.35);
+.lg-card{
+  background:rgba(255,255,255,.98);
+  border-radius:var(--r-xl);
+  box-shadow:var(--sh-xl);
   overflow:hidden;
-  z-index:10;
-  margin:20px;
-  animation:loginSlide .7s cubic-bezier(.16,1,.3,1);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  width:100%;max-width:900px;
+  animation:lgIn .8s cubic-bezier(.16,1,.3,1) both;
+  position:relative;z-index:1;
 }
-@keyframes loginSlide{from{opacity:0;transform:translateY(50px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes lgIn{
+  from{opacity:0;transform:translateY(60px) scale(.92)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
 
-.login-left{
+/* Login Left */
+.lg-left{
   background:var(--grad-dark);
-  padding:60px 40px;
+  padding:56px 44px;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  text-align:center;
-  position:relative;overflow:hidden;
+  text-align:center;position:relative;overflow:hidden;
 }
-.login-left::before{
+.lg-left::before{
   content:'';position:absolute;
-  width:300px;height:300px;
+  width:350px;height:350px;border-radius:50%;
   background:rgba(255,255,255,.04);
-  border-radius:50%;top:-80px;right:-80px;
+  top:-100px;right:-100px;pointer-events:none;
 }
-.ll-icon{
-  width:100px;height:100px;
-  background:rgba(255,255,255,.15);
-  border-radius:28px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:48px;
-  margin-bottom:24px;
+.lg-left::after{
+  content:'';position:absolute;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(26,115,232,.15);
+  bottom:-60px;left:-60px;pointer-events:none;
+}
+.lg-icon-wrap{
+  width:108px;height:108px;
+  background:rgba(255,255,255,.12);
   border:2px solid rgba(255,255,255,.2);
+  border-radius:30px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;margin-bottom:28px;
   backdrop-filter:blur(10px);
-  animation:iconPulse 3s ease infinite;
+  position:relative;z-index:1;
+  animation:iconPulse 3s ease-in-out infinite;
+  box-shadow:0 0 0 0 rgba(255,255,255,.2);
 }
-@keyframes iconPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.15)}50%{box-shadow:0 0 0 20px rgba(255,255,255,0)}}
-.ll-title{font-family:'Playfair Display',serif;font-size:28px;color:#fff;font-weight:800;line-height:1.3;margin-bottom:10px}
-.ll-sub{color:rgba(255,255,255,.7);font-size:14px;line-height:1.7}
-.ll-info{margin-top:32px;padding:16px 20px;background:rgba(255,255,255,.1);border-radius:14px;border:1px solid rgba(255,255,255,.15);text-align:left}
-.ll-info p{color:rgba(255,255,255,.85);font-size:13px;line-height:1.8}
-.ll-info strong{color:#fff}
-
-.login-right{padding:50px 44px;display:flex;flex-direction:column;justify-content:center}
-.lr-title{font-size:28px;font-weight:800;color:var(--text);margin-bottom:6px}
-.lr-sub{font-size:14px;color:var(--text3);margin-bottom:36px}
-.err-box{display:none;background:var(--r3);color:var(--r1);padding:12px 16px;border-radius:10px;font-size:14px;margin-bottom:16px;border-left:4px solid var(--r1);font-weight:500}
-
-.fg{margin-bottom:20px}
-.fg label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;letter-spacing:.3px}
-.input-w{position:relative}
-.input-w .ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px}
-.finput{width:100%;padding:14px 16px 14px 48px;border:2px solid var(--border);border-radius:12px;font-size:15px;font-family:inherit;background:#fafbff;color:var(--text);transition:all .3s;outline:none}
-.finput:focus{border-color:var(--p1);background:#fff;box-shadow:0 0 0 4px rgba(26,115,232,.1)}
-.btn-login{width:100%;padding:16px;background:var(--grad);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .3s;margin-top:4px;letter-spacing:.3px}
-.btn-login:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(26,115,232,.4)}
-.btn-login:active{transform:translateY(0)}
-
-@media(max-width:680px){
-  .login-wrap{grid-template-columns:1fr}
-  .login-left{padding:40px 30px;display:none}
-  .login-right{padding:40px 28px}
+@keyframes iconPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.2);transform:scale(1)}
+  50%{box-shadow:0 0 0 18px rgba(255,255,255,0);transform:scale(1.04)}
 }
+.lg-shop-name{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:800;
+  color:#fff;line-height:1.3;
+  margin-bottom:10px;
+  position:relative;z-index:1;
+}
+.lg-tagline{
+  color:rgba(255,255,255,.65);
+  font-size:13px;font-style:italic;
+  margin-bottom:32px;
+  position:relative;z-index:1;
+}
+.lg-address{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;padding:18px 20px;
+  text-align:left;position:relative;z-index:1;
+  backdrop-filter:blur(8px);
+}
+.lg-address p{
+  color:rgba(255,255,255,.8);
+  font-size:13px;line-height:2;
+}
+.lg-address strong{color:#fff}
 
-/* ═══════════════════════════════════════
-   SIDEBAR
-═══════════════════════════════════════ */
-#mainApp{display:none}
-.sidebar{
-  position:fixed;left:0;top:0;width:260px;height:100vh;
-  background:var(--dark);
-  z-index:1000;transition:width .3s ease;
-  overflow:hidden;
+/* Login Right */
+.lg-right{
+  padding:56px 48px;
   display:flex;flex-direction:column;
-  box-shadow:4px 0 24px rgba(0,0,0,.2);
+  justify-content:center;
+}
+.lg-welcome{font-size:30px;font-weight:900;color:var(--text);margin-bottom:6px}
+.lg-sub{font-size:14px;color:var(--text3);margin-bottom:36px}
+.lg-err{
+  display:none;
+  background:var(--red-l);color:var(--red);
+  padding:12px 16px;border-radius:10px;
+  font-size:14px;font-weight:500;
+  margin-bottom:18px;
+  border-left:4px solid var(--red);
+  animation:shake .4s ease;
+}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.lg-fg{margin-bottom:20px}
+.lg-label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.6px}
+.lg-iw{position:relative}
+.lg-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}
+.lg-inp{
+  width:100%;padding:14px 16px 14px 50px;
+  border:2px solid var(--border);border-radius:12px;
+  font-size:15px;background:#fafbff;color:var(--text);
+  transition:all .3s;outline:none;
+}
+.lg-inp:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(26,115,232,.1)}
+.lg-btn{
+  width:100%;padding:16px;
+  background:var(--grad-main);color:#fff;
+  border:none;border-radius:12px;
+  font-size:16px;font-weight:700;
+  letter-spacing:.3px;
+  transition:all .3s;margin-top:6px;
+  box-shadow:0 6px 20px rgba(26,115,232,.35);
+}
+.lg-btn:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(26,115,232,.45)}
+.lg-btn:active{transform:translateY(0)}
+
+/* ════════════════════════════════════════════════
+   MAIN APP LAYOUT
+════════════════════════════════════════════════ */
+#app{display:none}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;left:0;top:0;
+  width:var(--sb-w);height:100vh;
+  background:var(--dark);
+  z-index:800;
+  display:flex;flex-direction:column;
+  transition:width .3s cubic-bezier(.4,0,.2,1),transform .3s ease;
+  overflow:hidden;
+  box-shadow:4px 0 30px rgba(0,0,0,.22);
 }
 .sidebar.slim{width:72px}
-.sb-head{
-  padding:20px 18px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  display:flex;align-items:center;gap:12px;
-  flex-shrink:0;
+.sb-top{
+  padding:20px 16px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:14px;
+  flex-shrink:0;min-height:72px;
 }
-.sb-logo{
-  width:42px;height:42px;min-width:42px;
-  background:var(--grad);border-radius:12px;
+.sb-logo-box{
+  width:44px;height:44px;min-width:44px;
+  background:var(--grad-main);border-radius:13px;
   display:flex;align-items:center;justify-content:center;
-  font-size:20px;
+  font-size:22px;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(26,115,232,.4);
 }
-.sb-brand{overflow:hidden;white-space:nowrap}
+.sb-brand{overflow:hidden;white-space:nowrap;transition:opacity .3s}
 .sb-brand h3{color:#fff;font-size:15px;font-weight:700;line-height:1.3}
-.sb-brand span{color:rgba(255,255,255,.5);font-size:11px}
-.sb-nav{flex:1;padding:16px 12px;overflow-y:auto;overflow-x:hidden}
-.sb-nav::-webkit-scrollbar{width:3px}
-.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
-.nav-section{margin-bottom:6px}
-.nav-sec-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1.5px;padding:10px 12px 4px;white-space:nowrap;overflow:hidden;transition:opacity .3s}
-.sidebar.slim .nav-sec-label{opacity:0}
-.nav-it{
-  display:flex;align-items:center;gap:12px;
+.sb-brand span{color:rgba(255,255,255,.45);font-size:11px;font-weight:400}
+.sidebar.slim .sb-brand{opacity:0;pointer-events:none}
+
+.sb-body{flex:1;padding:16px 10px;overflow-y:auto;overflow-x:hidden}
+.sb-body::-webkit-scrollbar{width:0}
+.sb-section{margin-bottom:4px}
+.sb-sec-lbl{
+  font-size:10px;font-weight:700;
+  color:rgba(255,255,255,.3);
+  text-transform:uppercase;letter-spacing:1.8px;
+  padding:10px 14px 4px;
+  white-space:nowrap;overflow:hidden;
+  transition:opacity .25s;
+}
+.sidebar.slim .sb-sec-lbl{opacity:0}
+.nav-btn{
+  display:flex;align-items:center;gap:13px;
   padding:12px 14px;border-radius:12px;
-  color:rgba(255,255,255,.65);
+  color:rgba(255,255,255,.6);
   cursor:pointer;transition:all .2s;
   margin-bottom:3px;position:relative;
   white-space:nowrap;overflow:hidden;
-  user-select:none;
+  user-select:none;border:none;background:none;
+  width:100%;text-align:left;
 }
-.nav-it:hover{background:rgba(255,255,255,.08);color:#fff}
-.nav-it.on{background:rgba(26,115,232,.25);color:#fff;font-weight:600}
-.nav-it.on::before{content:'';position:absolute;left:0;top:25%;bottom:25%;width:3px;background:var(--p1);border-radius:3px}
-.nav-ic{font-size:19px;flex-shrink:0}
-.nav-tx{font-size:14px;transition:opacity .3s}
-.sidebar.slim .nav-tx{opacity:0}
-.sb-foot{padding:14px 12px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
+.nav-btn.active{background:rgba(26,115,232,.25);color:#fff;font-weight:600}
+.nav-btn.active::before{
+  content:'';position:absolute;
+  left:0;top:22%;bottom:22%;
+  width:3px;background:var(--blue);
+  border-radius:0 3px 3px 0;
+}
+.nav-ic{font-size:19px;flex-shrink:0;line-height:1}
+.nav-tx{font-size:14px;transition:opacity .25s;line-height:1}
+.sidebar.slim .nav-tx{opacity:0;pointer-events:none}
+.sb-foot{
+  padding:12px 10px;
+  border-top:1px solid rgba(255,255,255,.07);
+  flex-shrink:0;
+}
 
-/* ═══════════════════════════════════════
-   TOPBAR
-═══════════════════════════════════════ */
+/* TOPBAR */
 .topbar{
-  position:fixed;top:0;right:0;left:260px;height:68px;
+  position:fixed;top:0;right:0;
+  left:var(--sb-w);height:68px;
   background:rgba(255,255,255,.95);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
-  z-index:998;display:flex;align-items:center;
+  z-index:700;
+  display:flex;align-items:center;
   padding:0 28px;gap:14px;
-  transition:left .3s;
-  box-shadow:var(--shadow-sm);
+  transition:left .3s cubic-bezier(.4,0,.2,1);
+  box-shadow:var(--sh-sm);
 }
-.topbar.wide{left:72px}
-.tb-toggle{width:40px;height:40px;background:var(--p3);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--p1);transition:all .2s;flex-shrink:0}
-.tb-toggle:hover{background:var(--p1);color:#fff}
-.tb-info{flex:1}
-.tb-info h2{font-size:18px;font-weight:700;color:var(--text)}
+.topbar.slim{left:72px}
+.tb-toggle{
+  width:40px;height:40px;
+  background:var(--blue-l);border:none;
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:19px;color:var(--blue);
+  transition:all .2s;flex-shrink:0;
+}
+.tb-toggle:hover{background:var(--blue);color:#fff;transform:scale(1.05)}
+.tb-info{flex:1;min-width:0}
+.tb-info h2{
+  font-size:17px;font-weight:800;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .tb-info p{font-size:12px;color:var(--text3)}
-.tb-actions{display:flex;align-items:center;gap:10px}
-.tb-date{background:var(--p3);color:var(--p1);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;white-space:nowrap}
-.tb-logout{padding:9px 18px;background:var(--r3);color:var(--r1);border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
-.tb-logout:hover{background:var(--r1);color:#fff}
-
-/* ═══════════════════════════════════════
-   CONTENT
-═══════════════════════════════════════ */
-.content{margin-left:260px;margin-top:68px;padding:28px;transition:margin-left .3s;min-height:calc(100vh - 68px)}
-.content.wide{margin-left:72px}
-.page{display:none}
-.page.on{display:block;animation:pgIn .4s cubic-bezier(.16,1,.3,1)}
-@keyframes pgIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-/* ═══════════════════════════════════════
-   CARDS & STATS
-═══════════════════════════════════════ */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-bottom:24px}
-.sc{
-  background:var(--card);border-radius:var(--r3);
-  padding:22px;box-shadow:var(--shadow-sm);
-  border:1px solid var(--border);
-  transition:all .3s;position:relative;overflow:hidden;
+.tb-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tb-date{
+  background:var(--blue-l);color:var(--blue);
+  padding:8px 14px;border-radius:10px;
+  font-size:13px;font-weight:600;
+  white-space:nowrap;
 }
-.sc:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-.sc-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
-.sc-val{font-size:24px;font-weight:800;color:var(--text);line-height:1;margin-bottom:5px}
-.sc-lbl{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
-.sc-glow{position:absolute;right:-20px;top:-20px;width:80px;height:80px;border-radius:50%;opacity:.08}
+.tb-logout-btn{
+  padding:9px 18px;
+  background:var(--red-l);color:var(--red);
+  border:none;border-radius:10px;
+  font-size:13px;font-weight:600;
+  transition:all .2s;
+}
+.tb-logout-btn:hover{background:var(--red);color:#fff}
 
-.card{background:var(--card);border-radius:var(--r3);padding:24px;box-shadow:var(--shadow-sm);border:1px solid var(--border);margin-bottom:20px}
-.card-title{font-size:16px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.card-title::before{content:'';width:4px;height:20px;background:var(--grad);border-radius:4px}
+/* CONTENT AREA */
+.content-area{
+  margin-left:var(--sb-w);
+  margin-top:68px;
+  padding:28px;
+  min-height:calc(100vh - 68px);
+  transition:margin-left .3s cubic-bezier(.4,0,.2,1);
+}
+.content-area.slim{margin-left:72px}
+.page-section{display:none}
+.page-section.active{display:block;animation:pageIn .4s cubic-bezier(.16,1,.3,1)}
+@keyframes pageIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.sec-title{font-size:19px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px}
-.sec-title::before{content:'';width:5px;height:22px;background:var(--grad);border-radius:4px}
+/* ════════════════════════════════════════════════
+   COMMON UI COMPONENTS
+════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════
-   BUTTONS
-═══════════════════════════════════════ */
-.btn{padding:10px 20px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .25s;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+/* Section Header */
+.sec-head{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;flex-wrap:wrap;gap:12px;
+}
+.sec-title{
+  font-size:20px;font-weight:800;color:var(--text);
+  display:flex;align-items:center;gap:10px;
+}
+.sec-title::before{
+  content:'';width:5px;height:22px;
+  background:var(--grad-main);border-radius:4px;
+}
+
+/* Stat Cards */
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:18px;margin-bottom:24px;
+}
+.stat-card{
+  background:var(--white);border-radius:var(--r-lg);
+  padding:22px;border:1px solid var(--border);
+  box-shadow:var(--sh-sm);transition:all .3s;
+  position:relative;overflow:hidden;cursor:default;
+}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
+.stat-card-icon{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:25px;margin-bottom:16px;
+}
+.stat-card-val{font-size:24px;font-weight:900;color:var(--text);line-height:1;margin-bottom:5px}
+.stat-card-lbl{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.stat-card-bg{
+  position:absolute;right:-15px;top:-15px;
+  width:80px;height:80px;border-radius:50%;opacity:.08;
+}
+
+/* Card */
+.card{
+  background:var(--white);border-radius:var(--r-lg);
+  padding:24px;border:1px solid var(--border);
+  box-shadow:var(--sh-sm);margin-bottom:20px;
+}
+.card-head{
+  font-size:16px;font-weight:700;color:var(--text);
+  display:flex;align-items:center;gap:9px;
+  margin-bottom:18px;padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.card-head::before{
+  content:'';width:4px;height:18px;
+  background:var(--grad-main);border-radius:3px;
+}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;border:none;border-radius:10px;
+  font-size:14px;font-weight:600;
+  transition:all .25s;white-space:nowrap;
+  line-height:1;
+}
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:translateY(0)}
-.btn-p{background:var(--grad);color:#fff;box-shadow:0 4px 14px rgba(26,115,232,.3)}
-.btn-p:hover{box-shadow:0 8px 24px rgba(26,115,232,.4)}
-.btn-g{background:var(--grad2);color:#fff;box-shadow:0 4px 14px rgba(52,168,83,.3)}
-.btn-g:hover{box-shadow:0 8px 24px rgba(52,168,83,.4)}
-.btn-r{background:var(--grad3);color:#fff;box-shadow:0 4px 14px rgba(234,67,53,.3)}
-.btn-r:hover{box-shadow:0 8px 24px rgba(234,67,53,.4)}
-.btn-o{background:var(--grad4);color:#fff;box-shadow:0 4px 14px rgba(249,171,0,.3)}
-.btn-outline{background:transparent;color:var(--p1);border:2px solid var(--p1)}
-.btn-sm{padding:7px 14px;font-size:13px}
-.btn-xs{padding:5px 10px;font-size:12px;border-radius:8px}
+.btn-primary{background:var(--grad-main);color:#fff;box-shadow:0 4px 14px rgba(26,115,232,.3)}
+.btn-primary:hover{box-shadow:0 8px 24px rgba(26,115,232,.45)}
+.btn-success{background:var(--grad-green);color:#fff;box-shadow:0 4px 14px rgba(52,168,83,.3)}
+.btn-success:hover{box-shadow:0 8px 24px rgba(52,168,83,.4)}
+.btn-danger{background:var(--grad-red);color:#fff;box-shadow:0 4px 14px rgba(234,67,53,.3)}
+.btn-danger:hover{box-shadow:0 8px 24px rgba(234,67,53,.4)}
+.btn-warning{background:var(--grad-gold);color:#fff;box-shadow:0 4px 14px rgba(249,171,0,.3)}
+.btn-outline{background:transparent;color:var(--blue);border:2px solid var(--blue)}
+.btn-outline:hover{background:var(--blue);color:#fff}
+.btn-ghost{background:var(--bg);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--border);transform:none}
+.btn-sm{padding:7px 14px;font-size:13px;border-radius:8px}
+.btn-xs{padding:5px 10px;font-size:12px;border-radius:7px}
+.btn-icon{padding:8px;border-radius:9px;font-size:17px}
 
-/* ═══════════════════════════════════════
-   TABLE
-═══════════════════════════════════════ */
-.tw{background:var(--card);border-radius:var(--r3);box-shadow:var(--shadow-sm);overflow:hidden;border:1px solid var(--border)}
-.tw table{width:100%;border-collapse:collapse}
-.tw thead th{background:var(--dark);color:rgba(255,255,255,.9);padding:13px 16px;text-align:left;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-.tw tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
-.tw tbody tr:last-child{border-bottom:none}
-.tw tbody tr:hover{background:var(--p3)}
-.tw tbody td{padding:13px 16px;font-size:14px;color:var(--text)}
+/* Badge */
+.badge{
+  padding:4px 11px;border-radius:20px;
+  font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:4px;
+}
+.badge-pending{background:var(--gold-l);color:var(--gold-d)}
+.badge-partial{background:var(--blue-l);color:var(--blue-d)}
+.badge-paid{background:var(--green-l);color:var(--green-d)}
 
-.badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block}
-.badge-pending{background:var(--o3);color:var(--o2)}
-.badge-partial{background:var(--p3);color:var(--p1)}
-.badge-paid{background:var(--g3);color:var(--g2)}
-.amt{font-weight:700;font-size:15px}
-.amt-r{color:var(--r1)}
-.amt-g{color:var(--g1)}
+/* Table */
+.table-box{
+  background:var(--white);border-radius:var(--r-lg);
+  border:1px solid var(--border);box-shadow:var(--sh-sm);
+  overflow:hidden;
+}
+.tbl-scroll{overflow-x:auto}
+.data-table{width:100%;border-collapse:collapse}
+.data-table thead th{
+  background:var(--dark);color:rgba(255,255,255,.88);
+  padding:13px 16px;text-align:left;
+  font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.6px;
+  white-space:nowrap;
+}
+.data-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+.data-table tbody tr:last-child{border-bottom:none}
+.data-table tbody tr:hover{background:var(--blue-l)}
+.data-table td{padding:13px 16px;font-size:14px;color:var(--text);vertical-align:middle}
 
-.avatar{width:36px;height:36px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0}
+/* Amount styles */
+.amt{font-weight:800;font-size:15px}
+.amt-red{color:var(--red)}
+.amt-green{color:var(--green)}
+.amt-blue{color:var(--blue)}
+
+/* Avatar */
+.av{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--grad-main);color:#fff;
+  font-weight:700;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
 .flex-c{display:flex;align-items:center;gap:10px}
 
-/* ═══════════════════════════════════════
-   SEARCH
-═══════════════════════════════════════ */
-.srch-w{position:relative;flex:1;min-width:200px}
-.srch-ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px}
-.srch-i{width:100%;padding:11px 16px 11px 42px;border:2px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;transition:all .3s;outline:none;color:var(--text)}
-.srch-i:focus{border-color:var(--p1);box-shadow:0 0 0 4px rgba(26,115,232,.08)}
-.sel-i{padding:11px 16px;border:2px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;outline:none;color:var(--text);cursor:pointer;transition:all .3s}
-.sel-i:focus{border-color:var(--p1)}
+/* Search */
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none}
+.search-inp{
+  width:100%;padding:11px 16px 11px 42px;
+  border:2px solid var(--border);border-radius:10px;
+  font-size:14px;background:#fff;color:var(--text);
+  transition:all .3s;outline:none;
+}
+.search-inp:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(26,115,232,.08)}
+.select-inp{
+  padding:11px 16px;border:2px solid var(--border);border-radius:10px;
+  font-size:14px;background:#fff;color:var(--text);
+  outline:none;cursor:pointer;transition:all .3s;
+}
+.select-inp:focus{border-color:var(--blue)}
+.filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 
-/* ═══════════════════════════════════════
-   MODAL
-═══════════════════════════════════════ */
-.moverlay{display:none;position:fixed;inset:0;background:rgba(10,20,40,.6);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)}
-.moverlay.on{display:flex}
-.modal{background:var(--card);border-radius:24px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,.4);animation:mIn .35s cubic-bezier(.16,1,.3,1)}
-.modal::-webkit-scrollbar{width:4px}
-.modal::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-@keyframes mIn{from{opacity:0;transform:scale(.88) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.mhd{padding:24px 26px 0;display:flex;align-items:center;justify-content:space-between}
-.m-title{font-size:19px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px}
-.m-close{width:34px;height:34px;background:var(--bg);border:none;border-radius:50%;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .2s}
-.m-close:hover{background:var(--r1);color:#fff}
-.mbody{padding:22px 26px}
-.mfoot{padding:0 26px 24px;display:flex;gap:10px;justify-content:flex-end}
+/* Modal */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(10,18,40,.65);z-index:1500;
+  align-items:center;justify-content:center;
+  padding:16px;backdrop-filter:blur(6px);
+}
+.modal-bg.open{display:flex}
+.modal-box{
+  background:var(--white);border-radius:22px;
+  width:100%;max-width:540px;
+  max-height:90vh;overflow-y:auto;
+  box-shadow:0 40px 100px rgba(0,0,0,.35);
+  animation:modalIn .35s cubic-bezier(.16,1,.3,1);
+}
+.modal-box.wide{max-width:680px}
+.modal-box::-webkit-scrollbar{width:4px}
+.modal-box::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+@keyframes modalIn{from{opacity:0;transform:scale(.86) translateY(28px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-hd{
+  padding:24px 26px 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-title{
+  font-size:19px;font-weight:800;color:var(--text);
+  display:flex;align-items:center;gap:9px;
+}
+.modal-close{
+  width:34px;height:34px;background:var(--bg);
+  border:none;border-radius:50%;
+  font-size:17px;color:var(--text3);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.modal-close:hover{background:var(--red);color:#fff}
+.modal-body{padding:22px 26px}
+.modal-foot{padding:0 26px 24px;display:flex;gap:10px;justify-content:flex-end}
 
-.fg2{margin-bottom:16px}
-.fg2 label{display:block;font-size:12px;font-weight:700;color:var(--text3);margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px}
-.fi{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);background:#fafbff;transition:all .3s;outline:none}
-.fi:focus{border-color:var(--p1);background:#fff;box-shadow:0 0 0 4px rgba(26,115,232,.08)}
+/* Form */
+.fg{margin-bottom:16px}
+.fg label{
+  display:block;font-size:12px;font-weight:700;
+  color:var(--text3);margin-bottom:7px;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.fi{
+  width:100%;padding:12px 16px;
+  border:2px solid var(--border);border-radius:10px;
+  font-size:14px;color:var(--text);background:#fafbff;
+  transition:all .3s;outline:none;
+}
+.fi:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(26,115,232,.08)}
 .fi-ta{resize:vertical;min-height:80px}
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.f-row3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
 
-/* ═══════════════════════════════════════
-   TOAST
-═══════════════════════════════════════ */
-.toast{position:fixed;top:84px;right:24px;background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.18);z-index:9999;display:flex;align-items:center;gap:12px;min-width:280px;max-width:360px;transform:translateX(120%);transition:transform .4s cubic-bezier(.16,1,.3,1);border-left:5px solid var(--g1)}
-.toast.on{transform:translateX(0)}
-.toast.err{border-left-color:var(--r1)}
-.toast.warn{border-left-color:var(--o1)}
-.t-icon{font-size:22px;flex-shrink:0}
-.t-msg{font-size:14px;font-weight:600;color:var(--text)}
+/* Toast */
+.toast-el{
+  position:fixed;top:80px;right:24px;
+  background:var(--white);border-radius:14px;
+  padding:14px 20px;
+  box-shadow:0 10px 40px rgba(0,0,0,.18);
+  z-index:9999;display:flex;align-items:center;gap:12px;
+  min-width:280px;max-width:360px;
+  transform:translateX(140%);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+  border-left:5px solid var(--green);
+}
+.toast-el.show{transform:translateX(0)}
+.toast-el.err{border-left-color:var(--red)}
+.toast-el.warn{border-left-color:var(--gold)}
+.toast-ico{font-size:22px;flex-shrink:0}
+.toast-msg{font-size:14px;font-weight:600;color:var(--text);line-height:1.4}
 
-/* ═══════════════════════════════════════
-   DASHBOARD SPECIFICS
-═══════════════════════════════════════ */
-.quick-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.qc{background:var(--card);border-radius:var(--r3);padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .3s;box-shadow:var(--shadow-sm);border:2px solid transparent;flex:1;min-width:150px}
-.qc:hover{border-color:var(--p1);transform:translateY(-3px);box-shadow:var(--shadow)}
-.qc-ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.qc-tx h4{font-size:14px;font-weight:700;color:var(--text)}
-.qc-tx p{font-size:12px;color:var(--text3);margin-top:2px}
-.tcol{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:900px){.tcol{grid-template-columns:1fr}}
+/* Mob overlay */
+.mob-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.5);z-index:799;
+}
+.mob-overlay.show{display:block}
+
+/* Progress bar */
+.prog-wrap{margin-top:8px}
+.prog-bg{background:var(--border);border-radius:10px;height:8px;overflow:hidden}
+.prog-fill{height:100%;border-radius:10px;background:var(--grad-main);transition:width 1s cubic-bezier(.34,1.56,.64,1)}
+
+/* Two col layout */
+.two-col{display:grid;grid-template-columns:300px 1fr;gap:22px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.two-col-equal{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+/* ════════════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════════════ */
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;margin-bottom:24px;
+}
+.qk-card{
+  background:var(--white);border-radius:var(--r-lg);
+  padding:20px;display:flex;align-items:center;gap:14px;
+  border:2px solid transparent;
+  box-shadow:var(--sh-sm);cursor:pointer;
+  transition:all .3s;
+}
+.qk-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:var(--sh-md)}
+.qk-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.qk-txt h4{font-size:14px;font-weight:700;color:var(--text);line-height:1.3}
+.qk-txt p{font-size:12px;color:var(--text3);margin-top:3px}
+.chart-wrap{display:flex;align-items:flex-end;gap:7px;height:155px;padding:0 4px}
+.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end}
+.chart-bar{width:100%;border-radius:7px 7px 0 0;transition:height 1.3s cubic-bezier(.34,1.56,.64,1);cursor:pointer;min-height:4px}
+.chart-bar:hover{opacity:.75}
+.chart-lbl{font-size:10px;color:var(--text3);text-align:center}
 .debtor-list{display:flex;flex-direction:column;gap:8px}
-.di{display:flex;align-items:center;gap:12px;padding:11px;background:var(--bg);border-radius:10px;transition:all .2s;cursor:pointer}
-.di:hover{background:var(--p3)}
-.di-rank{width:26px;height:26px;border-radius:7px;background:var(--grad);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.debtor-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px;background:var(--bg);border-radius:10px;
+  cursor:pointer;transition:all .2s;
+}
+.debtor-item:hover{background:var(--blue-l)}
+.debtor-rank{
+  width:26px;height:26px;border-radius:7px;
+  background:var(--grad-main);color:#fff;
+  font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.hist-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.hist-item:last-child{border-bottom:none}
+.hist-dot{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.hist-info{flex:1;min-width:0}
+.hist-info h4{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-info p{font-size:12px;color:var(--text3);margin-top:2px}
+.hist-amt{font-size:15px;font-weight:800;flex-shrink:0}
 
-/* Chart */
-.chart-wrap{display:flex;align-items:flex-end;gap:6px;height:150px;padding:0 4px}
-.cb-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:5px}
-.cb{width:100%;border-radius:8px 8px 0 0;transition:height 1.2s cubic-bezier(.34,1.56,.64,1);cursor:pointer;position:relative}
-.cb:hover{opacity:.8}
-.cb-lbl{font-size:10px;color:var(--text3);text-align:center;white-space:nowrap}
+/* ════════════════════════════════════════════════
+   INVOICE - PRINT PREMIUM DESIGN
+════════════════════════════════════════════════ */
+.inv-panel-left{
+  max-height:calc(100vh - 160px);
+  overflow-y:auto;
+}
+.inv-list-item{
+  padding:14px 16px;
+  border:2px solid var(--border);border-radius:12px;
+  margin-bottom:10px;cursor:pointer;
+  transition:all .25s;
+}
+.inv-list-item:hover{border-color:var(--blue);background:var(--blue-l)}
+.inv-list-item.selected{border-color:var(--blue);background:var(--blue-l)}
+.inv-list-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.inv-list-no{font-size:13px;font-weight:800;color:var(--blue)}
+.inv-list-name{font-size:14px;font-weight:700;color:var(--text);margin-top:2px}
+.inv-list-date{font-size:11px;color:var(--text3);margin-top:1px}
+.inv-list-right{text-align:right;flex-shrink:0}
+.inv-list-amt{font-size:15px;font-weight:800;color:var(--text)}
+.inv-list-due{font-size:11px;color:var(--red);font-weight:700;margin-top:2px}
+.inv-list-actions{display:flex;gap:5px;margin-top:6px;justify-content:flex-end}
+.inv-empty{text-align:center;padding:60px 20px;color:var(--text3)}
+.inv-empty-ico{font-size:60px;opacity:.3;margin-bottom:16px}
 
-/* Progress */
-.prog-bg{background:var(--border);border-radius:10px;height:8px;overflow:hidden;margin-top:5px}
-.prog-fill{height:100%;border-radius:10px;background:var(--grad);transition:width 1.2s cubic-bezier(.34,1.56,.64,1)}
-
-/* History */
-.hi{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
-.hi:last-child{border-bottom:none}
-.hi-dot{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
-.hi-info{flex:1}
-.hi-info h4{font-size:14px;font-weight:600;color:var(--text)}
-.hi-info p{font-size:12px;color:var(--text3);margin-top:2px}
-.hi-amt{font-size:15px;font-weight:800}
-
-/* Note card */
-.nc{background:var(--card);border-radius:12px;padding:16px;border-left:5px solid var(--o1);box-shadow:var(--shadow-sm);margin-bottom:10px;transition:all .2s}
-.nc:hover{transform:translateX(4px);box-shadow:var(--shadow)}
-.nc-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:8px;align-items:center}
-.nc-txt{font-size:14px;line-height:1.7;color:var(--text)}
-
-/* Install item */
-.ii-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:9px;margin-bottom:7px;border-left:3px solid var(--g1)}
-.ii-num{width:26px;height:26px;border-radius:7px;background:var(--grad);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ii-info{flex:1}
-.ii-info span{font-size:11px;color:var(--text3);display:block}
-.ii-info strong{font-size:14px;color:var(--text)}
-.ii-amt{font-weight:800;color:var(--g1);font-size:15px}
-
-/* ═══════════════════════════════════════
-   INVOICE PRINT
-═══════════════════════════════════════ */
+/* ════════════════════════════════════════════════
+   PREMIUM INVOICE PAPER
+════════════════════════════════════════════════ */
 .inv-paper{
-  background:#fff;border-radius:var(--r3);
-  padding:44px;box-shadow:var(--shadow-lg);
+  background:#fff;
+  border-radius:var(--r-lg);
+  box-shadow:var(--sh-lg);
+  overflow:hidden;
+  font-family:'Inter','Hind Siliguri',sans-serif;
+  border:1px solid var(--border);
   max-width:780px;margin:0 auto;
-  font-family:'Inter',sans-serif;
 }
 
-.inv-hd{
+/* Invoice Top Banner */
+.inv-top-banner{
+  background:var(--dark);
+  padding:30px 40px 24px;
   display:flex;justify-content:space-between;align-items:flex-start;
-  padding-bottom:24px;margin-bottom:24px;
-  border-bottom:3px solid;
-  border-image:linear-gradient(90deg,#1a73e8,#34a853) 1;
+  gap:20px;position:relative;overflow:hidden;
 }
-.inv-brand h2{
-  font-size:28px;font-weight:900;
-  background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:-.5px;
+.inv-top-banner::before{
+  content:'';position:absolute;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(26,115,232,.12);
+  right:-80px;top:-80px;pointer-events:none;
 }
-.inv-brand .tagline{font-size:12px;color:var(--text3);font-style:italic;margin-top:2px}
-.inv-brand .contact{margin-top:10px;font-size:12px;color:var(--text2);line-height:1.8}
-.inv-num-box{text-align:right}
-.inv-badge-label{
-  background:var(--dark);color:#fff;
+.inv-top-banner::after{
+  content:'';position:absolute;
+  width:180px;height:180px;border-radius:50%;
+  background:rgba(52,168,83,.08);
+  left:20%;bottom:-60px;pointer-events:none;
+}
+.inv-brand-block{position:relative;z-index:1}
+.inv-brand-block h1{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:800;
+  color:#fff;line-height:1.2;margin-bottom:5px;
+  letter-spacing:-.3px;
+}
+.inv-brand-tagline{
+  color:rgba(255,255,255,.55);
+  font-size:12px;font-style:italic;margin-bottom:14px;
+}
+.inv-brand-contact{color:rgba(255,255,255,.75);font-size:12px;line-height:2}
+.inv-brand-contact strong{color:#fff}
+
+.inv-num-block{
+  text-align:right;position:relative;z-index:1;flex-shrink:0;
+}
+.inv-word-label{
+  display:inline-block;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.9);
   padding:5px 16px;border-radius:20px;
-  font-size:12px;font-weight:700;letter-spacing:2px;
-  display:inline-block;margin-bottom:10px;
+  font-size:11px;font-weight:700;
+  letter-spacing:2.5px;margin-bottom:10px;
+  backdrop-filter:blur(8px);
 }
-.inv-num{font-size:22px;font-weight:900;color:var(--p1)}
-.inv-num-box p{font-size:12px;color:var(--text3);line-height:1.9;margin-top:2px}
+.inv-num-val{
+  font-size:24px;font-weight:900;color:#fff;
+  margin-bottom:6px;letter-spacing:-.5px;
+}
+.inv-meta-dates{color:rgba(255,255,255,.7);font-size:12px;line-height:2.1}
+.inv-meta-dates strong{color:rgba(255,255,255,.9)}
 
-.inv-party{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
-.ipb{background:var(--bg);padding:14px 18px;border-radius:12px;border-left:4px solid var(--p1)}
-.ipb.green{border-left-color:var(--g1)}
-.ipb label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);display:block;margin-bottom:6px}
-.ipb .pname{font-size:16px;font-weight:800;color:var(--text)}
-.ipb .pdet{font-size:12px;color:var(--text3);margin-top:3px}
+/* Invoice Body */
+.inv-body-wrap{padding:32px 40px}
 
-.inv-table-wrap{overflow-x:auto;border-radius:12px;overflow:hidden;margin-bottom:20px;border:1px solid var(--border)}
-.inv-table{width:100%;border-collapse:collapse}
-.inv-table thead th{background:var(--dark);color:rgba(255,255,255,.9);padding:12px 16px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;text-align:left}
-.inv-table thead th:last-child,.inv-table td:last-child{text-align:right}
-.inv-table thead th:nth-child(3),.inv-table td:nth-child(3){text-align:center}
-.inv-table tbody tr{border-bottom:1px solid var(--border)}
-.inv-table tbody tr:last-child{border-bottom:none}
-.inv-table tbody tr:nth-child(even){background:#fafbff}
-.inv-table td{padding:12px 16px;font-size:13px;color:var(--text)}
+/* Party Info */
+.inv-party-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:18px;margin-bottom:28px;
+}
+.inv-party-box{
+  background:#f8faff;border-radius:12px;
+  padding:16px 20px;border-left:4px solid var(--blue);
+}
+.inv-party-box.right{border-left-color:var(--green)}
+.inv-party-lbl{
+  font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--text3);margin-bottom:8px;display:block;
+}
+.inv-party-name{font-size:17px;font-weight:800;color:var(--text);margin-bottom:4px}
+.inv-party-det{font-size:12px;color:var(--text3);line-height:1.8}
 
-.inv-sum-wrap{display:flex;justify-content:flex-end;margin-bottom:24px}
-.inv-sum-box{min-width:300px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.isr{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;font-size:14px;border-bottom:1px solid var(--border)}
-.isr:last-child{border-bottom:none}
-.isr.grand{background:var(--dark);color:#fff;font-weight:800;font-size:16px}
-.isr.paid-r{background:var(--g3);color:var(--g2);font-weight:700}
-.isr.due-r{background:var(--r3);color:var(--r1);font-weight:700;font-size:15px}
-.isr.cleared{background:var(--g3);color:var(--g2);font-weight:700;font-size:15px}
+/* Items Table */
+.inv-items-table-wrap{
+  border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);margin-bottom:24px;
+}
+.inv-items-table{width:100%;border-collapse:collapse}
+.inv-items-table thead th{
+  background:var(--dark2);color:rgba(255,255,255,.88);
+  padding:12px 16px;font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.6px;text-align:left;
+}
+.inv-items-table thead th:last-child,.inv-items-table td:last-child{text-align:right}
+.inv-items-table thead th:nth-child(3),
+.inv-items-table td:nth-child(3){text-align:center}
+.inv-items-table thead th:nth-child(4),
+.inv-items-table td:nth-child(4){text-align:right}
+.inv-items-table tbody tr{border-bottom:1px solid var(--border)}
+.inv-items-table tbody tr:last-child{border-bottom:none}
+.inv-items-table tbody tr:nth-child(even){background:#f9fbff}
+.inv-items-table td{padding:12px 16px;font-size:13px;color:var(--text);vertical-align:middle}
+.inv-row-num{font-weight:700;color:var(--blue);font-size:12px}
+.inv-item-name{font-weight:500}
+.inv-item-total{font-weight:700}
 
-.inv-install-sec{margin-bottom:24px}
-.inv-install-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.inv-install-title::after{content:'';flex:1;height:1px;background:var(--border)}
-.ipt{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.ipt thead th{background:var(--bg);color:var(--text2);padding:10px 14px;font-size:12px;font-weight:700;text-align:left;border-bottom:2px solid var(--border)}
-.ipt thead th:last-child,.ipt td:last-child{text-align:right}
-.ipt thead th:nth-child(4),.ipt td:nth-child(4){text-align:right}
-.ipt td{padding:10px 14px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border)}
-.ipt tr:last-child td{border-bottom:none}
-.ipt tbody tr:hover{background:var(--bg)}
+/* Summary Box */
+.inv-summary-row{display:flex;justify-content:flex-end;margin-bottom:24px}
+.inv-summary-box{
+  min-width:290px;
+  border:1px solid var(--border);border-radius:13px;overflow:hidden;
+}
+.inv-sr{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 18px;font-size:14px;border-bottom:1px solid var(--border);
+}
+.inv-sr:last-child{border-bottom:none}
+.inv-sr-label{color:var(--text2)}
+.inv-sr-val{font-weight:700;color:var(--text)}
+.inv-sr.total-row{
+  background:var(--dark);
+  padding:13px 18px;
+}
+.inv-sr.total-row .inv-sr-label{color:rgba(255,255,255,.8);font-weight:600;font-size:15px}
+.inv-sr.total-row .inv-sr-val{color:#fff;font-size:17px;font-weight:900}
+.inv-sr.paid-row{background:var(--green-l)}
+.inv-sr.paid-row .inv-sr-label{color:var(--green-d);font-weight:600}
+.inv-sr.paid-row .inv-sr-val{color:var(--green-d);font-size:15px}
+.inv-sr.due-row{background:var(--red-l)}
+.inv-sr.due-row .inv-sr-label{color:var(--red-d);font-weight:700;font-size:15px}
+.inv-sr.due-row .inv-sr-val{color:var(--red-d);font-size:16px;font-weight:900}
+.inv-sr.cleared-row{background:var(--green-l)}
+.inv-sr.cleared-row .inv-sr-label{color:var(--green-d);font-weight:700;font-size:15px}
+.inv-sr.cleared-row .inv-sr-val{color:var(--green-d);font-size:15px;font-weight:800}
 
-.inv-footer-row{margin-top:24px;padding-top:20px;border-top:2px dashed var(--border);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end}
-.inv-footer-note{font-size:12px;color:var(--text3);line-height:1.9}
-.sign-box{text-align:center;min-width:140px}
-.sign-line{border-top:2px solid var(--text2);padding-top:6px;margin-top:50px;font-size:11px;color:var(--text3)}
+/* Installment Table */
+.inv-inst-section{margin-bottom:24px}
+.inv-inst-title{
+  font-size:14px;font-weight:800;color:var(--text);
+  margin-bottom:12px;display:flex;align-items:center;gap:10px;
+}
+.inv-inst-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.inst-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.inst-table thead th{
+  background:var(--bg2);color:var(--text2);
+  padding:10px 14px;font-size:11px;font-weight:700;
+  text-align:left;border-bottom:2px solid var(--border);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.inst-table thead th:nth-child(4),
+.inst-table td:nth-child(4){text-align:right}
+.inst-table thead th:last-child,
+.inst-table td:last-child{text-align:right}
+.inst-table td{
+  padding:10px 14px;font-size:13px;
+  color:var(--text);border-bottom:1px solid var(--border);
+}
+.inst-table tr:last-child td{border-bottom:none}
+.inst-table tbody tr:hover{background:var(--bg)}
+.inst-num{font-weight:800;color:var(--blue);font-size:12px}
+.inst-date{font-weight:600}
+.inst-note{color:var(--text3)}
+.inst-paid-amt{font-weight:800;color:var(--green)}
+.inst-rem-amt{font-weight:800}
 
-.inv-print-bar{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+/* Invoice Note */
+.inv-note-box{
+  padding:14px 18px;background:var(--gold-l);
+  border-radius:10px;border-left:4px solid var(--gold);
+  margin-bottom:22px;
+}
+.inv-note-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold-d);margin-bottom:4px}
+.inv-note-txt{font-size:13px;color:var(--text);line-height:1.7}
 
-/* ═══════════════════════════════════════
-   PRINT MEDIA
-═══════════════════════════════════════ */
+/* Invoice Footer */
+.inv-footer{
+  border-top:2px dashed var(--border);
+  padding-top:20px;margin-top:4px;
+  display:grid;grid-template-columns:1fr auto;
+  gap:20px;align-items:flex-end;
+}
+.inv-footer-info{font-size:12px;color:var(--text3);line-height:1.9}
+.inv-footer-info strong{color:var(--text2)}
+.inv-sign-area{text-align:center;min-width:140px}
+.inv-sign-line{
+  border-top:2px solid var(--text2);
+  padding-top:7px;margin-top:54px;
+  font-size:11px;color:var(--text3);font-weight:600;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+
+/* Invoice Action Bar */
+.inv-action-bar{
+  display:flex;gap:10px;justify-content:center;
+  margin-top:18px;flex-wrap:wrap;
+}
+
+/* Invoice decorative strip */
+.inv-color-strip{
+  height:5px;
+  background:linear-gradient(90deg,var(--blue) 0%,var(--green) 50%,var(--gold) 100%);
+}
+
+/* ════════════════════════════════════════════════
+   DAILY INCOME/EXPENSE
+════════════════════════════════════════════════ */
+.daily-stat-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:18px;margin-bottom:24px;
+}
+
+/* ════════════════════════════════════════════════
+   NOTES PAGE
+════════════════════════════════════════════════ */
+.note-card{
+  background:var(--white);border-radius:12px;
+  padding:16px 18px;border-left:5px solid var(--gold);
+  box-shadow:var(--sh-sm);border:1px solid var(--border);
+  margin-bottom:11px;transition:all .2s;
+  border-left-width:5px;
+}
+.note-card:hover{transform:translateX(4px);box-shadow:var(--sh-md)}
+.note-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.note-meta{font-size:12px;color:var(--text3);font-weight:600}
+.note-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.note-txt{font-size:14px;color:var(--text2);line-height:1.7}
+.note-reminder{font-size:12px;color:var(--gold-d);font-weight:600;margin-top:8px}
+
+/* ════════════════════════════════════════════════
+   REPORTS PAGE
+════════════════════════════════════════════════ */
+.rep-total-row{
+  background:var(--dark)!important;color:#fff!important;
+  font-weight:800!important;
+}
+.rep-total-row td{color:#fff!important;font-weight:800!important}
+
+/* ════════════════════════════════════════════════
+   PRINT MEDIA QUERY — THE MAGIC
+════════════════════════════════════════════════ */
 @media print{
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  html,body{width:100%;height:auto;overflow:visible;background:#fff!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+  html,body{width:100%;height:auto;background:#fff!important;overflow:visible}
+
+  /* Hide everything */
   #loginPage,
-  .sidebar,.topbar,.overlay,.toast,
-  .no-print,.inv-print-bar,
-  #invoiceListPanel{display:none!important}
-  #mainApp{display:block!important}
-  .content{margin:0!important;padding:0!important;background:#fff!important;min-height:auto}
-  .page{display:none!important}
-  #page-invoice{display:block!important}
-  #invoicePreviewPanel{display:block!important}
-  .inv-paper{
-    box-shadow:none!important;border:none!important;
-    padding:16px!important;max-width:100%!important;
-    margin:0!important;border-radius:0!important;
+  .sidebar,
+  .topbar,
+  .mob-overlay,
+  .toast-el,
+  .no-print,
+  .inv-action-bar,
+  #inv-list-panel{display:none!important}
+
+  /* Show app */
+  #app{display:block!important}
+
+  /* Reset content area */
+  .content-area{
+    margin:0!important;padding:0!important;
+    min-height:auto!important;background:#fff!important;
   }
-  .sec-hd,.two-col>.card:first-child{display:none!important}
-  .tcol{display:block!important}
-  @page{margin:8mm;size:A4}
+
+  /* Hide all pages */
+  .page-section{display:none!important}
+
+  /* Show only invoice page */
+  #page-invoice{display:block!important}
+
+  /* In invoice page, hide list panel */
+  .inv-panel-left,
+  .sec-head{display:none!important}
+
+  /* Make preview fill page */
+  .two-col{display:block!important}
+
+  .inv-paper{
+    box-shadow:none!important;
+    border:none!important;
+    border-radius:0!important;
+    max-width:100%!important;
+    margin:0!important;
+    page-break-inside:avoid;
+  }
+
+  .inv-top-banner{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  @page{margin:8mm 10mm;size:A4 portrait}
 }
 
-/* ═══════════════════════════════════════
+/* ════════════════════════════════════════════════
    RESPONSIVE
-═══════════════════════════════════════ */
-.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}
-.mob-overlay.on{display:block}
-
+════════════════════════════════════════════════ */
+@media(max-width:1024px){
+  .two-col{grid-template-columns:260px 1fr}
+}
+@media(max-width:900px){
+  .two-col{grid-template-columns:1fr}
+  .two-col-equal{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr 1fr}
+  .daily-stat-row{grid-template-columns:repeat(3,1fr)}
+}
 @media(max-width:768px){
-  .sidebar{transform:translateX(-100%);width:260px!important}
-  .sidebar.mobile-on{transform:translateX(0)}
-  .topbar{left:0!important}
-  .content{margin-left:0!important;padding:16px}
-  .stats-row{grid-template-columns:1fr 1fr}
-  .sc{padding:16px 14px}
-  .sc-val{font-size:20px}
+  :root{--sb-w:265px}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.mob-open{transform:translateX(0)}
+  .sidebar.slim{transform:translateX(-100%)}
+  .topbar,.content-area{left:0!important;margin-left:0!important}
+  .content-area{padding:16px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .daily-stat-row{grid-template-columns:1fr 1fr}
   .f-row{grid-template-columns:1fr}
-  .inv-party{grid-template-columns:1fr}
-  .inv-hd{flex-direction:column;gap:16px}
-  .inv-num-box{text-align:left}
-  .inv-paper{padding:22px 16px}
-  .inv-footer-row{grid-template-columns:1fr}
-  .tcol,.two-col{display:block}
-  .two-col>*+*{margin-top:20px}
-  .quick-row{display:grid;grid-template-columns:1fr 1fr}
+  .f-row3{grid-template-columns:1fr}
+  .inv-party-row{grid-template-columns:1fr}
+  .inv-top-banner{flex-direction:column;padding:24px 20px 20px}
+  .inv-num-block{text-align:left}
+  .inv-body-wrap{padding:20px 16px}
+  .inv-footer{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr}
   .tb-date{display:none}
-  .tb-info p{display:none}
 }
 @media(max-width:480px){
-  .stats-row{grid-template-columns:1fr}
-  .quick-row{grid-template-columns:1fr}
-  .tb-logout span{display:none}
+  .stat-grid{grid-template-columns:1fr}
+  .daily-stat-row{grid-template-columns:1fr}
+  .quick-grid{grid-template-columns:1fr 1fr}
+  .inv-summary-box{min-width:100%}
+  .inv-summary-row{justify-content:stretch}
 }
-
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:5px}
-::-webkit-scrollbar-thumb:hover{background:var(--p1)}
-
-.two-col{display:grid;grid-template-columns:300px 1fr;gap:20px}
-@media(max-width:900px){.two-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- ══════════════ LOGIN ══════════════ -->
+<!-- ══════════ LOGIN ══════════ -->
 <div id="loginPage">
-  <div class="login-blob"></div>
-  <div class="login-blob"></div>
-  <div class="login-blob"></div>
-  <div class="login-wrap">
-    <div class="login-left">
-      <div class="ll-icon">🖨️</div>
-      <div class="ll-title">দুরন্ত ডিজিটাল সাইন</div>
-      <div class="ll-sub">ডিজাইনে দুরন্ত, মানে অনন্য।<br>পাটগ্রামের সেরা প্রিন্টিং সলিউশন</div>
-      <div class="ll-info">
+  <div class="lg-bg-circle"></div>
+  <div class="lg-bg-circle"></div>
+  <div class="lg-bg-circle"></div>
+  <div class="lg-bg-circle"></div>
+  <div class="lg-card">
+    <div class="lg-left">
+      <div class="lg-icon-wrap">🖨️</div>
+      <div class="lg-shop-name">দুরন্ত ডিজিটাল সাইন</div>
+      <div class="lg-tagline">ডিজাইনে দুরন্ত, মানে অনন্য।</div>
+      <div class="lg-address">
         <p>📍 <strong>হোটেল সাদিকের নিচতলা</strong><br>
         বড় মসজিদের সামনে, পাটগ্রাম<br>
         লালমনিরহাট<br>
         📞 <strong>01710513624</strong></p>
       </div>
     </div>
-    <div class="login-right">
-      <div class="lr-title">স্বাগতম! 👋</div>
-      <div class="lr-sub">আপনার অ্যাকাউন্টে প্রবেশ করুন</div>
-      <div class="err-box" id="loginErr">❌ ভুল User ID অথবা Password!</div>
-      <div class="fg">
-        <label>User ID</label>
-        <div class="input-w"><span class="ico">👤</span><input type="text" class="finput" id="uId" placeholder="User ID লিখুন" autocomplete="off"></div>
+    <div class="lg-right">
+      <div class="lg-welcome">স্বাগতম! 👋</div>
+      <div class="lg-sub">আপনার অ্যাকাউন্টে প্রবেশ করুন</div>
+      <div class="lg-err" id="lgErr">❌ ভুল User ID অথবা Password!</div>
+      <div class="lg-fg">
+        <label class="lg-label">User ID</label>
+        <div class="lg-iw">
+          <span class="lg-ico">👤</span>
+          <input type="text" class="lg-inp" id="lgUid" placeholder="User ID লিখুন" autocomplete="off">
+        </div>
       </div>
-      <div class="fg">
-        <label>Password</label>
-        <div class="input-w"><span class="ico">🔒</span><input type="password" class="finput" id="uPwd" placeholder="Password লিখুন"></div>
+      <div class="lg-fg">
+        <label class="lg-label">Password</label>
+        <div class="lg-iw">
+          <span class="lg-ico">🔒</span>
+          <input type="password" class="lg-inp" id="lgPwd" placeholder="Password লিখুন">
+        </div>
       </div>
-      <button class="btn-login" onclick="doLogin()">🚀 প্রবেশ করুন</button>
+      <button class="lg-btn" onclick="doLogin()">🚀 প্রবেশ করুন</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MAIN APP ══════════════ -->
-<div id="mainApp">
+<!-- ══════════ MAIN APP ══════════ -->
+<div id="app">
   <div class="mob-overlay" id="mobOv" onclick="closeMob()"></div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sb">
-    <div class="sb-head">
-      <div class="sb-logo">🖨️</div>
-      <div class="sb-brand"><h3>দুরন্ত ডিজিটাল</h3><span>Admin Panel</span></div>
+    <div class="sb-top">
+      <div class="sb-logo-box">🖨️</div>
+      <div class="sb-brand">
+        <h3>দুরন্ত ডিজিটাল</h3>
+        <span>Management System</span>
+      </div>
     </div>
-    <nav class="sb-nav">
-      <div class="nav-section">
-        <div class="nav-sec-label">প্রধান মেনু</div>
-        <div class="nav-it on" onclick="goPage('dashboard')"><span class="nav-ic">📊</span><span class="nav-tx">ড্যাশবোর্ড</span></div>
-        <div class="nav-it" onclick="goPage('customers')"><span class="nav-ic">👥</span><span class="nav-tx">কাস্টমার / পাওনা</span></div>
-        <div class="nav-it" onclick="goPage('payments')"><span class="nav-ic">💳</span><span class="nav-tx">পেমেন্ট হিস্ট্রি</span></div>
-        <div class="nav-it" onclick="goPage('daily')"><span class="nav-ic">📅</span><span class="nav-tx">দৈনিক আয়-ব্যয়</span></div>
-        <div class="nav-it" onclick="goPage('invoice')"><span class="nav-ic">🧾</span><span class="nav-tx">ইনভয়েস</span></div>
+    <div class="sb-body">
+      <div class="sb-section">
+        <div class="sb-sec-lbl">প্রধান মেনু</div>
+        <button class="nav-btn active" onclick="goPg('dashboard')"><span class="nav-ic">📊</span><span class="nav-tx">ড্যাশবোর্ড</span></button>
+        <button class="nav-btn" onclick="goPg('customers')"><span class="nav-ic">👥</span><span class="nav-tx">কাস্টমার ও পাওনা</span></button>
+        <button class="nav-btn" onclick="goPg('payments')"><span class="nav-ic">💳</span><span class="nav-tx">পেমেন্ট হিস্ট্রি</span></button>
+        <button class="nav-btn" onclick="goPg('daily')"><span class="nav-ic">📅</span><span class="nav-tx">দৈনিক আয়-ব্যয়</span></button>
+        <button class="nav-btn" onclick="goPg('invoice')"><span class="nav-ic">🧾</span><span class="nav-tx">ইনভয়েস</span></button>
       </div>
-      <div class="nav-section">
-        <div class="nav-sec-label">আরও</div>
-        <div class="nav-it" onclick="goPage('notes')"><span class="nav-ic">📝</span><span class="nav-tx">নোটস / রিমাইন্ডার</span></div>
-        <div class="nav-it" onclick="goPage('reports')"><span class="nav-ic">📈</span><span class="nav-tx">রিপোর্ট</span></div>
+      <div class="sb-section">
+        <div class="sb-sec-lbl">আরও</div>
+        <button class="nav-btn" onclick="goPg('notes')"><span class="nav-ic">📝</span><span class="nav-tx">নোটস</span></button>
+        <button class="nav-btn" onclick="goPg('reports')"><span class="nav-ic">📈</span><span class="nav-tx">রিপোর্ট</span></button>
       </div>
-    </nav>
+    </div>
     <div class="sb-foot">
-      <div class="nav-it" onclick="doLogout()"><span class="nav-ic">🚪</span><span class="nav-tx">লগআউট</span></div>
+      <button class="nav-btn" onclick="doLogout()"><span class="nav-ic">🚪</span><span class="nav-tx">লগআউট</span></button>
     </div>
   </aside>
 
@@ -569,310 +1052,354 @@ body{font-family:'Inter','Hind Siliguri',sans-serif;background:var(--bg);color:v
     <button class="tb-toggle" onclick="toggleSB()">☰</button>
     <div class="tb-info">
       <h2 id="pgTitle">ড্যাশবোর্ড</h2>
-      <p id="pgSub">দুরন্ত ডিজিটাল সাইন — পাটগ্রাম</p>
+      <p>দুরন্ত ডিজিটাল সাইন — পাটগ্রাম, লালমনিরহাট</p>
     </div>
-    <div class="tb-actions">
+    <div class="tb-right">
       <div class="tb-date" id="tbDate"></div>
-      <button class="tb-logout" onclick="doLogout()">🚪 <span>লগআউট</span></button>
+      <button class="tb-logout-btn" onclick="doLogout()">🚪 লগআউট</button>
     </div>
   </header>
 
-  <!-- ══ CONTENT ══ -->
-  <main class="content" id="ct">
+  <!-- CONTENT -->
+  <main class="content-area" id="ca">
 
     <!-- ── DASHBOARD ── -->
-    <div class="page on" id="page-dashboard">
-      <div class="stats-row" id="statsRow"></div>
-      <div class="quick-row">
-        <div class="qc" onclick="openAddCust()"><div class="qc-ic" style="background:#e8f0fe">➕</div><div class="qc-tx"><h4>নতুন কাস্টমার</h4><p>যোগ করুন</p></div></div>
-        <div class="qc" onclick="goPage('daily');openInc()"><div class="qc-ic" style="background:#e6f4ea">💰</div><div class="qc-tx"><h4>আয় যোগ</h4><p>দৈনিক লেনদেন</p></div></div>
-        <div class="qc" onclick="goPage('invoice');openNewInv()"><div class="qc-ic" style="background:#fff8e1">🧾</div><div class="qc-tx"><h4>নতুন ইনভয়েস</h4><p>তৈরি করুন</p></div></div>
-        <div class="qc" onclick="goPage('notes')"><div class="qc-ic" style="background:#fce8e6">📝</div><div class="qc-tx"><h4>নোট লিখুন</h4><p>রিমাইন্ডার</p></div></div>
+    <div class="page-section active" id="page-dashboard">
+      <div class="stat-grid" id="dashStats"></div>
+      <div class="quick-grid">
+        <div class="qk-card" onclick="openAddCust()"><div class="qk-ico" style="background:#e8f0fe">➕</div><div class="qk-txt"><h4>নতুন কাস্টমার</h4><p>যোগ করুন</p></div></div>
+        <div class="qk-card" onclick="goPg('daily');openIncome()"><div class="qk-ico" style="background:#e6f4ea">💰</div><div class="qk-txt"><h4>আয় যোগ</h4><p>দৈনিক লেনদেন</p></div></div>
+        <div class="qk-card" onclick="goPg('invoice');openNewInv()"><div class="qk-ico" style="background:#fff8e1">🧾</div><div class="qk-txt"><h4>নতুন ইনভয়েস</h4><p>তৈরি করুন</p></div></div>
+        <div class="qk-card" onclick="goPg('notes')"><div class="qk-ico" style="background:#fce8e6">📝</div><div class="qk-txt"><h4>নোট লিখুন</h4><p>রিমাইন্ডার</p></div></div>
       </div>
-      <div class="tcol">
+      <div class="two-col-equal">
         <div class="card">
-          <div class="card-title">🏆 সর্বোচ্চ পাওনা</div>
-          <div class="debtor-list" id="topDebtors"></div>
+          <div class="card-head">🏆 সর্বোচ্চ পাওনা</div>
+          <div class="debtor-list" id="dashDebtors"></div>
         </div>
         <div class="card">
-          <div class="card-title">🔄 সাম্প্রতিক লেনদেন</div>
-          <div id="recentAct" style="max-height:270px;overflow-y:auto"></div>
+          <div class="card-head">🔄 সাম্প্রতিক পেমেন্ট</div>
+          <div id="dashRecent" style="max-height:270px;overflow-y:auto"></div>
         </div>
       </div>
-      <div class="card" style="margin-top:20px">
-        <div class="card-title">📊 মাসিক আয় চার্ট</div>
-        <div class="chart-wrap" id="mChart"></div>
+      <div class="card" style="margin-top:0">
+        <div class="card-head">📊 মাসিক আয় (চলতি বছর)</div>
+        <div class="chart-wrap" id="dashChart"></div>
       </div>
     </div>
 
     <!-- ── CUSTOMERS ── -->
-    <div class="page" id="page-customers">
-      <div class="sec-hd">
-        <div class="sec-title">কাস্টমার ও পাওনা তালিকা</div>
-        <button class="btn btn-p" onclick="openAddCust()">➕ নতুন কাস্টমার</button>
+    <div class="page-section" id="page-customers">
+      <div class="sec-head">
+        <div class="sec-title">কাস্টমার ও পাওনা</div>
+        <button class="btn btn-primary" onclick="openAddCust()">➕ নতুন কাস্টমার</button>
       </div>
-      <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
-        <div class="srch-w"><span class="srch-ic">🔍</span><input type="text" class="srch-i" id="custSrch" placeholder="নাম বা ফোন দিয়ে খুঁজুন..." oninput="renderCust()"></div>
-        <select class="sel-i" id="custFilter" onchange="renderCust()">
-          <option value="all">সকল কাস্টমার</option>
-          <option value="pending">পাওনা বাকি</option>
+      <div class="filter-bar">
+        <div class="search-wrap"><span class="search-ico">🔍</span><input type="text" class="search-inp" id="custQ" placeholder="নাম বা ফোন দিয়ে খুঁজুন..." oninput="renderCusts()"></div>
+        <select class="select-inp" id="custFilter" onchange="renderCusts()">
+          <option value="all">সকল</option>
+          <option value="due">পাওনা বাকি</option>
           <option value="paid">পরিশোধ</option>
         </select>
       </div>
-      <div style="margin-bottom:10px;font-size:13px;color:var(--text3)" id="custCount"></div>
-      <div class="tw" style="overflow-x:auto">
-        <table><thead><tr><th>#</th><th>কাস্টমার</th><th>ফোন</th><th>পাওনা</th><th>পরিশোধ</th><th>বাকি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
-        <tbody id="custBody"></tbody></table>
-      </div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:12px" id="custCountTxt"></div>
+      <div class="table-box"><div class="tbl-scroll">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>কাস্টমার</th><th>ফোন</th><th>মোট পাওনা</th><th>পরিশোধ</th><th>বাকি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+          <tbody id="custTbody"></tbody>
+        </table>
+      </div></div>
     </div>
 
     <!-- ── PAYMENTS ── -->
-    <div class="page" id="page-payments">
-      <div class="sec-hd"><div class="sec-title">পেমেন্ট হিস্ট্রি</div></div>
-      <div class="tw" style="overflow-x:auto">
-        <table><thead><tr><th>#</th><th>তারিখ</th><th>কাস্টমার</th><th>পরিমাণ</th><th>নোট</th></tr></thead>
-        <tbody id="payBody"></tbody></table>
-      </div>
+    <div class="page-section" id="page-payments">
+      <div class="sec-head"><div class="sec-title">পেমেন্ট হিস্ট্রি</div></div>
+      <div class="table-box"><div class="tbl-scroll">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>তারিখ</th><th>কাস্টমার</th><th>পরিমাণ</th><th>নোট</th></tr></thead>
+          <tbody id="payTbody"></tbody>
+        </table>
+      </div></div>
     </div>
 
     <!-- ── DAILY ── -->
-    <div class="page" id="page-daily">
-      <div class="sec-hd">
+    <div class="page-section" id="page-daily">
+      <div class="sec-head">
         <div class="sec-title">দৈনিক আয়-ব্যয়</div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-g" onclick="openInc()">💰 আয়</button>
-          <button class="btn btn-r" onclick="openExp()">💸 ব্যয়</button>
+          <button class="btn btn-success" onclick="openIncome()">💰 আয়</button>
+          <button class="btn btn-danger" onclick="openExpense()">💸 ব্যয়</button>
         </div>
       </div>
-      <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
-        <div class="sc"><div class="sc-icon" style="background:#e8f0fe">💰</div><div class="sc-val" id="dInc">৳ ০</div><div class="sc-lbl">আজকের আয়</div></div>
-        <div class="sc"><div class="sc-icon" style="background:#fce8e6">💸</div><div class="sc-val" id="dExp">৳ ০</div><div class="sc-lbl">আজকের ব্যয়</div></div>
-        <div class="sc"><div class="sc-icon" style="background:#e6f4ea">📈</div><div class="sc-val" id="dPro">৳ ০</div><div class="sc-lbl">আজকের লাভ</div></div>
-      </div>
+      <div class="daily-stat-row" id="dailyStats"></div>
       <div class="card">
-        <div class="sec-hd" style="margin-bottom:14px">
-          <div class="card-title">লেনদেনের তালিকা</div>
-          <input type="date" id="dailyFilt" class="sel-i" onchange="renderDaily()">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <div class="card-head" style="margin-bottom:0;padding-bottom:0;border-bottom:none">লেনদেনের তালিকা</div>
+          <input type="date" id="dailyDateFilt" class="select-inp" onchange="renderDaily()">
         </div>
-        <div class="tw" style="overflow-x:auto">
-          <table><thead><tr><th>#</th><th>তারিখ</th><th>ধরন</th><th>বিবরণ</th><th>পরিমাণ</th><th>অ্যাকশন</th></tr></thead>
-          <tbody id="dailyBody"></tbody></table>
-        </div>
+        <div class="table-box"><div class="tbl-scroll">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>তারিখ</th><th>ধরন</th><th>বিবরণ / ক্যাটাগরি</th><th>পরিমাণ</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="dailyTbody"></tbody>
+          </table>
+        </div></div>
       </div>
     </div>
 
     <!-- ── INVOICE ── -->
-    <div class="page" id="page-invoice">
-      <div class="sec-hd no-print">
+    <div class="page-section" id="page-invoice">
+      <div class="sec-head no-print">
         <div class="sec-title">ইনভয়েস</div>
-        <button class="btn btn-p" onclick="openNewInv()">➕ নতুন ইনভয়েস</button>
+        <button class="btn btn-primary" onclick="openNewInv()">➕ নতুন ইনভয়েস</button>
       </div>
       <div class="two-col">
-        <div class="card no-print" id="invoiceListPanel">
-          <div class="card-title">সংরক্ষিত ইনভয়েস</div>
-          <div id="invList"></div>
+        <div class="inv-panel-left" id="inv-list-panel">
+          <div class="card-head" style="margin-bottom:14px">সংরক্ষিত ইনভয়েস</div>
+          <div id="invListEl"></div>
         </div>
-        <div id="invoicePreviewPanel">
-          <div style="text-align:center;padding:70px 20px;color:var(--text3)">
-            <div style="font-size:64px;margin-bottom:18px;opacity:.4">🧾</div>
-            <p style="font-size:15px">বাম পাশ থেকে একটি ইনভয়েস বেছে নিন</p>
+        <div id="invPreviewEl">
+          <div class="inv-empty">
+            <div class="inv-empty-ico">🧾</div>
+            <p>বাম পাশ থেকে একটি ইনভয়েস বেছে নিন<br>অথবা নতুন ইনভয়েস তৈরি করুন</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- ── NOTES ── -->
-    <div class="page" id="page-notes">
-      <div class="sec-hd">
+    <div class="page-section" id="page-notes">
+      <div class="sec-head">
         <div class="sec-title">নোটস ও রিমাইন্ডার</div>
-        <button class="btn btn-p" onclick="openAddNote()">➕ নতুন নোট</button>
+        <button class="btn btn-primary" onclick="openAddNote()">➕ নতুন নোট</button>
       </div>
-      <div class="tcol">
+      <div class="two-col-equal">
         <div><div id="notesList"></div></div>
         <div class="card">
-          <div class="card-title">⏰ আসন্ন পাওনা ডেডলাইন</div>
-          <div id="upDue"></div>
+          <div class="card-head">⏰ পাওনা ডেডলাইন</div>
+          <div id="dueReminders"></div>
         </div>
       </div>
     </div>
 
     <!-- ── REPORTS ── -->
-    <div class="page" id="page-reports">
-      <div class="sec-hd">
-        <div class="sec-title">রিপোর্ট ও বিশ্লেষণ</div>
+    <div class="page-section" id="page-reports">
+      <div class="sec-head">
+        <div class="sec-title">রিপোর্ট</div>
         <button class="btn btn-outline" onclick="window.print()">🖨️ প্রিন্ট</button>
       </div>
-      <div class="stats-row" id="repStats"></div>
+      <div class="stat-grid" id="repStats"></div>
       <div class="card">
-        <div class="card-title">📋 বিস্তারিত পাওনা রিপোর্ট</div>
-        <div style="font-size:12px;color:var(--text3);margin-bottom:14px">রিপোর্ট: <span id="repDate"></span> — দুরন্ত ডিজিটাল সাইন, পাটগ্রাম</div>
-        <div class="tw" style="overflow-x:auto">
-          <table><thead><tr><th>#</th><th>কাস্টমার</th><th>ফোন</th><th>পাওনা</th><th>পরিশোধ</th><th>বাকি</th><th>স্ট্যাটাস</th></tr></thead>
-          <tbody id="repBody"></tbody></table>
-        </div>
+        <div class="card-head">📋 পাওনা রিপোর্ট — <span id="repDateLbl" style="font-weight:400;color:var(--text3)"></span></div>
+        <div class="table-box"><div class="tbl-scroll">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>কাস্টমার</th><th>ফোন</th><th>মোট পাওনা</th><th>পরিশোধ</th><th>বাকি</th><th>স্ট্যাটাস</th></tr></thead>
+            <tbody id="repTbody"></tbody>
+          </table>
+        </div></div>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <span class="t-icon" id="tIcon">✅</span>
-  <span class="t-msg" id="tMsg"></span>
+<!-- ══════════ TOAST ══════════ -->
+<div class="toast-el" id="toast">
+  <span class="toast-ico" id="toastIco">✅</span>
+  <span class="toast-msg" id="toastMsg"></span>
 </div>
 
-<!-- ══════════ MODALS ══════════ -->
+<!-- ══════════════ MODALS ══════════════ -->
 
-<!-- Customer -->
-<div class="moverlay" id="mCust">
-  <div class="modal">
-    <div class="mhd"><div class="m-title" id="mCustTitle">➕ নতুন কাস্টমার</div><button class="m-close" onclick="closeM('mCust')">✕</button></div>
-    <div class="mbody">
-      <input type="hidden" id="eId">
-      <div class="f-row">
-        <div class="fg2"><label>কাস্টমারের নাম *</label><input type="text" class="fi" id="cN" placeholder="নাম লিখুন"></div>
-        <div class="fg2"><label>মোবাইল নম্বর</label><input type="text" class="fi" id="cP" placeholder="01XXXXXXXXX"></div>
-      </div>
-      <div class="f-row">
-        <div class="fg2"><label>প্রাথমিক পাওনা (৳)</label><input type="number" class="fi" id="cA" placeholder="0.00"></div>
-        <div class="fg2"><label>ডেডলাইন তারিখ</label><input type="date" class="fi" id="cD"></div>
-      </div>
-      <div class="fg2"><label>ঠিকানা / নোট</label><textarea class="fi fi-ta" id="cNt" placeholder="ঠিকানা বা বিবরণ..."></textarea></div>
+<!-- Add/Edit Customer -->
+<div class="modal-bg" id="mCust">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-title" id="mCustTitle">➕ নতুন কাস্টমার</div>
+      <button class="modal-close" onclick="closeM('mCust')">✕</button>
     </div>
-    <div class="mfoot">
-      <button class="btn btn-outline" onclick="closeM('mCust')">বাতিল</button>
-      <button class="btn btn-p" onclick="saveCust()">💾 সংরক্ষণ</button>
+    <div class="modal-body">
+      <input type="hidden" id="mCustId">
+      <div class="f-row">
+        <div class="fg"><label>কাস্টমারের নাম *</label><input type="text" class="fi" id="mCN" placeholder="নাম লিখুন"></div>
+        <div class="fg"><label>মোবাইল নম্বর</label><input type="text" class="fi" id="mCP" placeholder="01XXXXXXXXX"></div>
+      </div>
+      <div class="f-row">
+        <div class="fg"><label>প্রাথমিক পাওনা (৳)</label><input type="number" class="fi" id="mCA" placeholder="0.00" min="0"></div>
+        <div class="fg"><label>ডেডলাইন তারিখ</label><input type="date" class="fi" id="mCD"></div>
+      </div>
+      <div class="fg"><label>ঠিকানা / নোট</label><textarea class="fi fi-ta" id="mCNt" placeholder="ঠিকানা বা বিস্তারিত..."></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeM('mCust')">বাতিল</button>
+      <button class="btn btn-primary" onclick="saveCust()">💾 সংরক্ষণ করুন</button>
     </div>
   </div>
 </div>
 
-<!-- Payment -->
-<div class="moverlay" id="mPay">
-  <div class="modal">
-    <div class="mhd"><div class="m-title">💳 পেমেন্ট গ্রহণ</div><button class="m-close" onclick="closeM('mPay')">✕</button></div>
-    <div class="mbody">
-      <input type="hidden" id="pCid">
+<!-- Payment Modal -->
+<div class="modal-bg" id="mPay">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-title">💳 পেমেন্ট গ্রহণ</div>
+      <button class="modal-close" onclick="closeM('mPay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mPayCid">
       <div style="background:var(--bg);border-radius:12px;padding:16px;margin-bottom:20px">
-        <div class="flex-c">
-          <div class="avatar" id="pAv">?</div>
-          <div><div style="font-weight:700;font-size:16px" id="pCN"></div><div style="font-size:13px;color:var(--text3)" id="pCP"></div></div>
+        <div class="flex-c" style="margin-bottom:14px">
+          <div class="av" id="mPayAv" style="width:44px;height:44px;font-size:18px">?</div>
+          <div>
+            <div style="font-weight:800;font-size:17px" id="mPayName"></div>
+            <div style="font-size:13px;color:var(--text3)" id="mPayPhone"></div>
+          </div>
         </div>
-        <div style="margin-top:14px;display:flex;gap:18px;flex-wrap:wrap">
-          <div><div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">মোট পাওনা</div><div style="font-weight:800;color:var(--r1);font-size:18px" id="pTD"></div></div>
-          <div><div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">পরিশোধ</div><div style="font-weight:800;color:var(--g1);font-size:18px" id="pTP"></div></div>
-          <div><div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">বাকি</div><div style="font-weight:800;color:var(--p1);font-size:18px" id="pTR"></div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div style="text-align:center;background:var(--red-l);padding:12px;border-radius:10px">
+            <div style="font-size:11px;color:var(--red-d);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">মোট পাওনা</div>
+            <div style="font-size:17px;font-weight:900;color:var(--red)" id="mPayTotalDue"></div>
+          </div>
+          <div style="text-align:center;background:var(--green-l);padding:12px;border-radius:10px">
+            <div style="font-size:11px;color:var(--green-d);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">পরিশোধ</div>
+            <div style="font-size:17px;font-weight:900;color:var(--green)" id="mPayPaid"></div>
+          </div>
+          <div style="text-align:center;background:var(--blue-l);padding:12px;border-radius:10px">
+            <div style="font-size:11px;color:var(--blue-d);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">বাকি</div>
+            <div style="font-size:17px;font-weight:900;color:var(--blue)" id="mPayRem"></div>
+          </div>
         </div>
       </div>
       <div class="f-row">
-        <div class="fg2"><label>পরিমাণ (৳) *</label><input type="number" class="fi" id="pAmt" placeholder="0.00"></div>
-        <div class="fg2"><label>তারিখ</label><input type="date" class="fi" id="pDt"></div>
+        <div class="fg"><label>পরিশোধের পরিমাণ (৳) *</label><input type="number" class="fi" id="mPayAmt" placeholder="0.00" min="0"></div>
+        <div class="fg"><label>তারিখ</label><input type="date" class="fi" id="mPayDt"></div>
       </div>
-      <div class="fg2"><label>নোট</label><input type="text" class="fi" id="pNt" placeholder="পেমেন্টের বিবরণ..."></div>
+      <div class="fg"><label>নোট (ঐচ্ছিক)</label><input type="text" class="fi" id="mPayNt" placeholder="পেমেন্টের বিবরণ..."></div>
     </div>
-    <div class="mfoot">
-      <button class="btn btn-outline" onclick="closeM('mPay')">বাতিল</button>
-      <button class="btn btn-g" onclick="doPay()">✅ পেমেন্ট নিশ্চিত</button>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeM('mPay')">বাতিল</button>
+      <button class="btn btn-success" onclick="doPayment()">✅ পেমেন্ট নিশ্চিত করুন</button>
     </div>
   </div>
 </div>
 
-<!-- Invoice Pay (Installment) -->
-<div class="moverlay" id="mInvPay">
-  <div class="modal">
-    <div class="mhd"><div class="m-title">💳 কিস্তি যোগ করুন</div><button class="m-close" onclick="closeM('mInvPay')">✕</button></div>
-    <div class="mbody">
-      <input type="hidden" id="ipId">
-      <div style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:18px;font-size:14px;line-height:1.8" id="ipSum"></div>
-      <div class="f-row">
-        <div class="fg2"><label>জমার পরিমাণ (৳) *</label><input type="number" class="fi" id="ipAmt" placeholder="0.00"></div>
-        <div class="fg2"><label>তারিখ *</label><input type="date" class="fi" id="ipDt"></div>
-      </div>
-      <div class="fg2"><label>নোট</label><input type="text" class="fi" id="ipNt" placeholder="নোট লিখুন..."></div>
+<!-- Invoice Create Modal -->
+<div class="modal-bg" id="mInv">
+  <div class="modal-box wide">
+    <div class="modal-hd">
+      <div class="modal-title">🧾 নতুন ইনভয়েস তৈরি</div>
+      <button class="modal-close" onclick="closeM('mInv')">✕</button>
     </div>
-    <div class="mfoot">
-      <button class="btn btn-outline" onclick="closeM('mInvPay')">বাতিল</button>
-      <button class="btn btn-g" onclick="saveInvPay()">✅ কিস্তি সংরক্ষণ</button>
+    <div class="modal-body">
+      <div class="f-row">
+        <div class="fg"><label>কাস্টমার নাম *</label><input type="text" class="fi" id="iCust" placeholder="নাম লিখুন"></div>
+        <div class="fg"><label>মোবাইল নম্বর</label><input type="text" class="fi" id="iPhone" placeholder="01XXXXXXXXX"></div>
+      </div>
+      <div class="f-row">
+        <div class="fg"><label>ঠিকানা</label><input type="text" class="fi" id="iAddr" placeholder="ঠিকানা (ঐচ্ছিক)"></div>
+        <div class="fg"><label>ইনভয়েস তারিখ</label><input type="date" class="fi" id="iDate"></div>
+      </div>
+      <div class="f-row">
+        <div class="fg"><label>পেমেন্ট ডেডলাইন</label><input type="date" class="fi" id="iDue"></div>
+        <div class="fg"><label>ওয়ার্ক অর্ডার / রেফারেন্স</label><input type="text" class="fi" id="iRef" placeholder="WO-001 (ঐচ্ছিক)"></div>
+      </div>
+      <div style="margin-bottom:10px;border-top:1px solid var(--border);padding-top:16px">
+        <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">পণ্য / সেবার তালিকা</div>
+        <div id="invItemsWrap"></div>
+        <button class="btn btn-outline btn-sm" onclick="addInvItem()" style="margin-bottom:4px">➕ আইটেম যোগ করুন</button>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:16px">
+        <div class="f-row">
+          <div class="fg"><label>ছাড় (৳)</label><input type="number" class="fi" id="iDisc" value="0" min="0" oninput="calcInvTotal()"></div>
+          <div style="display:flex;align-items:flex-end;padding-bottom:16px">
+            <div style="background:var(--blue-l);padding:14px 20px;border-radius:11px;width:100%;text-align:center">
+              <div style="font-size:11px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">মোট টাকা</div>
+              <div style="font-size:22px;font-weight:900;color:var(--blue)" id="iTotal">৳ ০</div>
+            </div>
+          </div>
+        </div>
+        <div class="fg"><label>নোট / শর্তাবলী</label><textarea class="fi fi-ta" id="iNote" placeholder="ইনভয়েস নোট, বিশেষ শর্ত..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeM('mInv')">বাতিল</button>
+      <button class="btn btn-primary" onclick="saveInv()">🧾 ইনভয়েস তৈরি করুন</button>
     </div>
   </div>
 </div>
 
-<!-- Daily -->
-<div class="moverlay" id="mDaily">
-  <div class="modal">
-    <div class="mhd"><div class="m-title" id="mDailyT">💰 আয় যোগ</div><button class="m-close" onclick="closeM('mDaily')">✕</button></div>
-    <div class="mbody">
-      <input type="hidden" id="dType">
+<!-- Invoice Installment Modal -->
+<div class="modal-bg" id="mInst">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-title">💳 কিস্তি / জমা যোগ করুন</div>
+      <button class="modal-close" onclick="closeM('mInst')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mInstInvId">
+      <div style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:18px;line-height:1.9" id="mInstSummary"></div>
       <div class="f-row">
-        <div class="fg2"><label>পরিমাণ (৳) *</label><input type="number" class="fi" id="dAmt" placeholder="0.00"></div>
-        <div class="fg2"><label>তারিখ</label><input type="date" class="fi" id="dDt"></div>
+        <div class="fg"><label>জমার পরিমাণ (৳) *</label><input type="number" class="fi" id="mInstAmt" placeholder="0.00" min="0"></div>
+        <div class="fg"><label>তারিখ *</label><input type="date" class="fi" id="mInstDt"></div>
       </div>
-      <div class="fg2"><label>বিবরণ *</label><input type="text" class="fi" id="dDsc" placeholder="কাজের বিবরণ..."></div>
-      <div class="fg2"><label>ক্যাটাগরি</label>
-        <select class="fi" id="dCat">
+      <div class="fg"><label>নোট</label><input type="text" class="fi" id="mInstNt" placeholder="পেমেন্টের বিবরণ..."></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeM('mInst')">বাতিল</button>
+      <button class="btn btn-success" onclick="saveInstallment()">✅ কিস্তি সংরক্ষণ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Daily Transaction Modal -->
+<div class="modal-bg" id="mDaily">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-title" id="mDailyTitle">💰 আয় যোগ করুন</div>
+      <button class="modal-close" onclick="closeM('mDaily')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mDailyType">
+      <div class="f-row">
+        <div class="fg"><label>পরিমাণ (৳) *</label><input type="number" class="fi" id="mDailyAmt" placeholder="0.00" min="0"></div>
+        <div class="fg"><label>তারিখ</label><input type="date" class="fi" id="mDailyDt"></div>
+      </div>
+      <div class="fg"><label>বিবরণ *</label><input type="text" class="fi" id="mDailyDesc" placeholder="কাজের বিবরণ লিখুন..."></div>
+      <div class="fg">
+        <label>ক্যাটাগরি</label>
+        <select class="fi" id="mDailyCat">
           <option>ব্যানার প্রিন্ট</option><option>ফ্লেক্স প্রিন্ট</option>
-          <option>স্টিকার</option><option>ভিজিটিং কার্ড</option>
+          <option>স্টিকার প্রিন্ট</option><option>ভিজিটিং কার্ড</option>
           <option>লেটারহেড</option><option>ডিজিটাল ডিজাইন</option>
           <option>নামফলক</option><option>ব্যাকড্রপ</option>
-          <option>অন্যান্য আয়</option><option>বেতন</option>
-          <option>কাঁচামাল</option><option>বিদ্যুৎ</option>
-          <option>ভাড়া</option><option>অন্যান্য ব্যয়</option>
+          <option>পোস্টার</option><option>ফেস্টুন</option>
+          <option>পেমেন্ট সংগ্রহ</option><option>অন্যান্য আয়</option>
+          <option>কাঁচামাল ক্রয়</option><option>বেতন</option>
+          <option>বিদ্যুৎ বিল</option><option>দোকান ভাড়া</option>
+          <option>যানবাহন খরচ</option><option>অন্যান্য ব্যয়</option>
         </select>
       </div>
     </div>
-    <div class="mfoot">
-      <button class="btn btn-outline" onclick="closeM('mDaily')">বাতিল</button>
-      <button class="btn btn-p" onclick="saveDaily()" id="dSaveBtn">💾 সংরক্ষণ</button>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeM('mDaily')">বাতিল</button>
+      <button class="btn btn-primary" onclick="saveDaily()" id="mDailySaveBtn">💾 সংরক্ষণ</button>
     </div>
   </div>
 </div>
 
-<!-- Invoice Create -->
-<div class="moverlay" id="mInv">
-  <div class="modal" style="max-width:640px">
-    <div class="mhd"><div class="m-title">🧾 নতুন ইনভয়েস</div><button class="m-close" onclick="closeM('mInv')">✕</button></div>
-    <div class="mbody">
-      <div class="f-row">
-        <div class="fg2"><label>কাস্টমার নাম *</label><input type="text" class="fi" id="iCust" placeholder="নাম লিখুন"></div>
-        <div class="fg2"><label>ফোন</label><input type="text" class="fi" id="iPhone" placeholder="01XXXXXXXXX"></div>
-      </div>
-      <div class="f-row">
-        <div class="fg2"><label>ঠিকানা</label><input type="text" class="fi" id="iAddr" placeholder="ঠিকানা (ঐচ্ছিক)"></div>
-        <div class="fg2"><label></label></div>
-      </div>
-      <div class="f-row">
-        <div class="fg2"><label>ইনভয়েস তারিখ</label><input type="date" class="fi" id="iDt"></div>
-        <div class="fg2"><label>পেমেন্ট ডেডলাইন</label><input type="date" class="fi" id="iDue"></div>
-      </div>
-      <div style="margin-bottom:10px"><label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">আইটেমসমূহ</label></div>
-      <div id="iItems"></div>
-      <button class="btn btn-outline btn-sm" onclick="addIItem()" style="margin-bottom:16px">➕ আইটেম যোগ</button>
-      <div class="f-row">
-        <div class="fg2"><label>ছাড় (৳)</label><input type="number" class="fi" id="iDisc" value="0" oninput="calcITotal()"></div>
-        <div style="display:flex;align-items:flex-end;padding-bottom:16px">
-          <div style="background:var(--p3);padding:12px 18px;border-radius:10px;font-weight:800;font-size:16px;color:var(--p1)">মোট: <span id="iTotal">৳ ০</span></div>
-        </div>
-      </div>
-      <div class="fg2"><label>নোট / শর্ত</label><textarea class="fi fi-ta" id="iNote" placeholder="ইনভয়েস নোট..."></textarea></div>
+<!-- Note Modal -->
+<div class="modal-bg" id="mNote">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-title">📝 নতুন নোট</div>
+      <button class="modal-close" onclick="closeM('mNote')">✕</button>
     </div>
-    <div class="mfoot">
-      <button class="btn btn-outline" onclick="closeM('mInv')">বাতিল</button>
-      <button class="btn btn-p" onclick="saveInv()">🧾 ইনভয়েস তৈরি</button>
-    </div>
-  </div>
-</div>
-
-<!-- Note -->
-<div class="moverlay" id="mNote">
-  <div class="modal">
-    <div class="mhd"><div class="m-title">📝 নতুন নোট</div><button class="m-close" onclick="closeM('mNote')">✕</button></div>
-    <div class="mbody">
-      <div class="fg2"><label>শিরোনাম</label><input type="text" class="fi" id="ntT" placeholder="নোটের শিরোনাম..."></div>
-      <div class="fg2"><label>বিবরণ *</label><textarea class="fi fi-ta" id="ntTx" placeholder="নোট লিখুন..." style="min-height:110px"></textarea></div>
+    <div class="modal-body">
+      <div class="fg"><label>শিরোনাম</label><input type="text" class="fi" id="ntTitle" placeholder="নোটের শিরোনাম..."></div>
+      <div class="fg"><label>বিবরণ *</label><textarea class="fi fi-ta" id="ntText" placeholder="নোট লিখুন..." style="min-height:110px"></textarea></div>
       <div class="f-row">
-        <div class="fg2"><label>রিমাইন্ডার তারিখ</label><input type="date" class="fi" id="ntR"></div>
-        <div class="fg2"><label>গুরুত্ব</label>
-          <select class="fi" id="ntPr">
+        <div class="fg"><label>রিমাইন্ডার তারিখ</label><input type="date" class="fi" id="ntRemind"></div>
+        <div class="fg">
+          <label>গুরুত্ব</label>
+          <select class="fi" id="ntPrio">
             <option value="normal">🟡 স্বাভাবিক</option>
             <option value="high">🔴 জরুরি</option>
             <option value="low">🟢 কম গুরুত্বপূর্ণ</option>
@@ -880,31 +1407,35 @@ body{font-family:'Inter','Hind Siliguri',sans-serif;background:var(--bg);color:v
         </div>
       </div>
     </div>
-    <div class="mfoot">
-      <button class="btn btn-outline" onclick="closeM('mNote')">বাতিল</button>
-      <button class="btn btn-p" onclick="saveNote()">💾 সংরক্ষণ</button>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeM('mNote')">বাতিল</button>
+      <button class="btn btn-primary" onclick="saveNote()">💾 সংরক্ষণ</button>
     </div>
   </div>
 </div>
 
-<!-- Customer Detail -->
-<div class="moverlay" id="mDetail">
-  <div class="modal" style="max-width:600px">
-    <div class="mhd"><div class="m-title">👤 কাস্টমার বিবরণ</div><button class="m-close" onclick="closeM('mDetail')">✕</button></div>
-    <div class="mbody" id="detailBody"></div>
+<!-- Customer Detail Modal -->
+<div class="modal-bg" id="mDetail">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-hd">
+      <div class="modal-title">👤 কাস্টমার বিবরণ</div>
+      <button class="modal-close" onclick="closeM('mDetail')">✕</button>
+    </div>
+    <div class="modal-body" id="mDetailBody"></div>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════
-// STORAGE
-// ══════════════════════════════════════════
-const SK={c:'ds_c',p:'ds_p',d:'ds_d',i:'ds_i',n:'ds_n'};
-const ld=k=>{try{return JSON.parse(localStorage.getItem(SK[k]))||[]}catch{return[]}};
-const sv=(k,v)=>localStorage.setItem(SK[k],JSON.stringify(v));
+/* ════════════════════════════════════════════════
+   DATA LAYER
+════════════════════════════════════════════════ */
+const DB={
+  get:(k)=>{try{return JSON.parse(localStorage.getItem('ds_'+k))||[]}catch{return[]}},
+  set:(k,v)=>localStorage.setItem('ds_'+k,JSON.stringify(v)),
+};
 
-// Initial customers
-const IC=[
+/* Initial customer data */
+const INIT_CUSTS=[
   {id:1,name:'মাহবুব ভাই',phone:'01717094515',amount:900,note:'',dueDate:''},
   {id:2,name:'হস্তলিপি একাডেমী',phone:'01894062946',amount:500,note:'',dueDate:''},
   {id:3,name:'Afsana Arifa Apu',phone:'01616746123',amount:1300,note:'',dueDate:''},
@@ -936,745 +1467,797 @@ const IC=[
   {id:29,name:'ঈমানুর কুচলিবাড়ী',phone:'01714287824',amount:1370,note:'',dueDate:''},
   {id:30,name:'Mijanur hujur',phone:'01745099906',amount:500,note:'',dueDate:''}
 ];
-if(!localStorage.getItem(SK.c)) sv('c',IC);
+if(!localStorage.getItem('ds_custs')) DB.set('custs',INIT_CUSTS);
 
-// ══════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════
-const tk=n=>'৳ '+parseFloat(n||0).toLocaleString('en-IN',{minimumFractionDigits:2});
-const today=()=>new Date().toISOString().split('T')[0];
-const fmtD=s=>{if(!s)return'—';const d=new Date(s);return d.toLocaleDateString('bn-BD',{day:'2-digit',month:'short',year:'numeric'})};
-const ini=n=>n?n.charAt(0).toUpperCase():'?';
-const cPaid=id=>ld('p').filter(p=>p.cid==id).reduce((s,p)=>s+p.amount,0);
-const cBal=c=>c.amount-cPaid(c.id);
-const iPaid=inv=>(inv.inst||[]).reduce((s,i)=>s+i.amount,0);
-const iDue=inv=>inv.total-iPaid(inv);
+/* ════════════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════════════ */
+const $ = id=>document.getElementById(id);
+const tk = n=>'৳ '+parseFloat(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const today = ()=>new Date().toISOString().split('T')[0];
+const fmtDate = s=>{if(!s)return'—';try{return new Date(s).toLocaleDateString('bn-BD',{day:'2-digit',month:'short',year:'numeric'})}catch{return s}};
+const ini = s=>s?s.trim().charAt(0).toUpperCase():'?';
+const uid = ()=>Date.now()+Math.floor(Math.random()*1000);
+const custPaid = id=>DB.get('pays').filter(p=>p.cid==id).reduce((s,p)=>s+p.amount,0);
+const custBal = c=>c.amount-custPaid(c.id);
+const invPaid = inv=>(inv.inst||[]).reduce((s,i)=>s+i.amount,0);
+const invDue = inv=>Math.max(inv.total-invPaid(inv),0);
 
 function toast(msg,type='ok'){
-  const t=document.getElementById('toast');
-  const icons={ok:'✅',err:'❌',warn:'⚠️'};
-  document.getElementById('tIcon').textContent=icons[type]||'✅';
-  document.getElementById('tMsg').textContent=msg;
-  t.className='toast on'+(type!=='ok'?' '+type:'');
-  setTimeout(()=>t.classList.remove('on'),3500);
+  const t=$('toast');
+  $('toastIco').textContent=type==='ok'?'✅':type==='err'?'❌':'⚠️';
+  $('toastMsg').textContent=msg;
+  t.className='toast-el show'+(type!=='ok'?' '+type:'');
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),3500);
 }
-const openM=id=>document.getElementById(id).classList.add('on');
-const closeM=id=>document.getElementById(id).classList.remove('on');
-document.querySelectorAll('.moverlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on')}));
 
-// ══════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════
+const openM=id=>$(id).classList.add('open');
+const closeM=id=>$(id).classList.remove('open');
+document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open')}));
+
+/* ════════════════════════════════════════════════
+   AUTH
+════════════════════════════════════════════════ */
 function doLogin(){
-  const u=document.getElementById('uId').value.trim();
-  const p=document.getElementById('uPwd').value.trim();
+  const u=$('lgUid').value.trim(), p=$('lgPwd').value.trim();
   if(u==='dspatgram'&&p==='5825900'){
-    document.getElementById('loginPage').style.display='none';
-    document.getElementById('mainApp').style.display='block';
-    document.getElementById('loginErr').style.display='none';
+    $('loginPage').style.display='none';
+    $('app').style.display='block';
+    $('lgErr').style.display='none';
     initApp();
   }else{
-    document.getElementById('loginErr').style.display='block';
-    document.getElementById('uPwd').value='';
+    $('lgErr').style.display='block';
+    $('lgPwd').value='';
+    $('lgErr').style.animation='none';
+    requestAnimationFrame(()=>$('lgErr').style.animation='shake .4s ease');
   }
 }
 function doLogout(){
   if(confirm('লগআউট করবেন?')){
-    document.getElementById('loginPage').style.display='flex';
-    document.getElementById('mainApp').style.display='none';
-    document.getElementById('uId').value='';
-    document.getElementById('uPwd').value='';
+    $('loginPage').style.display='flex';
+    $('app').style.display='none';
+    $('lgUid').value='';$('lgPwd').value='';
   }
 }
 document.addEventListener('keypress',e=>{
-  if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none') doLogin();
+  if(e.key==='Enter'&&$('loginPage').style.display!=='none') doLogin();
 });
 
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
+/* ════════════════════════════════════════════════
+   APP INIT
+════════════════════════════════════════════════ */
 function initApp(){
   updDate();
   renderDash();
-  renderCust();
-  renderPay();
+  renderCusts();
+  renderPays();
   renderDaily();
   renderInvList();
   renderNotes();
   renderRep();
   setInterval(updDate,30000);
 }
+
 function updDate(){
-  const n=new Date();
-  document.getElementById('tbDate').textContent=n.toLocaleDateString('bn-BD',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+  $('tbDate').textContent=new Date().toLocaleDateString('bn-BD',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
 }
 
-// ══════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════
+/* ════════════════════════════════════════════════
+   SIDEBAR / NAVIGATION
+════════════════════════════════════════════════ */
 let sbSlim=false,mobOpen=false;
+
 function toggleSB(){
-  const mob=window.innerWidth<=768;
-  if(mob){
+  if(window.innerWidth<=768){
     mobOpen=!mobOpen;
-    document.getElementById('sb').classList.toggle('mobile-on',mobOpen);
-    document.getElementById('mobOv').classList.toggle('on',mobOpen);
+    $('sb').classList.toggle('mob-open',mobOpen);
+    $('mobOv').classList.toggle('show',mobOpen);
   }else{
     sbSlim=!sbSlim;
-    document.getElementById('sb').classList.toggle('slim',sbSlim);
-    document.getElementById('tb').classList.toggle('wide',sbSlim);
-    document.getElementById('ct').classList.toggle('wide',sbSlim);
+    $('sb').classList.toggle('slim',sbSlim);
+    $('tb').classList.toggle('slim',sbSlim);
+    $('ca').classList.toggle('slim',sbSlim);
   }
 }
 function closeMob(){
   mobOpen=false;
-  document.getElementById('sb').classList.remove('mobile-on');
-  document.getElementById('mobOv').classList.remove('on');
+  $('sb').classList.remove('mob-open');
+  $('mobOv').classList.remove('show');
 }
 
-const PG={
-  dashboard:['ড্যাশবোর্ড','সকল তথ্যের সারসংক্ষেপ'],
-  customers:['কাস্টমার ও পাওনা','সকল কাস্টমারের তথ্য'],
-  payments:['পেমেন্ট হিস্ট্রি','সকল পরিশোধের রেকর্ড'],
-  daily:['দৈনিক আয়-ব্যয়','প্রতিদিনের লেনদেন'],
-  invoice:['ইনভয়েস','বিল ও চালান'],
-  notes:['নোটস ও রিমাইন্ডার','গুরুত্বপূর্ণ তথ্য'],
-  reports:['রিপোর্ট','বিস্তারিত বিশ্লেষণ']
+const PG_TITLES={
+  dashboard:'ড্যাশবোর্ড',customers:'কাস্টমার ও পাওনা',
+  payments:'পেমেন্ট হিস্ট্রি',daily:'দৈনিক আয়-ব্যয়',
+  invoice:'ইনভয়েস',notes:'নোটস ও রিমাইন্ডার',reports:'রিপোর্ট'
 };
-function goPage(pg){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nav-it').forEach(n=>n.classList.remove('on'));
-  document.getElementById('page-'+pg).classList.add('on');
-  document.getElementById('pgTitle').textContent=PG[pg][0];
-  document.getElementById('pgSub').textContent=PG[pg][1];
-  // highlight nav
-  document.querySelectorAll('.nav-it').forEach(n=>{
-    if(n.querySelector('.nav-tx')?.textContent.trim()===PG[pg][0]) n.classList.add('on');
+
+function goPg(pg){
+  document.querySelectorAll('.page-section').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
+  $('page-'+pg).classList.add('active');
+  $('pgTitle').textContent=PG_TITLES[pg]||pg;
+  // Highlight nav
+  document.querySelectorAll('.nav-btn').forEach(btn=>{
+    if(btn.querySelector('.nav-tx')?.textContent.trim()===PG_TITLES[pg]) btn.classList.add('active');
   });
   if(pg==='dashboard') renderDash();
   if(pg==='reports') renderRep();
-  if(pg==='daily'){renderDaily();updDailyStats()}
+  if(pg==='daily'){renderDaily();renderDailyStats()}
   if(pg==='notes') renderNotes();
   if(pg==='invoice') renderInvList();
   closeMob();
 }
 
-// ══════════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════════
+/* ════════════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════════════ */
 function renderDash(){
-  const custs=ld('c'),pays=ld('p'),daily=ld('d');
+  const custs=DB.get('custs'), pays=DB.get('pays'), daily=DB.get('daily');
   const td=today();
   const totDue=custs.reduce((s,c)=>s+c.amount,0);
   const totPaid=pays.reduce((s,p)=>s+p.amount,0);
-  const rem=totDue-totPaid;
-  const todInc=daily.filter(d=>d.date===td&&d.type==='inc').reduce((s,d)=>s+d.amount,0);
+  const todayInc=daily.filter(d=>d.date===td&&d.type==='inc').reduce((s,d)=>s+d.amount,0);
 
-  document.getElementById('statsRow').innerHTML=`
-    <div class="sc"><div class="sc-icon" style="background:#e8f0fe">👥</div><div class="sc-val">${custs.length}</div><div class="sc-lbl">মোট কাস্টমার</div><div class="sc-glow" style="background:#1a73e8"></div></div>
-    <div class="sc"><div class="sc-icon" style="background:#fce8e6">💰</div><div class="sc-val" style="font-size:19px">${tk(rem)}</div><div class="sc-lbl">মোট বাকি পাওনা</div><div class="sc-glow" style="background:#ea4335"></div></div>
-    <div class="sc"><div class="sc-icon" style="background:#e6f4ea">✅</div><div class="sc-val" style="font-size:19px">${tk(totPaid)}</div><div class="sc-lbl">মোট পরিশোধ</div><div class="sc-glow" style="background:#34a853"></div></div>
-    <div class="sc"><div class="sc-icon" style="background:#fff8e1">📅</div><div class="sc-val" style="font-size:19px">${tk(todInc)}</div><div class="sc-lbl">আজকের আয়</div><div class="sc-glow" style="background:#f9ab00"></div></div>
+  $('dashStats').innerHTML=`
+    <div class="stat-card">
+      <div class="stat-card-icon" style="background:#e8f0fe">👥</div>
+      <div class="stat-card-val">${custs.length}</div>
+      <div class="stat-card-lbl">মোট কাস্টমার</div>
+      <div class="stat-card-bg" style="background:#1a73e8"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-icon" style="background:#fce8e6">💰</div>
+      <div class="stat-card-val" style="font-size:19px">${tk(totDue-totPaid)}</div>
+      <div class="stat-card-lbl">মোট বাকি পাওনা</div>
+      <div class="stat-card-bg" style="background:#ea4335"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-icon" style="background:#e6f4ea">✅</div>
+      <div class="stat-card-val" style="font-size:19px">${tk(totPaid)}</div>
+      <div class="stat-card-lbl">মোট পরিশোধ</div>
+      <div class="stat-card-bg" style="background:#34a853"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-icon" style="background:#fff8e1">📅</div>
+      <div class="stat-card-val" style="font-size:19px">${tk(todayInc)}</div>
+      <div class="stat-card-lbl">আজকের আয়</div>
+      <div class="stat-card-bg" style="background:#f9ab00"></div>
+    </div>
   `;
 
-  const top=[...custs].sort((a,b)=>cBal(b)-cBal(a)).slice(0,6);
-  document.getElementById('topDebtors').innerHTML=top.map((c,i)=>{
-    const b=cBal(c);if(b<=0)return'';
-    return`<div class="di" onclick="openDetail(${c.id})">
-      <div class="di-rank">${i+1}</div>
-      <div class="avatar">${ini(c.name)}</div>
-      <div style="flex:1"><div style="font-weight:700;font-size:14px">${c.name}</div><div style="font-size:12px;color:var(--text3)">${c.phone}</div></div>
-      <div class="amt amt-r">${tk(b)}</div>
+  // Top debtors
+  const top=[...custs].sort((a,b)=>custBal(b)-custBal(a)).slice(0,6);
+  $('dashDebtors').innerHTML=top.map((c,i)=>{
+    const b=custBal(c);if(b<=0)return'';
+    return`<div class="debtor-item" onclick="openDetail(${c.id})">
+      <div class="debtor-rank">${i+1}</div>
+      <div class="av">${ini(c.name)}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div><div style="font-size:12px;color:var(--text3)">${c.phone||'—'}</div></div>
+      <div class="amt amt-red" style="font-size:14px;flex-shrink:0">${tk(b)}</div>
     </div>`;
   }).join('');
 
-  const rPay=[...pays].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,8);
-  document.getElementById('recentAct').innerHTML=rPay.length?rPay.map(p=>{
-    const c=custs.find(x=>x.id==p.cid)||{};
-    return`<div class="hi">
-      <div class="hi-dot" style="background:var(--g3)">💳</div>
-      <div class="hi-info"><h4>${c.name||'—'}</h4><p>${fmtD(p.date)} ${p.note?'• '+p.note:''}</p></div>
-      <div class="hi-amt amt-g">${tk(p.amount)}</div>
+  // Recent payments
+  const recPays=[...pays].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,8);
+  $('dashRecent').innerHTML=recPays.length?recPays.map(p=>{
+    const c=custs.find(x=>x.id==p.cid)||{name:'?'};
+    return`<div class="hist-item">
+      <div class="hist-dot" style="background:var(--green-l)">💳</div>
+      <div class="hist-info"><h4>${c.name}</h4><p>${fmtDate(p.date)}${p.note?' — '+p.note:''}</p></div>
+      <div class="hist-amt amt-green">${tk(p.amount)}</div>
     </div>`;
   }).join(''):`<div style="text-align:center;padding:30px;color:var(--text3)">কোনো পেমেন্ট নেই</div>`;
 
-  // Chart
-  const months=['জানু','ফেব্রু','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টে','অক্টো','নভে','ডিসে'];
-  const mD=Array(12).fill(0);
-  daily.filter(d=>d.type==='inc').forEach(d=>{const m=new Date(d.date).getMonth();mD[m]+=d.amount});
-  const mx=Math.max(...mD,500);
-  const cls=['#1a73e8','#34a853','#f9ab00','#ea4335','#9c27b0','#ff5722','#00bcd4','#8bc34a','#ff9800','#3f51b5','#e91e63','#607d8b'];
-  document.getElementById('mChart').innerHTML=mD.map((v,i)=>`
-    <div class="cb-col" title="${months[i]}: ${tk(v)}">
-      <div class="cb" style="height:${Math.max(v/mx*140,4)}px;background:${cls[i]}"></div>
-      <div class="cb-lbl">${months[i]}</div>
+  // Monthly chart
+  const months=['জান','ফেব','মার','এপ্র','মে','জুন','জুলা','আগ','সেপ','অক্ট','নভে','ডিসে'];
+  const mData=Array(12).fill(0);
+  daily.filter(d=>d.type==='inc').forEach(d=>{
+    const m=new Date(d.date).getMonth();
+    if(!isNaN(m)) mData[m]+=d.amount;
+  });
+  const mx=Math.max(...mData,100);
+  const colors=['#1a73e8','#34a853','#f9ab00','#ea4335','#9c27b0','#ff5722','#00bcd4','#8bc34a','#ff9800','#3f51b5','#e91e63','#607d8b'];
+  $('dashChart').innerHTML=mData.map((v,i)=>`
+    <div class="chart-col" title="${months[i]}: ${tk(v)}">
+      <div class="chart-bar" style="height:${Math.max(v/mx*140,4)}px;background:${colors[i]}" title="${tk(v)}"></div>
+      <div class="chart-lbl">${months[i]}</div>
     </div>`).join('');
 }
 
-// ══════════════════════════════════════════
-// CUSTOMERS
-// ══════════════════════════════════════════
-function renderCust(){
-  const custs=ld('c');
-  const s=(document.getElementById('custSrch')?.value||'').toLowerCase();
-  const f=document.getElementById('custFilter')?.value||'all';
+/* ════════════════════════════════════════════════
+   CUSTOMERS
+════════════════════════════════════════════════ */
+function renderCusts(){
+  const custs=DB.get('custs');
+  const q=($('custQ')?.value||'').toLowerCase();
+  const f=$('custFilter')?.value||'all';
   const fil=custs.filter(c=>{
-    const ms=c.name.toLowerCase().includes(s)||(c.phone||'').includes(s);
-    const b=cBal(c);
-    const mf=f==='all'||(f==='pending'&&b>0)||(f==='paid'&&b<=0);
-    return ms&&mf;
+    const ms=c.name.toLowerCase().includes(q)||(c.phone||'').includes(q);
+    const b=custBal(c);
+    return ms&&(f==='all'||(f==='due'&&b>0)||(f==='paid'&&b<=0));
   });
-  document.getElementById('custCount').textContent=`মোট ${fil.length} জন কাস্টমার`;
-  document.getElementById('custBody').innerHTML=fil.map((c,i)=>{
-    const pd=cPaid(c.id),b=c.amount-pd;
-    const st=b<=0?['badge-paid','পরিশোধ']:pd>0?['badge-partial','আংশিক']:['badge-pending','বাকি'];
+  $('custCountTxt').textContent=`মোট ${fil.length} জন কাস্টমার দেখানো হচ্ছে`;
+  $('custTbody').innerHTML=fil.map((c,i)=>{
+    const pd=custPaid(c.id),b=c.amount-pd;
+    const st=b<=0?['badge-paid','✅ পরিশোধ']:pd>0?['badge-partial','🔵 আংশিক']:['badge-pending','🔴 বাকি'];
     return`<tr>
       <td style="color:var(--text3);font-weight:600">${i+1}</td>
-      <td><div class="flex-c"><div class="avatar" onclick="openDetail(${c.id})" style="cursor:pointer">${ini(c.name)}</div><div><div style="font-weight:700;cursor:pointer" onclick="openDetail(${c.id})">${c.name}</div>${c.note?`<div style="font-size:11px;color:var(--text3)">${c.note.slice(0,30)}</div>`:''}</div></div></td>
-      <td><a href="tel:${c.phone}" style="color:var(--p1);text-decoration:none;font-weight:500">📞 ${c.phone||'—'}</a></td>
-      <td class="amt amt-r">${tk(c.amount)}</td>
-      <td class="amt amt-g">${tk(pd)}</td>
-      <td class="amt" style="color:${b>0?'var(--r1)':'var(--g1)'}">${tk(b)}</td>
+      <td><div class="flex-c"><div class="av" onclick="openDetail(${c.id})" style="cursor:pointer">${ini(c.name)}</div>
+        <div><div style="font-weight:700;cursor:pointer" onclick="openDetail(${c.id})">${c.name}</div>${c.note?`<div style="font-size:11px;color:var(--text3)">${c.note.slice(0,28)}</div>`:''}</div></div></td>
+      <td><a href="tel:${c.phone}" style="color:var(--blue);font-weight:500">📞 ${c.phone||'—'}</a></td>
+      <td class="amt amt-red">${tk(c.amount)}</td>
+      <td class="amt amt-green">${tk(pd)}</td>
+      <td class="amt" style="color:${b>0?'var(--red)':'var(--green)'}">${tk(b)}</td>
       <td><span class="badge ${st[0]}">${st[1]}</span></td>
       <td><div style="display:flex;gap:5px;flex-wrap:wrap">
-        <button class="btn btn-g btn-xs" onclick="openPay(${c.id})" title="পেমেন্ট">💳</button>
-        <button class="btn btn-p btn-xs" onclick="openDetail(${c.id})" title="বিবরণ">👁️</button>
-        <button class="btn btn-o btn-xs" onclick="openEditCust(${c.id})" title="সম্পাদনা">✏️</button>
-        <button class="btn btn-r btn-xs" onclick="delCust(${c.id})" title="মুছুন">🗑️</button>
+        <button class="btn btn-success btn-xs" onclick="openPay(${c.id})" title="পেমেন্ট">💳</button>
+        <button class="btn btn-primary btn-xs" onclick="openDetail(${c.id})" title="বিবরণ">👁️</button>
+        <button class="btn btn-warning btn-xs" onclick="openEditCust(${c.id})" title="সম্পাদনা">✏️</button>
+        <button class="btn btn-danger btn-xs" onclick="delCust(${c.id})" title="মুছুন">🗑️</button>
       </div></td>
     </tr>`;
-  }).join('')||'<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">কোনো কাস্টমার নেই</td></tr>';
+  }).join('')||`<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">কোনো কাস্টমার পাওয়া যায়নি</td></tr>`;
 }
 
 function openAddCust(){
-  document.getElementById('mCustTitle').textContent='➕ নতুন কাস্টমার';
-  document.getElementById('eId').value='';
-  ['cN','cP','cA','cD','cNt'].forEach(id=>document.getElementById(id).value='');
+  $('mCustTitle').textContent='➕ নতুন কাস্টমার';
+  $('mCustId').value='';
+  ['mCN','mCP','mCA','mCD','mCNt'].forEach(id=>$(id).value='');
   openM('mCust');
 }
+
 function openEditCust(id){
-  const c=ld('c').find(x=>x.id==id);if(!c)return;
-  document.getElementById('mCustTitle').textContent='✏️ কাস্টমার সম্পাদনা';
-  document.getElementById('eId').value=c.id;
-  document.getElementById('cN').value=c.name;
-  document.getElementById('cP').value=c.phone||'';
-  document.getElementById('cA').value=c.amount;
-  document.getElementById('cD').value=c.dueDate||'';
-  document.getElementById('cNt').value=c.note||'';
+  const c=DB.get('custs').find(x=>x.id==id);if(!c)return;
+  $('mCustTitle').textContent='✏️ কাস্টমার সম্পাদনা';
+  $('mCustId').value=c.id;
+  $('mCN').value=c.name;$('mCP').value=c.phone||'';
+  $('mCA').value=c.amount;$('mCD').value=c.dueDate||'';
+  $('mCNt').value=c.note||'';
   openM('mCust');
 }
+
 function saveCust(){
-  const nm=document.getElementById('cN').value.trim();
-  if(!nm)return toast('নাম দিন!','err');
-  const amt=parseFloat(document.getElementById('cA').value)||0;
-  const custs=ld('c');
-  const eid=document.getElementById('eId').value;
+  const nm=$('mCN').value.trim();
+  if(!nm)return toast('কাস্টমারের নাম দিন!','err');
+  const custs=DB.get('custs');
+  const eid=$('mCustId').value;
   if(eid){
     const idx=custs.findIndex(c=>c.id==eid);
-    if(idx>=0) custs[idx]={...custs[idx],name:nm,phone:document.getElementById('cP').value,amount:amt,dueDate:document.getElementById('cD').value,note:document.getElementById('cNt').value};
+    if(idx>=0) custs[idx]={...custs[idx],name:nm,phone:$('mCP').value.trim(),amount:parseFloat($('mCA').value)||0,dueDate:$('mCD').value,note:$('mCNt').value.trim()};
     toast('কাস্টমার আপডেট হয়েছে!');
   }else{
-    custs.push({id:Date.now(),name:nm,phone:document.getElementById('cP').value,amount:amt,dueDate:document.getElementById('cD').value,note:document.getElementById('cNt').value});
+    custs.push({id:uid(),name:nm,phone:$('mCP').value.trim(),amount:parseFloat($('mCA').value)||0,dueDate:$('mCD').value,note:$('mCNt').value.trim()});
     toast('নতুন কাস্টমার যোগ হয়েছে!');
   }
-  sv('c',custs);closeM('mCust');renderCust();renderDash();
+  DB.set('custs',custs);closeM('mCust');renderCusts();renderDash();
 }
+
 function delCust(id){
-  const c=ld('c').find(x=>x.id==id);if(!c)return;
-  if(!confirm(`"${c.name}" মুছে ফেলবেন?`))return;
-  sv('c',ld('c').filter(x=>x.id!=id));
-  sv('p',ld('p').filter(p=>p.cid!=id));
-  renderCust();renderDash();
-  toast('মুছে ফেলা হয়েছে','warn');
+  const c=DB.get('custs').find(x=>x.id==id);if(!c)return;
+  if(!confirm(`"${c.name}" মুছে ফেলবেন? এই কাস্টমারের সকল পেমেন্ট রেকর্ডও মুছে যাবে।`))return;
+  DB.set('custs',DB.get('custs').filter(x=>x.id!=id));
+  DB.set('pays',DB.get('pays').filter(p=>p.cid!=id));
+  renderCusts();renderDash();toast('মুছে ফেলা হয়েছে','warn');
 }
+
 function openDetail(id){
-  const c=ld('c').find(x=>x.id==id);if(!c)return;
-  const pd=cPaid(id),bal=c.amount-pd;
-  const hist=ld('p').filter(p=>p.cid==id).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  document.getElementById('detailBody').innerHTML=`
+  const c=DB.get('custs').find(x=>x.id==id);if(!c)return;
+  const pd=custPaid(id),bal=c.amount-pd;
+  const hist=DB.get('pays').filter(p=>p.cid==id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  $('mDetailBody').innerHTML=`
     <div style="text-align:center;margin-bottom:22px">
-      <div class="avatar" style="width:70px;height:70px;border-radius:20px;font-size:28px;margin:0 auto 12px">${ini(c.name)}</div>
-      <h2 style="font-size:22px;font-weight:800">${c.name}</h2>
-      <p><a href="tel:${c.phone}" style="color:var(--p1)">📞 ${c.phone||'—'}</a></p>
-      ${c.note?`<p style="color:var(--text3);font-size:13px;margin-top:5px">${c.note}</p>`:''}
-      ${c.dueDate?`<p style="color:var(--o1);font-size:13px;margin-top:5px;font-weight:600">📅 ডেডলাইন: ${fmtD(c.dueDate)}</p>`:''}
+      <div class="av" style="width:72px;height:72px;border-radius:20px;font-size:30px;margin:0 auto 14px">${ini(c.name)}</div>
+      <h2 style="font-size:22px;font-weight:800;margin-bottom:5px">${c.name}</h2>
+      <a href="tel:${c.phone}" style="color:var(--blue);font-weight:600">📞 ${c.phone||'—'}</a>
+      ${c.note?`<p style="color:var(--text3);font-size:13px;margin-top:6px">${c.note}</p>`:''}
+      ${c.dueDate?`<p style="color:var(--gold-d);font-size:13px;font-weight:600;margin-top:5px">📅 ডেডলাইন: ${fmtDate(c.dueDate)}</p>`:''}
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
-      <div style="background:var(--r3);border-radius:12px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--r1);font-weight:700;margin-bottom:5px">মোট পাওনা</div><div style="font-size:19px;font-weight:800;color:var(--r1)">${tk(c.amount)}</div></div>
-      <div style="background:var(--g3);border-radius:12px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--g2);font-weight:700;margin-bottom:5px">পরিশোধ</div><div style="font-size:19px;font-weight:800;color:var(--g1)">${tk(pd)}</div></div>
-      <div style="background:var(--p3);border-radius:12px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--p2);font-weight:700;margin-bottom:5px">বাকি</div><div style="font-size:19px;font-weight:800;color:${bal>0?'var(--r1)':'var(--g1)'}">${tk(bal)}</div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+      <div style="background:var(--red-l);border-radius:12px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--red-d);font-weight:700;text-transform:uppercase;margin-bottom:5px">মোট পাওনা</div><div style="font-size:20px;font-weight:900;color:var(--red)">${tk(c.amount)}</div></div>
+      <div style="background:var(--green-l);border-radius:12px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--green-d);font-weight:700;text-transform:uppercase;margin-bottom:5px">পরিশোধ</div><div style="font-size:20px;font-weight:900;color:var(--green)">${tk(pd)}</div></div>
+      <div style="background:var(--blue-l);border-radius:12px;padding:14px;text-align:center"><div style="font-size:11px;color:var(--blue-d);font-weight:700;text-transform:uppercase;margin-bottom:5px">বাকি</div><div style="font-size:20px;font-weight:900;color:${bal>0?'var(--red)':'var(--green)'}">${tk(bal)}</div></div>
     </div>
-    ${c.amount>0?`<div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:5px"><span>পরিশোধের অগ্রগতি</span><span>${Math.round(pd/c.amount*100)}%</span></div><div class="prog-bg"><div class="prog-fill" style="width:${Math.min(pd/c.amount*100,100)}%"></div></div></div>`:''}
-    <div style="display:flex;gap:10px;margin-bottom:20px">
-      <button class="btn btn-g" style="flex:1" onclick="closeM('mDetail');openPay(${id})">💳 পেমেন্ট নিন</button>
-      <button class="btn btn-p" style="flex:1" onclick="closeM('mDetail');openEditCust(${id})">✏️ সম্পাদনা</button>
+    ${c.amount>0?`<div style="margin-bottom:20px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:5px"><span>পরিশোধের অগ্রগতি</span><span>${Math.round(Math.min(pd/c.amount,1)*100)}%</span></div><div class="prog-bg"><div class="prog-fill" style="width:${Math.min(pd/c.amount*100,100)}%"></div></div></div>`:''}
+    <div style="display:flex;gap:10px;margin-bottom:22px">
+      <button class="btn btn-success" style="flex:1" onclick="closeM('mDetail');openPay(${id})">💳 পেমেন্ট নিন</button>
+      <button class="btn btn-primary" style="flex:1" onclick="closeM('mDetail');openEditCust(${id})">✏️ সম্পাদনা</button>
     </div>
-    <div style="font-weight:700;margin-bottom:12px;font-size:15px">📋 পেমেন্ট ইতিহাস (${hist.length}টি)</div>
-    ${hist.length?hist.map(h=>`<div class="hi"><div class="hi-dot" style="background:var(--g3)">💳</div><div class="hi-info"><h4>${fmtD(h.date)}</h4><p>${h.note||'পেমেন্ট'}</p></div><div class="hi-amt amt-g">${tk(h.amount)}</div></div>`).join(''):`<p style="color:var(--text3);text-align:center;padding:18px">কোনো পেমেন্ট নেই</p>`}
+    <div style="font-weight:700;font-size:15px;margin-bottom:12px">📋 পেমেন্ট ইতিহাস (${hist.length} টি)</div>
+    <div style="max-height:220px;overflow-y:auto">
+    ${hist.length?hist.map(h=>`<div class="hist-item"><div class="hist-dot" style="background:var(--green-l)">💳</div><div class="hist-info"><h4>${fmtDate(h.date)}</h4><p>${h.note||'পেমেন্ট গৃহীত'}</p></div><div class="hist-amt amt-green">${tk(h.amount)}</div></div>`).join(''):`<p style="text-align:center;padding:20px;color:var(--text3)">কোনো পেমেন্ট নেই</p>`}
+    </div>
   `;
   openM('mDetail');
 }
 
-// ══════════════════════════════════════════
-// PAYMENTS
-// ══════════════════════════════════════════
+/* ════════════════════════════════════════════════
+   PAYMENTS
+════════════════════════════════════════════════ */
 function openPay(id){
-  const c=ld('c').find(x=>x.id==id);if(!c)return;
-  const pd=cPaid(id);
-  document.getElementById('pCid').value=id;
-  document.getElementById('pAv').textContent=ini(c.name);
-  document.getElementById('pCN').textContent=c.name;
-  document.getElementById('pCP').textContent=c.phone||'—';
-  document.getElementById('pTD').textContent=tk(c.amount);
-  document.getElementById('pTP').textContent=tk(pd);
-  document.getElementById('pTR').textContent=tk(c.amount-pd);
-  document.getElementById('pAmt').value='';
-  document.getElementById('pDt').value=today();
-  document.getElementById('pNt').value='';
+  const c=DB.get('custs').find(x=>x.id==id);if(!c)return;
+  const pd=custPaid(id);
+  $('mPayCid').value=id;
+  $('mPayAv').textContent=ini(c.name);
+  $('mPayName').textContent=c.name;
+  $('mPayPhone').textContent=c.phone||'—';
+  $('mPayTotalDue').textContent=tk(c.amount);
+  $('mPayPaid').textContent=tk(pd);
+  $('mPayRem').textContent=tk(c.amount-pd);
+  $('mPayAmt').value='';$('mPayDt').value=today();$('mPayNt').value='';
   openM('mPay');
 }
-function doPay(){
-  const id=document.getElementById('pCid').value;
-  const amt=parseFloat(document.getElementById('pAmt').value);
-  const dt=document.getElementById('pDt').value||today();
-  const nt=document.getElementById('pNt').value;
+
+function doPayment(){
+  const id=$('mPayCid').value;
+  const amt=parseFloat($('mPayAmt').value);
+  const dt=$('mPayDt').value||today();
+  const nt=$('mPayNt').value.trim();
   if(!amt||amt<=0)return toast('সঠিক পরিমাণ দিন!','err');
-  const pays=ld('p');
-  pays.push({id:Date.now(),cid:parseInt(id),amount:amt,date:dt,note:nt});
-  sv('p',pays);
-  const c=ld('c').find(x=>x.id==id);
-  const daily=ld('d');
-  daily.push({id:Date.now()+1,type:'inc',amount:amt,date:dt,desc:`পেমেন্ট - ${c?.name}`,cat:'পেমেন্ট সংগ্রহ'});
-  sv('d',daily);
-  closeM('mPay');renderCust();renderPay();renderDash();updDailyStats();
+  const pays=DB.get('pays');
+  pays.push({id:uid(),cid:parseInt(id),amount:amt,date:dt,note:nt});
+  DB.set('pays',pays);
+  const c=DB.get('custs').find(x=>x.id==id);
+  const daily=DB.get('daily');
+  daily.push({id:uid(),type:'inc',amount:amt,desc:`পেমেন্ট — ${c?.name||''}`,date:dt,cat:'পেমেন্ট সংগ্রহ'});
+  DB.set('daily',daily);
+  closeM('mPay');renderCusts();renderPays();renderDash();renderDailyStats();
   toast(`${tk(amt)} পেমেন্ট সংরক্ষিত!`);
 }
-function renderPay(){
-  const pays=ld('p').sort((a,b)=>new Date(b.date)-new Date(a.date));
-  const custs=ld('c');
-  document.getElementById('payBody').innerHTML=pays.map((p,i)=>{
-    const c=custs.find(x=>x.id==p.cid)||{};
-    return`<tr><td style="color:var(--text3)">${i+1}</td><td style="font-weight:600">${fmtD(p.date)}</td><td><div class="flex-c"><div class="avatar" style="width:30px;height:30px;font-size:12px">${ini(c.name)}</div>${c.name||'—'}</div></td><td class="amt amt-g">${tk(p.amount)}</td><td style="color:var(--text3)">${p.note||'—'}</td></tr>`;
-  }).join('')||'<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text3)">কোনো পেমেন্ট নেই</td></tr>';
+
+function renderPays(){
+  const pays=DB.get('pays').sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const custs=DB.get('custs');
+  $('payTbody').innerHTML=pays.map((p,i)=>{
+    const c=custs.find(x=>x.id==p.cid)||{name:'—'};
+    return`<tr><td style="color:var(--text3)">${i+1}</td><td style="font-weight:600">${fmtDate(p.date)}</td>
+      <td><div class="flex-c"><div class="av" style="width:30px;height:30px;font-size:12px">${ini(c.name)}</div>${c.name}</div></td>
+      <td class="amt amt-green">${tk(p.amount)}</td>
+      <td style="color:var(--text3)">${p.note||'—'}</td></tr>`;
+  }).join('')||`<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text3)">কোনো পেমেন্ট নেই</td></tr>`;
 }
 
-// ══════════════════════════════════════════
-// DAILY
-// ══════════════════════════════════════════
-function openInc(){
-  document.getElementById('mDailyT').textContent='💰 আয় যোগ করুন';
-  document.getElementById('dType').value='inc';
-  document.getElementById('dSaveBtn').className='btn btn-g';
-  document.getElementById('dAmt').value='';
-  document.getElementById('dDsc').value='';
-  document.getElementById('dDt').value=today();
+/* ════════════════════════════════════════════════
+   DAILY TRANSACTIONS
+════════════════════════════════════════════════ */
+function openIncome(){
+  $('mDailyTitle').textContent='💰 আয় যোগ করুন';
+  $('mDailyType').value='inc';
+  $('mDailySaveBtn').className='btn btn-success';
+  $('mDailyAmt').value='';$('mDailyDesc').value='';$('mDailyDt').value=today();
   openM('mDaily');
 }
-function openExp(){
-  document.getElementById('mDailyT').textContent='💸 ব্যয় যোগ করুন';
-  document.getElementById('dType').value='exp';
-  document.getElementById('dSaveBtn').className='btn btn-r';
-  document.getElementById('dAmt').value='';
-  document.getElementById('dDsc').value='';
-  document.getElementById('dDt').value=today();
+function openExpense(){
+  $('mDailyTitle').textContent='💸 ব্যয় যোগ করুন';
+  $('mDailyType').value='exp';
+  $('mDailySaveBtn').className='btn btn-danger';
+  $('mDailyAmt').value='';$('mDailyDesc').value='';$('mDailyDt').value=today();
   openM('mDaily');
 }
 function saveDaily(){
-  const amt=parseFloat(document.getElementById('dAmt').value);
-  const dsc=document.getElementById('dDsc').value.trim();
+  const amt=parseFloat($('mDailyAmt').value);
+  const desc=$('mDailyDesc').value.trim();
   if(!amt||amt<=0)return toast('পরিমাণ দিন!','err');
-  if(!dsc)return toast('বিবরণ দিন!','err');
-  const daily=ld('d');
-  daily.push({id:Date.now(),type:document.getElementById('dType').value,amount:amt,desc:dsc,date:document.getElementById('dDt').value||today(),cat:document.getElementById('dCat').value});
-  sv('d',daily);closeM('mDaily');renderDaily();updDailyStats();renderDash();
+  if(!desc)return toast('বিবরণ দিন!','err');
+  const daily=DB.get('daily');
+  daily.push({id:uid(),type:$('mDailyType').value,amount:amt,desc,date:$('mDailyDt').value||today(),cat:$('mDailyCat').value});
+  DB.set('daily',daily);closeM('mDaily');renderDaily();renderDailyStats();renderDash();
   toast('লেনদেন সংরক্ষিত!');
 }
-function renderDaily(){
-  const daily=ld('d');
-  const f=document.getElementById('dailyFilt')?.value||'';
-  const fil=f?daily.filter(d=>d.date===f):daily;
-  const s=[...fil].sort((a,b)=>new Date(b.date)-new Date(a.date));
-  document.getElementById('dailyBody').innerHTML=s.map((d,i)=>`
-    <tr><td style="color:var(--text3)">${i+1}</td><td style="font-weight:600">${fmtD(d.date)}</td>
-    <td><span class="badge ${d.type==='inc'?'badge-paid':'badge-pending'}">${d.type==='inc'?'💰 আয়':'💸 ব্যয়'}</span></td>
-    <td>${d.desc} <span style="color:var(--text3);font-size:12px">${d.cat?'('+d.cat+')':''}</span></td>
-    <td class="amt ${d.type==='inc'?'amt-g':'amt-r'}">${d.type==='inc'?'+':'-'}${tk(d.amount)}</td>
-    <td><button class="btn btn-r btn-xs" onclick="delDaily(${d.id})">🗑️</button></td></tr>
-  `).join('')||'<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text3)">কোনো লেনদেন নেই</td></tr>';
-  updDailyStats();
-}
-function delDaily(id){
-  if(!confirm('মুছে ফেলবেন?'))return;
-  sv('d',ld('d').filter(d=>d.id!=id));renderDaily();renderDash();
-  toast('মুছে ফেলা হয়েছে','warn');
-}
-function updDailyStats(){
-  const daily=ld('d'),td=today();
+
+function renderDailyStats(){
+  const daily=DB.get('daily'),td=today();
   const inc=daily.filter(d=>d.date===td&&d.type==='inc').reduce((s,d)=>s+d.amount,0);
   const exp=daily.filter(d=>d.date===td&&d.type==='exp').reduce((s,d)=>s+d.amount,0);
   const pr=inc-exp;
-  const ei=document.getElementById('dInc'),ee=document.getElementById('dExp'),ep=document.getElementById('dPro');
-  if(ei)ei.textContent=tk(inc);
-  if(ee)ee.textContent=tk(exp);
-  if(ep){ep.textContent=tk(pr);ep.style.color=pr>=0?'var(--g1)':'var(--r1)'}
+  $('dailyStats').innerHTML=`
+    <div class="stat-card"><div class="stat-card-icon" style="background:#e8f0fe">💰</div><div class="stat-card-val" style="font-size:19px">${tk(inc)}</div><div class="stat-card-lbl">আজকের আয়</div></div>
+    <div class="stat-card"><div class="stat-card-icon" style="background:#fce8e6">💸</div><div class="stat-card-val" style="font-size:19px">${tk(exp)}</div><div class="stat-card-lbl">আজকের ব্যয়</div></div>
+    <div class="stat-card"><div class="stat-card-icon" style="background:#e6f4ea">📈</div><div class="stat-card-val" style="font-size:19px;color:${pr>=0?'var(--green)':'var(--red)'}">${tk(pr)}</div><div class="stat-card-lbl">আজকের লাভ</div></div>
+  `;
 }
 
-// ══════════════════════════════════════════
-// INVOICE
-// ══════════════════════════════════════════
-let iItemCnt=0;
+function renderDaily(){
+  const daily=DB.get('daily');
+  const filt=$('dailyDateFilt')?.value||'';
+  const fil=filt?daily.filter(d=>d.date===filt):daily;
+  const sorted=[...fil].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  $('dailyTbody').innerHTML=sorted.map((d,i)=>`<tr>
+    <td style="color:var(--text3)">${i+1}</td>
+    <td style="font-weight:600">${fmtDate(d.date)}</td>
+    <td><span class="badge ${d.type==='inc'?'badge-paid':'badge-pending'}">${d.type==='inc'?'💰 আয়':'💸 ব্যয়'}</span></td>
+    <td>${d.desc}<span style="color:var(--text3);font-size:12px;margin-left:6px">${d.cat?'('+d.cat+')':''}</span></td>
+    <td class="amt ${d.type==='inc'?'amt-green':'amt-red'}">${d.type==='inc'?'+':'-'}${tk(d.amount)}</td>
+    <td><button class="btn btn-danger btn-xs" onclick="delDaily(${d.id})">🗑️</button></td>
+  </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text3)">কোনো লেনদেন নেই</td></tr>`;
+  renderDailyStats();
+}
+
+function delDaily(id){
+  if(!confirm('এই লেনদেন মুছে ফেলবেন?'))return;
+  DB.set('daily',DB.get('daily').filter(d=>d.id!=id));
+  renderDaily();renderDash();toast('মুছে ফেলা হয়েছে','warn');
+}
+
+/* ════════════════════════════════════════════════
+   INVOICE — FULL FEATURED
+════════════════════════════════════════════════ */
+let invItemCnt=0;
 
 function openNewInv(){
-  ['iCust','iPhone','iAddr','iNote'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('iDt').value=today();
-  document.getElementById('iDue').value='';
-  document.getElementById('iDisc').value='0';
-  document.getElementById('iTotal').textContent='৳ ০';
-  iItemCnt=0;document.getElementById('iItems').innerHTML='';
-  addIItem();openM('mInv');
+  ['iCust','iPhone','iAddr','iRef','iNote'].forEach(id=>$(id).value='');
+  $('iDate').value=today();$('iDue').value='';$('iDisc').value='0';
+  $('iTotal').textContent='৳ ০';
+  invItemCnt=0;$('invItemsWrap').innerHTML='';
+  addInvItem();openM('mInv');
 }
-function addIItem(){
-  iItemCnt++;
-  const d=document.createElement('div');
-  d.id='ii_'+iItemCnt;
-  d.style.cssText='display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px';
-  d.innerHTML=`
-    <div><label style="font-size:11px;color:var(--text3);font-weight:700;display:block;margin-bottom:5px">পণ্য/সেবার নাম</label><input type="text" class="fi" placeholder="যেমন: ব্যানার প্রিন্ট" oninput="calcITotal()" style="font-size:13px;padding:10px 12px"></div>
-    <div><label style="font-size:11px;color:var(--text3);font-weight:700;display:block;margin-bottom:5px">পরিমাণ</label><input type="number" class="fi" value="1" min="1" oninput="calcITotal()" style="font-size:13px;padding:10px 12px"></div>
-    <div><label style="font-size:11px;color:var(--text3);font-weight:700;display:block;margin-bottom:5px">মূল্য (৳)</label><input type="number" class="fi" placeholder="0" oninput="calcITotal()" style="font-size:13px;padding:10px 12px"></div>
-    <div><label style="font-size:11px;display:block;margin-bottom:5px;color:transparent">X</label><button class="btn btn-r btn-sm" onclick="document.getElementById('ii_${iItemCnt}').remove();calcITotal()" style="padding:10px 12px">✕</button></div>`;
-  document.getElementById('iItems').appendChild(d);
+
+function addInvItem(){
+  invItemCnt++;
+  const div=document.createElement('div');
+  div.id='ii_'+invItemCnt;
+  div.style.cssText='display:grid;grid-template-columns:2.5fr 70px 100px 36px;gap:8px;align-items:end;margin-bottom:10px';
+  div.innerHTML=`
+    <div><label style="font-size:11px;font-weight:700;color:var(--text3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">পণ্য/সেবার নাম</label><input type="text" class="fi" placeholder="যেমন: ব্যানার প্রিন্ট, ফ্লেক্স..." oninput="calcInvTotal()" style="font-size:13px;padding:10px 12px"></div>
+    <div><label style="font-size:11px;font-weight:700;color:var(--text3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">পরিমাণ</label><input type="number" class="fi" value="1" min="1" oninput="calcInvTotal()" style="font-size:13px;padding:10px 12px;text-align:center"></div>
+    <div><label style="font-size:11px;font-weight:700;color:var(--text3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">মূল্য (৳)</label><input type="number" class="fi" placeholder="0" min="0" oninput="calcInvTotal()" style="font-size:13px;padding:10px 12px"></div>
+    <div style="padding-bottom:1px"><button class="btn btn-danger btn-xs btn-icon" onclick="document.getElementById('ii_${invItemCnt}').remove();calcInvTotal()" style="width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center">✕</button></div>`;
+  $('invItemsWrap').appendChild(div);
 }
-function calcITotal(){
+
+function calcInvTotal(){
   let sub=0;
-  document.querySelectorAll('#iItems>div').forEach(d=>{
+  document.querySelectorAll('#invItemsWrap>div').forEach(d=>{
     const ip=d.querySelectorAll('input');
     if(ip.length>=3) sub+=(parseFloat(ip[1].value)||0)*(parseFloat(ip[2].value)||0);
   });
-  const disc=parseFloat(document.getElementById('iDisc').value)||0;
-  document.getElementById('iTotal').textContent=tk(sub-disc);
-  return sub-disc;
+  const disc=parseFloat($('iDisc').value)||0;
+  $('iTotal').textContent=tk(Math.max(sub-disc,0));
+  return Math.max(sub-disc,0);
 }
+
 function saveInv(){
-  const cust=document.getElementById('iCust').value.trim();
+  const cust=$('iCust').value.trim();
   if(!cust)return toast('কাস্টমার নাম দিন!','err');
   const items=[];
-  document.querySelectorAll('#iItems>div').forEach(d=>{
+  document.querySelectorAll('#invItemsWrap>div').forEach(d=>{
     const ip=d.querySelectorAll('input');
     if(ip.length>=3){
       const nm=ip[0].value.trim(),qty=parseFloat(ip[1].value)||0,price=parseFloat(ip[2].value)||0;
-      if(nm&&price>0) items.push({name:nm,qty,price,total:qty*price});
+      if(nm&&qty>0&&price>0) items.push({name:nm,qty,price,total:qty*price});
     }
   });
-  if(!items.length)return toast('কমপক্ষে একটি আইটেম দিন!','err');
-  const disc=parseFloat(document.getElementById('iDisc').value)||0;
+  if(!items.length)return toast('কমপক্ষে একটি আইটেম যোগ করুন!','err');
+  const disc=parseFloat($('iDisc').value)||0;
   const sub=items.reduce((s,i)=>s+i.total,0);
-  const total=sub-disc;
-  const invs=ld('i');
+  const total=Math.max(sub-disc,0);
+  const invs=DB.get('invs');
   const inv={
-    id:Date.now(),
+    id:uid(),
     invNo:'INV-'+String(invs.length+1).padStart(4,'0'),
-    customer:cust,phone:document.getElementById('iPhone').value,
-    address:document.getElementById('iAddr').value,
-    date:document.getElementById('iDt').value||today(),
-    dueDate:document.getElementById('iDue').value,
+    customer:cust,phone:$('iPhone').value.trim(),
+    address:$('iAddr').value.trim(),ref:$('iRef').value.trim(),
+    date:$('iDate').value||today(),dueDate:$('iDue').value,
     items,subtotal:sub,discount:disc,total,
-    note:document.getElementById('iNote').value,
-    inst:[]
+    note:$('iNote').value.trim(),inst:[]
   };
-  invs.push(inv);sv('i',invs);
+  invs.push(inv);DB.set('invs',invs);
   closeM('mInv');renderInvList();showInvPreview(inv.id);
   toast(`ইনভয়েস ${inv.invNo} তৈরি হয়েছে!`);
 }
 
 function renderInvList(){
-  const invs=ld('i').sort((a,b)=>b.id-a.id);
-  document.getElementById('invList').innerHTML=invs.length?invs.map(inv=>{
-    const pd=iPaid(inv),due=iDue(inv);
-    const st=due<=0?'✅ পরিশোধ':pd>0?'🔵 আংশিক':'🔴 বাকি';
-    return`<div style="padding:13px;border:2px solid var(--border);border-radius:12px;margin-bottom:9px;cursor:pointer;transition:all .2s" onclick="showInvPreview(${inv.id})" onmouseover="this.style.borderColor='var(--p1)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+  const invs=DB.get('invs').sort((a,b)=>b.id-a.id);
+  $('invListEl').innerHTML=invs.length?invs.map(inv=>{
+    const pd=invPaid(inv),due=invDue(inv);
+    const stTx=due<=0?'✅ পরিশোধ':pd>0?'🔵 আংশিক':'🔴 বাকি';
+    return`<div class="inv-list-item" id="ili_${inv.id}" onclick="showInvPreview(${inv.id})">
+      <div class="inv-list-top">
         <div>
-          <div style="font-weight:800;color:var(--p1);font-size:13px">${inv.invNo}</div>
-          <div style="font-weight:700;font-size:14px;margin-top:2px">${inv.customer}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px">${fmtD(inv.date)}</div>
-          <div style="font-size:11px;margin-top:3px">${st}</div>
+          <div class="inv-list-no">${inv.invNo}</div>
+          <div class="inv-list-name">${inv.customer}</div>
+          <div class="inv-list-date">${fmtDate(inv.date)}</div>
+          <div style="font-size:11px;margin-top:3px">${stTx}</div>
         </div>
-        <div style="text-align:right">
-          <div style="font-weight:800;font-size:15px">${tk(inv.total)}</div>
-          ${due>0?`<div style="font-size:11px;color:var(--r1);font-weight:700">বাকি: ${tk(due)}</div>`:''}
-          <div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end">
-            ${due>0?`<button class="btn btn-g btn-xs" onclick="event.stopPropagation();openInvPay(${inv.id})">💳</button>`:''}
-            <button class="btn btn-r btn-xs" onclick="event.stopPropagation();delInv(${inv.id})">🗑️</button>
+        <div class="inv-list-right">
+          <div class="inv-list-amt">${tk(inv.total)}</div>
+          ${due>0?`<div class="inv-list-due">বাকি: ${tk(due)}</div>`:''}
+          <div class="inv-list-actions">
+            ${due>0?`<button class="btn btn-success btn-xs" onclick="event.stopPropagation();openInstModal(${inv.id})" title="কিস্তি">💳</button>`:''}
+            <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();delInv(${inv.id})" title="মুছুন">🗑️</button>
           </div>
         </div>
       </div>
     </div>`;
-  }).join(''):`<p style="color:var(--text3);text-align:center;padding:30px;font-size:14px">কোনো ইনভয়েস নেই</p>`;
+  }).join(''):`<div class="inv-empty"><div class="inv-empty-ico">🧾</div><p>কোনো ইনভয়েস নেই<br><small>নতুন ইনভয়েস তৈরি করুন</small></p></div>`;
 }
 
-function openInvPay(id){
-  const inv=ld('i').find(i=>i.id==id);if(!inv)return;
-  const pd=iPaid(inv),due=iDue(inv);
-  document.getElementById('ipId').value=id;
-  document.getElementById('ipAmt').value='';
-  document.getElementById('ipDt').value=today();
-  document.getElementById('ipNt').value='';
-  document.getElementById('ipSum').innerHTML=`
-    <strong style="font-size:15px">${inv.invNo} — ${inv.customer}</strong><br>
+function openInstModal(id){
+  const inv=DB.get('invs').find(i=>i.id==id);if(!inv)return;
+  const pd=invPaid(inv),due=invDue(inv);
+  $('mInstInvId').value=id;$('mInstAmt').value='';$('mInstDt').value=today();$('mInstNt').value='';
+  $('mInstSummary').innerHTML=`
+    <strong style="font-size:15px;display:block;margin-bottom:5px">${inv.invNo} — ${inv.customer}</strong>
     <span style="color:var(--text3)">মোট বিল:</span> <strong>${tk(inv.total)}</strong> &nbsp;|&nbsp;
-    <span style="color:var(--text3)">জমা:</span> <strong style="color:var(--g1)">${tk(pd)}</strong> &nbsp;|&nbsp;
-    <span style="color:var(--text3)">বাকি:</span> <strong style="color:var(--r1)">${tk(due)}</strong>
-  `;
-  openM('mInvPay');
+    <span style="color:var(--text3)">জমা:</span> <strong style="color:var(--green)">${tk(pd)}</strong> &nbsp;|&nbsp;
+    <span style="color:var(--text3)">বাকি:</span> <strong style="color:var(--red)">${tk(due)}</strong>`;
+  openM('mInst');
 }
-function saveInvPay(){
-  const id=parseInt(document.getElementById('ipId').value);
-  const amt=parseFloat(document.getElementById('ipAmt').value);
-  const dt=document.getElementById('ipDt').value||today();
-  const nt=document.getElementById('ipNt').value.trim();
+
+function saveInstallment(){
+  const id=parseInt($('mInstInvId').value);
+  const amt=parseFloat($('mInstAmt').value);
+  const dt=$('mInstDt').value||today();
+  const nt=$('mInstNt').value.trim();
   if(!amt||amt<=0)return toast('পরিমাণ দিন!','err');
-  const invs=ld('i');
+  const invs=DB.get('invs');
   const idx=invs.findIndex(i=>i.id==id);if(idx<0)return;
   if(!invs[idx].inst) invs[idx].inst=[];
-  const due=iDue(invs[idx]);
-  if(amt>due+0.01)return toast(`সর্বোচ্চ ${tk(due)} জমা দেওয়া যাবে!`,'err');
-  invs[idx].inst.push({id:Date.now(),amount:amt,date:dt,note:nt});
-  sv('i',invs);
-  const daily=ld('d');
-  daily.push({id:Date.now()+1,type:'inc',amount:amt,date:dt,desc:`ইনভয়েস জমা - ${invs[idx].customer} (${invs[idx].invNo})`,cat:'ইনভয়েস পেমেন্ট'});
-  sv('d',daily);
-  closeM('mInvPay');renderInvList();showInvPreview(id);updDailyStats();renderDash();
+  const due=invDue(invs[idx]);
+  if(amt>due+0.01)return toast(`সর্বোচ্চ ${tk(due)} জমা দিতে পারবেন!`,'err');
+  invs[idx].inst.push({id:uid(),amount:amt,date:dt,note:nt});
+  DB.set('invs',invs);
+  const daily=DB.get('daily');
+  daily.push({id:uid(),type:'inc',amount:amt,date:dt,desc:`ইনভয়েস জমা — ${invs[idx].customer} (${invs[idx].invNo})`,cat:'ইনভয়েস পেমেন্ট'});
+  DB.set('daily',daily);
+  closeM('mInst');renderInvList();showInvPreview(id);renderDailyStats();renderDash();
   toast(`${tk(amt)} কিস্তি সংরক্ষিত!`);
 }
+
 function delInv(id){
   if(!confirm('এই ইনভয়েস মুছে ফেলবেন?'))return;
-  sv('i',ld('i').filter(i=>i.id!=id));renderInvList();
-  document.getElementById('invoicePreviewPanel').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text3)"><div style="font-size:60px;opacity:.3;margin-bottom:16px">🧾</div><p>ইনভয়েস মুছে ফেলা হয়েছে</p></div>';
+  DB.set('invs',DB.get('invs').filter(i=>i.id!=id));renderInvList();
+  $('invPreviewEl').innerHTML=`<div class="inv-empty"><div class="inv-empty-ico">🧾</div><p>ইনভয়েস মুছে ফেলা হয়েছে</p></div>`;
   toast('মুছে ফেলা হয়েছে','warn');
 }
 
-// ── INVOICE PREVIEW (Print-Ready) ──
+/* ────────────────────────────────────────
+   PREMIUM INVOICE PREVIEW
+──────────────────────────────────────── */
 function showInvPreview(id){
-  const inv=ld('i').find(i=>i.id==id);if(!inv)return;
-  const pd=iPaid(inv),due=iDue(inv);
+  // Highlight selected
+  document.querySelectorAll('.inv-list-item').forEach(el=>el.classList.remove('selected'));
+  const liEl=$('ili_'+id);if(liEl) liEl.classList.add('selected');
+
+  const inv=DB.get('invs').find(i=>i.id==id);if(!inv)return;
+  const pd=invPaid(inv),due=invDue(inv);
   const inst=inv.inst||[];
 
-  // Build installment table
-  let instHTML='';
+  /* Build installment rows with running balance */
+  let instTableHTML='';
   if(inst.length>0){
     let runBal=inv.total;
-    instHTML=`
-      <div class="inv-install-sec">
-        <div class="inv-install-title">💳 জমার বিবরণ (${inst.length}টি কিস্তি)</div>
-        <table class="ipt">
+    const rows=inst.map((ins,i)=>{
+      runBal-=ins.amount;
+      const remAmt=Math.max(runBal,0);
+      return`<tr>
+        <td><span class="inst-num">${i+1}</span></td>
+        <td class="inst-date">${fmtDate(ins.date)}</td>
+        <td class="inst-note">${ins.note||'—'}</td>
+        <td class="inst-paid-amt" style="text-align:right">${tk(ins.amount)}</td>
+        <td class="inst-rem-amt" style="text-align:right;color:${remAmt>0.01?'var(--red)':'var(--green)'}">${tk(remAmt)}</td>
+      </tr>`;
+    }).join('');
+    instTableHTML=`
+      <div class="inv-inst-section">
+        <div class="inv-inst-title">💳 জমার বিবরণ (${inst.length}টি কিস্তি)</div>
+        <div style="overflow-x:auto">
+        <table class="inst-table">
           <thead>
             <tr>
               <th style="width:36px">#</th>
               <th>তারিখ</th>
               <th>নোট</th>
-              <th style="text-align:right">জমার পরিমাণ</th>
-              <th style="text-align:right">পরবর্তী বাকি</th>
+              <th>জমার পরিমাণ</th>
+              <th>পরবর্তী বাকি</th>
             </tr>
           </thead>
-          <tbody>
-            ${inst.map((ins,i)=>{
-              runBal-=ins.amount;
-              return`<tr>
-                <td><strong style="color:var(--p1)">${i+1}</strong></td>
-                <td style="font-weight:600">${fmtD(ins.date)}</td>
-                <td style="color:var(--text3)">${ins.note||'—'}</td>
-                <td style="text-align:right;font-weight:800;color:var(--g1)">${tk(ins.amount)}</td>
-                <td style="text-align:right;font-weight:800;color:${runBal>0.01?'var(--r1)':'var(--g1)'}">${tk(Math.max(runBal,0))}</td>
-              </tr>`;
-            }).join('')}
-          </tbody>
+          <tbody>${rows}</tbody>
         </table>
-      </div>
-    `;
+        </div>
+      </div>`;
   }
 
-  document.getElementById('invoicePreviewPanel').innerHTML=`
-    <div class="inv-paper" id="invPrint">
+  /* Due/Cleared row */
+  const dueOrClearedHTML=due>0.01
+    ?`<div class="inv-sr due-row"><span class="inv-sr-label">⚠️ এখনও বাকি আছে</span><span class="inv-sr-val">${tk(due)}</span></div>`
+    :`<div class="inv-sr cleared-row"><span class="inv-sr-label">✅ সম্পূর্ণ পরিশোধ হয়েছে</span><span class="inv-sr-val" style="font-size:14px">পরিশোধিত ✓</span></div>`;
 
-      <!-- HEADER -->
-      <div class="inv-hd">
-        <div class="inv-brand">
-          <h2>দুরন্ত ডিজিটাল সাইন</h2>
-          <div class="tagline">ডিজাইনে দুরন্ত, মানে অনন্য।</div>
-          <div class="contact">
+  /* Discount row */
+  const discHTML=inv.discount>0
+    ?`<div class="inv-sr"><span class="inv-sr-label">ছাড়</span><span class="inv-sr-val" style="color:var(--green)">— ${tk(inv.discount)}</span></div>`:'';
+
+  /* Reference info */
+  const refHTML=inv.ref?`<div class="inv-party-det">📋 রেফারেন্স: ${inv.ref}</div>`:'';
+
+  $('invPreviewEl').innerHTML=`
+    <div class="inv-paper">
+      <!-- Top color strip -->
+      <div class="inv-color-strip"></div>
+
+      <!-- TOP BANNER -->
+      <div class="inv-top-banner">
+        <div class="inv-brand-block">
+          <h1>দুরন্ত ডিজিটাল সাইন</h1>
+          <div class="inv-brand-tagline">ডিজাইনে দুরন্ত, মানে অনন্য।</div>
+          <div class="inv-brand-contact">
             📍 হোটেল সাদিকের নিচতলা, বড় মসজিদের সামনে<br>
             পাটগ্রাম, লালমনিরহাট<br>
-            📞 01710513624
+            📞 <strong>01710513624</strong>
           </div>
         </div>
-        <div class="inv-num-box">
-          <div class="inv-badge-label">INVOICE</div>
-          <div class="inv-num">${inv.invNo}</div>
-          <p>তারিখ: <strong>${fmtD(inv.date)}</strong></p>
-          ${inv.dueDate?`<p style="color:var(--o2)">পেমেন্ট ডেডলাইন: <strong>${fmtD(inv.dueDate)}</strong></p>`:''}
+        <div class="inv-num-block">
+          <div class="inv-word-label">INVOICE</div>
+          <div class="inv-num-val">${inv.invNo}</div>
+          <div class="inv-meta-dates">
+            তারিখ: <strong>${fmtDate(inv.date)}</strong><br>
+            ${inv.dueDate?`ডেডলাইন: <strong style="color:#f9ab00">${fmtDate(inv.dueDate)}</strong>`:''}
+          </div>
         </div>
       </div>
 
-      <!-- PARTY -->
-      <div class="inv-party">
-        <div class="ipb">
-          <label>বিল প্রদানকারী</label>
-          <div class="pname">${inv.customer}</div>
-          ${inv.phone?`<div class="pdet">📞 ${inv.phone}</div>`:''}
-          ${inv.address?`<div class="pdet">📍 ${inv.address}</div>`:''}
-        </div>
-        <div class="ipb green">
-          <label>বিল গ্রহণকারী</label>
-          <div class="pname">দুরন্ত ডিজিটাল সাইন</div>
-          <div class="pdet">📞 01710513624</div>
-          <div class="pdet">পাটগ্রাম, লালমনিরহাট</div>
-        </div>
-      </div>
+      <!-- BODY -->
+      <div class="inv-body-wrap">
 
-      <!-- ITEMS TABLE -->
-      <div class="inv-table-wrap">
-        <table class="inv-table">
-          <thead>
-            <tr>
-              <th style="width:36px">#</th>
-              <th>পণ্য / সেবার বিবরণ</th>
-              <th style="text-align:center;width:80px">পরিমাণ</th>
-              <th style="text-align:right;width:110px">একক মূল্য</th>
-              <th style="text-align:right;width:120px">মোট</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${inv.items.map((it,i)=>`
+        <!-- PARTY INFO -->
+        <div class="inv-party-row">
+          <div class="inv-party-box">
+            <span class="inv-party-lbl">বিল প্রদানকারী (কাস্টমার)</span>
+            <div class="inv-party-name">${inv.customer}</div>
+            ${inv.phone?`<div class="inv-party-det">📞 ${inv.phone}</div>`:''}
+            ${inv.address?`<div class="inv-party-det">📍 ${inv.address}</div>`:''}
+            ${refHTML}
+          </div>
+          <div class="inv-party-box right">
+            <span class="inv-party-lbl">বিল গ্রহণকারী</span>
+            <div class="inv-party-name">দুরন্ত ডিজিটাল সাইন</div>
+            <div class="inv-party-det">📞 01710513624</div>
+            <div class="inv-party-det">📍 পাটগ্রাম, লালমনিরহাট</div>
+          </div>
+        </div>
+
+        <!-- ITEMS TABLE -->
+        <div class="inv-items-table-wrap">
+          <table class="inv-items-table">
+            <thead>
               <tr>
-                <td style="font-weight:700;color:var(--p1)">${i+1}</td>
-                <td style="font-weight:500">${it.name}</td>
-                <td style="text-align:center">${it.qty}</td>
+                <th style="width:36px">#</th>
+                <th>পণ্য / সেবার বিবরণ</th>
+                <th style="text-align:center;width:80px">পরিমাণ</th>
+                <th style="text-align:right;width:110px">একক মূল্য</th>
+                <th style="text-align:right;width:120px">মোট</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${inv.items.map((it,i)=>`<tr>
+                <td><span class="inv-row-num">${i+1}</span></td>
+                <td class="inv-item-name">${it.name}</td>
+                <td style="text-align:center">${it.qty} টি</td>
                 <td style="text-align:right">${tk(it.price)}</td>
-                <td style="text-align:right;font-weight:700">${tk(it.total)}</td>
+                <td style="text-align:right" class="inv-item-total">${tk(it.total)}</td>
               </tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- SUMMARY -->
-      <div class="inv-sum-wrap">
-        <div class="inv-sum-box">
-          <div class="isr"><span>সাব-টোটাল</span><span>${tk(inv.subtotal)}</span></div>
-          ${inv.discount>0?`<div class="isr"><span>ছাড়</span><span style="color:var(--g1)">— ${tk(inv.discount)}</span></div>`:''}
-          <div class="isr grand"><span>মোট বিল</span><span>${tk(inv.total)}</span></div>
-          <div class="isr paid-r">
-            <span>✅ মোট নগদ জমা${inst.length>0?` (${inst.length}টি কিস্তি)`:''}</span>
-            <span>${tk(pd)}</span>
+        <!-- SUMMARY -->
+        <div class="inv-summary-row">
+          <div class="inv-summary-box">
+            <div class="inv-sr"><span class="inv-sr-label">সাব-টোটাল</span><span class="inv-sr-val">${tk(inv.subtotal)}</span></div>
+            ${discHTML}
+            <div class="inv-sr total-row"><span class="inv-sr-label">মোট বিল</span><span class="inv-sr-val">${tk(inv.total)}</span></div>
+            <div class="inv-sr paid-row">
+              <span class="inv-sr-label">✅ মোট নগদ জমা${inst.length>0?` (${inst.length}টি কিস্তি)`:''}</span>
+              <span class="inv-sr-val">${tk(pd)}</span>
+            </div>
+            ${dueOrClearedHTML}
           </div>
-          ${due>0.01
-            ?`<div class="isr due-r"><span>⚠️ এখনও বাকি</span><span>${tk(due)}</span></div>`
-            :`<div class="isr cleared"><span>✅ সম্পূর্ণ পরিশোধ হয়েছে</span><span>${tk(0)}</span></div>`
-          }
         </div>
-      </div>
 
-      <!-- INSTALLMENTS -->
-      ${instHTML}
+        <!-- INSTALLMENTS TABLE -->
+        ${instTableHTML}
 
-      <!-- NOTE -->
-      ${inv.note?`<div style="padding:14px 18px;background:var(--bg);border-radius:10px;border-left:4px solid var(--o1);margin-bottom:20px"><strong style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">নোট</strong><p style="font-size:14px;margin-top:5px;color:var(--text)">${inv.note}</p></div>`:''}
+        <!-- NOTE -->
+        ${inv.note?`<div class="inv-note-box"><div class="inv-note-lbl">বিশেষ নোট / শর্তাবলী</div><div class="inv-note-txt">${inv.note}</div></div>`:''}
 
-      <!-- FOOTER -->
-      <div class="inv-footer-row">
-        <div class="inv-footer-note">
-          <p><strong>দুরন্ত ডিজিটাল সাইন</strong></p>
-          <p>📍 হোটেল সাদিকের নিচতলা, বড় মসজিদের সামনে, পাটগ্রাম, লালমনিরহাট</p>
-          <p>📞 01710513624</p>
-          <p style="margin-top:8px;font-style:italic">ধন্যবাদ আমাদের সেবা গ্রহণ করার জন্য। 🙏</p>
+        <!-- FOOTER -->
+        <div class="inv-footer">
+          <div class="inv-footer-info">
+            <strong>দুরন্ত ডিজিটাল সাইন</strong><br>
+            📍 হোটেল সাদিকের নিচতলা, বড় মসজিদের সামনে<br>
+            পাটগ্রাম, লালমনিরহাট &nbsp;|&nbsp; 📞 01710513624<br>
+            <span style="font-style:italic;margin-top:4px;display:block">ধন্যবাদ আমাদের সেবা গ্রহণ করার জন্য 🙏</span>
+          </div>
+          <div class="inv-sign-area">
+            <div class="inv-sign-line">গ্রাহকের স্বাক্ষর</div>
+          </div>
         </div>
-        <div class="sign-box">
-          <div class="sign-line">গ্রাহকের স্বাক্ষর</div>
-        </div>
-      </div>
+
+      </div><!-- /body wrap -->
+
+      <!-- Bottom color strip -->
+      <div class="inv-color-strip"></div>
     </div>
 
     <!-- ACTION BAR (hidden on print) -->
-    <div class="inv-print-bar no-print">
-      <button class="btn btn-p" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-      ${due>0.01?`<button class="btn btn-g" onclick="openInvPay(${inv.id})">💳 কিস্তি যোগ করুন</button>`:`<span class="btn btn-g" style="cursor:default;opacity:.7">✅ সম্পূর্ণ পরিশোধ</span>`}
-      <button class="btn btn-r" onclick="delInv(${inv.id})">🗑️ মুছুন</button>
+    <div class="inv-action-bar no-print">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+      ${due>0.01
+        ?`<button class="btn btn-success" onclick="openInstModal(${inv.id})">💳 কিস্তি যোগ করুন</button>`
+        :`<span class="btn btn-success" style="cursor:default;opacity:.7">✅ সম্পূর্ণ পরিশোধ</span>`}
+      <button class="btn btn-danger" onclick="delInv(${inv.id})">🗑️ মুছুন</button>
     </div>
   `;
 }
 
-// ══════════════════════════════════════════
-// NOTES
-// ══════════════════════════════════════════
+/* ════════════════════════════════════════════════
+   NOTES
+════════════════════════════════════════════════ */
 function openAddNote(){
-  ['ntT','ntTx','ntR'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('ntPr').value='normal';
-  openM('mNote');
+  ['ntTitle','ntText','ntRemind'].forEach(id=>$(id).value='');
+  $('ntPrio').value='normal';openM('mNote');
 }
 function saveNote(){
-  const tx=document.getElementById('ntTx').value.trim();
-  if(!tx)return toast('নোট লিখুন!','err');
-  const ns=ld('n');
-  ns.push({id:Date.now(),title:document.getElementById('ntT').value.trim(),text:tx,reminder:document.getElementById('ntR').value,priority:document.getElementById('ntPr').value,date:today()});
-  sv('n',ns);closeM('mNote');renderNotes();toast('নোট সংরক্ষিত!');
+  const tx=$('ntText').value.trim();if(!tx)return toast('নোট লিখুন!','err');
+  const notes=DB.get('notes');
+  notes.push({id:uid(),title:$('ntTitle').value.trim(),text:tx,reminder:$('ntRemind').value,priority:$('ntPrio').value,date:today()});
+  DB.set('notes',notes);closeM('mNote');renderNotes();toast('নোট সংরক্ষিত!');
 }
 function renderNotes(){
-  const ns=ld('n').sort((a,b)=>b.id-a.id);
+  const notes=DB.get('notes').sort((a,b)=>b.id-a.id);
   const bgs={high:'#fff0f0',normal:'#f0fff4',low:'#fafafa'};
-  const bds={high:'var(--r1)',normal:'var(--g1)',low:'var(--text3)'};
-  document.getElementById('notesList').innerHTML=ns.length?ns.map(n=>`
-    <div class="nc" style="border-left-color:${bds[n.priority]};background:${bgs[n.priority]}">
-      <div class="nc-meta">
-        <span style="font-weight:600">${n.priority==='high'?'🔴 জরুরি':n.priority==='low'?'🟢 সাধারণ':'🟡 স্বাভাবিক'}${n.title?' — '+n.title:''}</span>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span>${fmtD(n.date)}</span>
-          <button class="btn btn-r btn-xs" onclick="delNote(${n.id})">🗑️</button>
-        </div>
+  const bcs={high:'var(--red)',normal:'var(--green)',low:'var(--text3)'};
+  $('notesList').innerHTML=notes.length?notes.map(n=>`
+    <div class="note-card" style="border-left-color:${bcs[n.priority]};background:${bgs[n.priority]}">
+      <div class="note-head">
+        <div class="note-meta">${n.priority==='high'?'🔴 জরুরি':n.priority==='low'?'🟢 সাধারণ':'🟡 স্বাভাবিক'} · ${fmtDate(n.date)}</div>
+        <button class="btn btn-danger btn-xs" onclick="delNote(${n.id})">🗑️</button>
       </div>
-      <div class="nc-txt">${n.text}</div>
-      ${n.reminder?`<div style="margin-top:8px;font-size:12px;color:var(--o2);font-weight:600">⏰ রিমাইন্ডার: ${fmtD(n.reminder)}</div>`:''}
-    </div>
-  `).join(''):`<div style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:50px;opacity:.3;margin-bottom:14px">📝</div><p>কোনো নোট নেই</p></div>`;
+      ${n.title?`<div class="note-title">${n.title}</div>`:''}
+      <div class="note-txt">${n.text}</div>
+      ${n.reminder?`<div class="note-reminder">⏰ রিমাইন্ডার: ${fmtDate(n.reminder)}</div>`:''}
+    </div>`).join(''):`<div style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:50px;opacity:.3;margin-bottom:14px">📝</div><p>কোনো নোট নেই</p></div>`;
 
-  const custs=ld('c');
-  const wd=custs.filter(c=>c.dueDate&&cBal(c)>0).sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
-  document.getElementById('upDue').innerHTML=wd.length?wd.map(c=>{
+  const custs=DB.get('custs');
+  const wDue=custs.filter(c=>c.dueDate&&custBal(c)>0).sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+  $('dueReminders').innerHTML=wDue.length?wDue.map(c=>{
     const days=Math.ceil((new Date(c.dueDate)-new Date())/86400000);
-    const col=days<0?'var(--r1)':days<3?'var(--o2)':'var(--text3)';
+    const col=days<0?'var(--red)':days<3?'var(--gold-d)':'var(--text3)';
     return`<div style="padding:11px;background:var(--bg);border-radius:9px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
-      <div><div style="font-weight:700;font-size:14px">${c.name}</div><div style="font-size:12px;color:${col};margin-top:2px;font-weight:600">${days<0?`${Math.abs(days)} দিন আগে ছিল!`:days===0?'⚠️ আজকেই!':days+' দিন বাকি'}</div></div>
-      <div class="amt amt-r" style="font-size:14px">${tk(cBal(c))}</div>
+      <div><div style="font-weight:700;font-size:14px">${c.name}</div><div style="font-size:12px;color:${col};font-weight:600;margin-top:2px">${days<0?`${Math.abs(days)} দিন আগে মেয়াদ শেষ!`:days===0?'⚠️ আজকেই!':days+' দিন বাকি'}</div></div>
+      <div class="amt amt-red" style="font-size:14px">${tk(custBal(c))}</div>
     </div>`;
-  }).join(''):`<p style="color:var(--text3);text-align:center;padding:20px">কোনো ডেডলাইন নির্ধারিত নেই</p>`;
+  }).join(''):`<p style="color:var(--text3);text-align:center;padding:20px;font-size:14px">কোনো ডেডলাইন নেই</p>`;
 }
-function delNote(id){sv('n',ld('n').filter(n=>n.id!=id));renderNotes();toast('নোট মুছে ফেলা হয়েছে','warn')}
+function delNote(id){DB.set('notes',DB.get('notes').filter(n=>n.id!=id));renderNotes();toast('নোট মুছে ফেলা হয়েছে','warn')}
 
-// ══════════════════════════════════════════
-// REPORTS
-// ══════════════════════════════════════════
+/* ════════════════════════════════════════════════
+   REPORTS
+════════════════════════════════════════════════ */
 function renderRep(){
-  const custs=ld('c'),pays=ld('p'),daily=ld('d');
+  const custs=DB.get('custs'),pays=DB.get('pays'),daily=DB.get('daily');
   const tDue=custs.reduce((s,c)=>s+c.amount,0);
   const tPaid=pays.reduce((s,p)=>s+p.amount,0);
-  const rem=tDue-tPaid;
   const tInc=daily.filter(d=>d.type==='inc').reduce((s,d)=>s+d.amount,0);
   const tExp=daily.filter(d=>d.type==='exp').reduce((s,d)=>s+d.amount,0);
-
-  document.getElementById('repStats').innerHTML=`
-    <div class="sc"><div class="sc-icon" style="background:#e8f0fe">👥</div><div class="sc-val">${custs.length}</div><div class="sc-lbl">মোট কাস্টমার</div></div>
-    <div class="sc"><div class="sc-icon" style="background:#fce8e6">💰</div><div class="sc-val" style="font-size:18px">${tk(rem)}</div><div class="sc-lbl">মোট বাকি</div></div>
-    <div class="sc"><div class="sc-icon" style="background:#e6f4ea">✅</div><div class="sc-val" style="font-size:18px">${tk(tPaid)}</div><div class="sc-lbl">মোট পরিশোধ</div></div>
-    <div class="sc"><div class="sc-icon" style="background:#fff8e1">📈</div><div class="sc-val" style="font-size:18px">${tk(tInc-tExp)}</div><div class="sc-lbl">মোট লাভ</div></div>
+  $('repStats').innerHTML=`
+    <div class="stat-card"><div class="stat-card-icon" style="background:#e8f0fe">👥</div><div class="stat-card-val">${custs.length}</div><div class="stat-card-lbl">মোট কাস্টমার</div></div>
+    <div class="stat-card"><div class="stat-card-icon" style="background:#fce8e6">💰</div><div class="stat-card-val" style="font-size:18px">${tk(tDue-tPaid)}</div><div class="stat-card-lbl">মোট বাকি</div></div>
+    <div class="stat-card"><div class="stat-card-icon" style="background:#e6f4ea">✅</div><div class="stat-card-val" style="font-size:18px">${tk(tPaid)}</div><div class="stat-card-lbl">মোট পরিশোধ</div></div>
+    <div class="stat-card"><div class="stat-card-icon" style="background:#fff8e1">📈</div><div class="stat-card-val" style="font-size:18px">${tk(tInc-tExp)}</div><div class="stat-card-lbl">মোট লাভ</div></div>
   `;
-  document.getElementById('repDate').textContent=new Date().toLocaleDateString('bn-BD',{day:'2-digit',month:'long',year:'numeric'});
-  const s=[...custs].sort((a,b)=>cBal(b)-cBal(a));
-  const tb=document.getElementById('repBody');
-  tb.innerHTML=s.map((c,i)=>{
-    const pd=cPaid(c.id),b=c.amount-pd;
-    const st=b<=0?['badge-paid','পরিশোধ']:pd>0?['badge-partial','আংশিক']:['badge-pending','বাকি'];
-    return`<tr><td style="color:var(--text3)">${i+1}</td><td style="font-weight:700">${c.name}</td><td>${c.phone||'—'}</td><td class="amt amt-r">${tk(c.amount)}</td><td class="amt amt-g">${tk(pd)}</td><td class="amt" style="color:${b>0?'var(--r1)':'var(--g1)'}">${tk(b)}</td><td><span class="badge ${st[0]}">${st[1]}</span></td></tr>`;
+  $('repDateLbl').textContent=new Date().toLocaleDateString('bn-BD',{day:'2-digit',month:'long',year:'numeric'});
+  const sorted=[...custs].sort((a,b)=>custBal(b)-custBal(a));
+  const tbody=$('repTbody');
+  tbody.innerHTML=sorted.map((c,i)=>{
+    const pd=custPaid(c.id),b=c.amount-pd;
+    const st=b<=0?['badge-paid','✅ পরিশোধ']:pd>0?['badge-partial','🔵 আংশিক']:['badge-pending','🔴 বাকি'];
+    return`<tr><td style="color:var(--text3)">${i+1}</td><td style="font-weight:700">${c.name}</td><td>${c.phone||'—'}</td><td class="amt amt-red">${tk(c.amount)}</td><td class="amt amt-green">${tk(pd)}</td><td class="amt" style="color:${b>0?'var(--red)':'var(--green)'}">${tk(b)}</td><td><span class="badge ${st[0]}">${st[1]}</span></td></tr>`;
   }).join('');
-  tb.innerHTML+=`<tr style="background:var(--dark);color:#fff;font-weight:700"><td colspan="3" style="color:rgba(255,255,255,.9)">সর্বমোট</td><td style="color:#fff">${tk(tDue)}</td><td style="color:#fff">${tk(tPaid)}</td><td style="color:#fff">${tk(rem)}</td><td style="color:rgba(255,255,255,.9)">${custs.length} জন</td></tr>`;
+  // Total row
+  const totalRow=document.createElement('tr');
+  totalRow.className='rep-total-row';
+  totalRow.innerHTML=`<td colspan="3">সর্বমোট</td><td>${tk(tDue)}</td><td>${tk(tPaid)}</td><td>${tk(tDue-tPaid)}</td><td>${custs.length} জন</td>`;
+  tbody.appendChild(totalRow);
 }
 </script>
 </body>
